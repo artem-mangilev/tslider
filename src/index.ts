@@ -1,11 +1,13 @@
-import NumRange from './NumRange'
+import './index.scss'
+import Tslider from './Tslider'
+import { SliderOptions } from './SliderOptions'
 
-const range = new NumRange(40, 60)
-console.log(range.getNumber(50))
+$(document).ready(() => {
+  const options: SliderOptions = {
+    min: 0,
+    max: 500,
+    current: 250,
+  }
 
-import Handle from './Handle'
-
-const handle = new Handle(10, 200, 50);
-console.log(handle.position)
-
-
+  new Tslider(options)
+})
