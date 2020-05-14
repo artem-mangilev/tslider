@@ -9,27 +9,33 @@ class View {
     this.$data = $('.data')
   }
 
-  get trackWidth() {
+  get trackWidth(): number {
     return this.$track.width()
   }
 
-  get trackPositionX() {
+  get trackPositionX(): number {
     return Math.floor(this.$track[0].getBoundingClientRect().x)
   }
 
-  get trackPositionY() {
+  get trackPositionY(): number {
     return Math.floor(this.$track[0].getBoundingClientRect().y)
   }
 
-  get handleWidth() {
+  get handleWidth(): number {
     return this.$handle.width()
   }
 
-  public moveHandleX(positionX: number): void {
-    this.$handle.css('left', positionX)
+  public moveHandleX(positionRatioX: number): void {
+    const translateRatio = positionRatioX * this.trackWidth * 10
+    const middleOfHandle = this.handleWidth / 2
+
+    this.$handle.css(
+      'transform',
+      `translateX(calc(${translateRatio}% - ${middleOfHandle}px))`
+    )
   }
 
-  public updateHandleData(data: string) {
+  public updateHandleData(data: string): void {
     this.$data.html(data)
   }
 

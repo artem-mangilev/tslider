@@ -8,20 +8,16 @@ class Tslider implements Observer {
     // const model = new Model()
 
     view.trackClick((trackClickX) => {
-      // compute the middle of the handle in order to correctly put
-      // it on the track
-      const handlePositionX = trackClickX - view.handleWidth / 2
-
-      // move handle to new position
-      view.moveHandleX(handlePositionX)
-
       // figure out how much data is represented by current handle position:
 
       // 1. Convert handle position to ratio
-      const handlePositionXRatio = trackClickX / view.trackWidth
+      const handlePositionRatioX = trackClickX / (view.trackWidth - 1)
+
+      // move handle to new position
+      view.moveHandleX(handlePositionRatioX)
 
       // 2. Multiply this ratio to max value in range
-      const ratioDataAmount = (handlePositionXRatio * options.max).toString()
+      const ratioDataAmount = (handlePositionRatioX * options.max).toString()
 
       // 3. Update the data
       view.updateHandleData(ratioDataAmount)
