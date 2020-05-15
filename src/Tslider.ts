@@ -8,10 +8,19 @@ class Tslider implements Observer {
     // const model = new Model()
 
     view.trackClick((trackClickX) => {
+      // decide where to put handle according to step size.
+      const numberOfSteps: number = options.max / options.step
+
+      const pixelsPerStep: number = view.trackWidth / numberOfSteps
+
+      // if trackClickX closer to right boundry of step length, put handle to this boundry
+      // otherwise put handle to left boundry
+      const handleStep = Math.round(trackClickX / pixelsPerStep)
+
       // figure out how much data is represented by current handle position:
 
       // 1. Convert handle position to ratio
-      const handlePositionRatioX = trackClickX / (view.trackWidth - 1)
+      const handlePositionRatioX = handleStep / numberOfSteps
 
       // move handle to new position
       view.moveHandleX(handlePositionRatioX)
