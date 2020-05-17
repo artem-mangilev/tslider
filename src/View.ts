@@ -1,3 +1,5 @@
+import { Point } from "./Point"
+
 class View {
   public $track: JQuery<HTMLElement>
   public $handle: JQuery<HTMLElement>
@@ -31,12 +33,12 @@ class View {
 
   public moveHandle(positionRatioX: number, positionRatioY: number): void {
     // TODO: add type for this kind of objects
-    const translateRatio = {
+    const translateRatio: Point = {
       x: positionRatioX * this.trackWidth * 10,
       y: positionRatioY * this.trackHeight * 10,
     }
 
-    const middleOfHandle = this.handleWidth / 2
+    const middleOfHandle: number = this.handleWidth / 2
 
     this.$handle.css(
       'transform',
