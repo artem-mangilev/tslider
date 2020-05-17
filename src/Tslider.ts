@@ -3,37 +3,42 @@ import Model from './Model'
 import { SliderOptions } from './SliderOptions'
 
 class Tslider implements Observer {
+  private view: View
+  private options: SliderOptions
+
   constructor(options: SliderOptions) {
-    const view = new View()
-    // const model = new Model()
+    // initialize an options
+    this.options = options
 
-    view.trackClick((trackClickX) => {
-      // decide where to put handle according to step size.
-      const numberOfSteps: number = options.max / options.step
+    // initialize the View
+    this.view = new View()
 
-      const pixelsPerStep: number = view.trackWidth / numberOfSteps
+    // initialize the Model
+    const model: Model = new Model(
+      options,
+      this.view.trackWidth,
+      this.view.handleWidth
+    )
 
-      // if trackClickX closer to right boundry of step length, put handle to this boundry
-      // otherwise put handle to left boundry
-      const handleStep = Math.round(trackClickX / pixelsPerStep)
+    // register this class as observer of the model
+    model.attach(this)
 
-      // figure out how much data is represented by current handle position:
-
-      // 1. Convert handle position to ratio
-      const handlePositionRatioX = handleStep / numberOfSteps
-
-      // move handle to new position
-      view.moveHandleX(handlePositionRatioX)
-
-      // 2. Multiply this ratio to max value in range
-      const ratioDataAmount = (handlePositionRatioX * options.max).toString()
-
-      // 3. Update the data
-      view.updateHandleData(ratioDataAmount)
+    // when user clicks to some area of the track, move the handle at this position
+    this.view.trackClick((trackClickX) => {
+      model.handlePositionRatioX(trackClickX)
     })
   }
 
-  public update(subject: Subject): void {}
+  // TODO: hide implementation details of the Model. This class shouldn't know that model has a currentHandlePositionX property
+  public update(model: Model): void {
+    const currentHandlePositionX = model.currentHandlePositionX
+
+    this.view.moveHandleX(currentHandlePositionX)
+
+    const dataAmount = (currentHandlePositionX * this.options.max).toString()
+
+    this.view.updateHandleData(dataAmount)
+  }
 }
 
 export default Tslider

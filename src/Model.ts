@@ -1,35 +1,21 @@
 import { SliderOptions } from './SliderOptions'
 
-interface Model extends Subject {
-  new (options: SliderOptions, trackSize: number): Model
-
-  /* 
-    Moves handle to selected position.
-    Accepts the point on the track
-  */
-  moveHandle(trackPointX: number): void
-
-  /* 
-    Converts a number within the range to track point
-  */
-  rangeMemberToTrackPoint(rangeMember: number): number
-}
-
-class Model implements Model {
-  private observers: Observer[]
-  private currentHandlePosition: number
+class Model implements Subject {
+  public currentHandlePositionX: number
   private options: SliderOptions
   private maxMinDiff: number
+  private trackWidth: number
 
-  constructor(options: SliderOptions, trackSize: number, handleSize: number) {
-    this.observers = []
-
+  constructor(options: SliderOptions, trackWidth: number, handleSize: number) {
     this.options = options
-    this.currentHandlePosition = this.rangeMemberToTrackPoint(
-      this.options.current
-    )
+    this.currentHandlePositionX = 0
     this.maxMinDiff = this.diff(this.options.max, this.options.min)
+    this.trackWidth = trackWidth
   }
+
+  // --- start of Subject functionality (Observer pattern) ---
+
+  private observers: Observer[] = []
 
   public attach(observer: Observer): void {
     const isExist = this.observers.includes(observer)
@@ -58,7 +44,7 @@ class Model implements Model {
     }
   }
 
-  public moveHandle(trackPointX: number): void {}
+  // --- end of Subject functionality ---
 
   // public rangeMemberToTrackPoint(rangeMember: number): number {
   //   const diffWithMin: number = this.diff(rangeMember, this.options.min)
@@ -70,6 +56,24 @@ class Model implements Model {
     }
 
     throw new Error('First argument must be bigger than second')
+  }
+
+  get numberOfSteps(): number {
+    return this.options.max / this.options.step
+  }
+
+  get stepSegment(): number {
+    return this.trackWidth / this.numberOfSteps
+  }
+
+  public handlePositionRatioX(targetPointX: number): void {
+    // if targetPointX closer to right boundry of step length, put handle to this boundry
+    // otherwise put handle to left boundry
+    const handleStep = Math.round(targetPointX / this.stepSegment)
+
+    this.currentHandlePositionX = handleStep / this.numberOfSteps
+
+    this.notify()
   }
 }
 
