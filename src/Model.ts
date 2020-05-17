@@ -1,8 +1,8 @@
 import { SliderOptions } from './SliderOptions'
 
 class Model implements Subject {
-  public currentHandlePositionX: number
-  public currentHandlePositionY: number
+  public handlePositionRatioX: number
+  public handlePositionRatioY: number
 
   private options: SliderOptions
   private maxMinDiff: number
@@ -11,8 +11,8 @@ class Model implements Subject {
   constructor(options: SliderOptions, trackWidth: number, trackHeight: number) {
     this.options = options
 
-    this.currentHandlePositionX
-    this.currentHandlePositionY
+    this.handlePositionRatioX
+    this.handlePositionRatioY
 
     this.trackWidth = trackWidth
 
@@ -60,19 +60,19 @@ class Model implements Subject {
     return this.trackWidth / this.numberOfSteps
   }
 
-  public handlePositionRatio(targetPointX: number): void {
+  public moveHandle(targetPointX: number): void {
     // if targetPointX closer to right boundry of step length, put handle to this boundry
     // otherwise put handle to left boundry
     const handleStep = Math.round(targetPointX / this.stepSegment)
-    this.currentHandlePositionX = handleStep / this.numberOfSteps
+    this.handlePositionRatioX = handleStep / this.numberOfSteps
 
-    this.currentHandlePositionY = 0.5
+    this.handlePositionRatioY = 0.5
 
     this.notify()
   }
 
   get dataAmount(): number {
-    return this.currentHandlePositionX * this.maxMinDiff + this.options.min
+    return this.handlePositionRatioX * this.maxMinDiff + this.options.min
   }
 }
 

@@ -1,13 +1,15 @@
-import { Point } from "./Point"
+import { Point } from './Point'
 
 class View {
   public $track: JQuery<HTMLElement>
   public $handle: JQuery<HTMLElement>
   public $data: JQuery<HTMLElement>
+  public $range: JQuery<HTMLElement>
 
   constructor() {
     this.$track = $('.track')
     this.$handle = $('.handle')
+    this.$range = $('.range')
     this.$data = $('.data')
   }
 
@@ -53,6 +55,10 @@ class View {
     this.$data.html(data)
   }
 
+  public updateRange(positionRatioX: number): void {
+    this.$range.css('width', `${positionRatioX * 100}%`)
+  }
+
   public trackClick(handler: (x: number) => void): void {
     this.$track.click(({ clientX, target }) => {
       const trackClickX = clientX - this.trackPositionX
@@ -60,8 +66,12 @@ class View {
       // filter out negative values of trackClickX
       if (trackClickX < 0) return
 
-      // call handler only if click occurs on track
-      if (target === this.$track[0]) handler(trackClickX)
+      // call handler only if click occurs on track or range
+      const isTrack = target === this.$track[0]
+      const isRange = target === this.$range[0]
+      const correctTarget = isTrack || isRange
+      
+      if (correctTarget) handler(trackClickX)
     })
   }
 }
