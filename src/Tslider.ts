@@ -14,6 +14,7 @@ class Tslider implements Observer {
     this.view = new View()
 
     // initialize the Model
+    // TODO: decrease the number of arguments. Possible solution: create additional extended interface with needed properties for Model
     const model: Model = new Model(
       options,
       this.view.trackWidth,
