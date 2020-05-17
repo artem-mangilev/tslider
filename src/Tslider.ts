@@ -24,6 +24,9 @@ class Tslider implements Observer {
     // register this class as observer of the model
     model.attach(this)
 
+    // set initial handle position
+    model.handlePositionRatioX(0)
+
     // when user clicks to some area of the track, move the handle at this position
     this.view.trackClick((trackClickX) => {
       model.handlePositionRatioX(trackClickX)

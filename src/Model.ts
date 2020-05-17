@@ -10,7 +10,7 @@ class Model implements Subject {
     this.options = options
     this.currentHandlePositionX = 0
     this.maxMinDiff = this.diff(this.options.max, this.options.min)
-    this.trackWidth = trackWidth
+    this.trackWidth = trackWidth  
   }
 
   // --- start of Subject functionality (Observer pattern) ---
