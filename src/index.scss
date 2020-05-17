@@ -2,8 +2,9 @@
   box-sizing: border-box;
   position: relative;
   width: 200px;
-  height: 15px;
-  background-color: blue;
+  height: 7px;
+  border: 1px solid rgba(31, 32, 65, 0.25);
+  border-radius: 3px;
 }
 
 .handle {
@@ -11,5 +12,6 @@
   position: absolute;
   width: 10px;
   height: 10px;
-  background-color: red;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #6fcf97 0%, #66d2ea 100%);
 }
