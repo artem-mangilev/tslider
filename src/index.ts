@@ -4,8 +4,8 @@ import { SliderOptions } from './SliderOptions'
 
 $(document).ready(() => {
   const options: SliderOptions = {
-    min: 0,
-    max: 100,
+    min: 100,
+    max: 200,
     current: 20,
     step: 10
   }

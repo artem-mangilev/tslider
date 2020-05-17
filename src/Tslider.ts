@@ -39,8 +39,7 @@ class Tslider implements Observer {
     const currentHandlePositionY = model.currentHandlePositionY
     this.view.moveHandle(currentHandlePositionX, currentHandlePositionY)
 
-    const dataAmount = (currentHandlePositionX * this.options.max).toString()
-    this.view.updateHandleData(dataAmount)
+    this.view.updateHandleData(model.dataAmount.toString())
   }
 }
 

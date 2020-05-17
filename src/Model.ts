@@ -16,7 +16,7 @@ class Model implements Subject {
 
     this.trackWidth = trackWidth
 
-    this.maxMinDiff = this.diff(this.options.max, this.options.min)
+    this.maxMinDiff = this.options.max - this.options.min
   }
 
   // --- start of Subject functionality (Observer pattern) ---
@@ -52,20 +52,8 @@ class Model implements Subject {
 
   // --- end of Subject functionality ---
 
-  // public rangeMemberToTrackPoint(rangeMember: number): number {
-  //   const diffWithMin: number = this.diff(rangeMember, this.options.min)
-  // }
-
-  private diff(bigger: number, smaller: number): number {
-    if (bigger > smaller) {
-      return bigger - smaller
-    }
-
-    throw new Error('First argument must be bigger than second')
-  }
-
   get numberOfSteps(): number {
-    return this.options.max / this.options.step
+    return this.maxMinDiff / this.options.step
   }
 
   get stepSegment(): number {
@@ -81,6 +69,10 @@ class Model implements Subject {
     this.currentHandlePositionY = 0.5
 
     this.notify()
+  }
+
+  get dataAmount(): number {
+    return this.currentHandlePositionX * this.maxMinDiff + this.options.min
   }
 }
 
