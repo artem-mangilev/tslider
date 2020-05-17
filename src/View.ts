@@ -13,6 +13,10 @@ class View {
     return this.$track.width()
   }
 
+  get trackHeight(): number {
+    return this.$track.height()
+  }
+
   get trackPositionX(): number {
     return Math.floor(this.$track[0].getBoundingClientRect().x)
   }
@@ -25,13 +29,21 @@ class View {
     return this.$handle.width()
   }
 
-  public moveHandleX(positionRatioX: number): void {
-    const translateRatio = positionRatioX * this.trackWidth * 10
+  public moveHandle(positionRatioX: number, positionRatioY: number): void {
+    // TODO: add type for this kind of objects
+    const translateRatio = {
+      x: positionRatioX * this.trackWidth * 10,
+      y: positionRatioY * this.trackHeight * 10,
+    }
+
     const middleOfHandle = this.handleWidth / 2
 
     this.$handle.css(
       'transform',
-      `translateX(calc(${translateRatio}% - ${middleOfHandle}px))`
+      `translate(
+        calc(${translateRatio.x}% - ${middleOfHandle}px),
+        calc(${translateRatio.y}% - ${middleOfHandle}px)
+      )`
     )
   }
 

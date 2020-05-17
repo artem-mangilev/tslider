@@ -18,29 +18,28 @@ class Tslider implements Observer {
     const model: Model = new Model(
       options,
       this.view.trackWidth,
-      this.view.handleWidth
+      this.view.trackHeight
     )
 
     // register this class as observer of the model
     model.attach(this)
 
     // set initial handle position
-    model.handlePositionRatioX(0)
+    model.handlePositionRatio(0)
 
     // when user clicks to some area of the track, move the handle at this position
     this.view.trackClick((trackClickX) => {
-      model.handlePositionRatioX(trackClickX)
+      model.handlePositionRatio(trackClickX)
     })
   }
 
   // TODO: hide implementation details of the Model. This class shouldn't know that model has a currentHandlePositionX property
   public update(model: Model): void {
     const currentHandlePositionX = model.currentHandlePositionX
-
-    this.view.moveHandleX(currentHandlePositionX)
+    const currentHandlePositionY = model.currentHandlePositionY
+    this.view.moveHandle(currentHandlePositionX, currentHandlePositionY)
 
     const dataAmount = (currentHandlePositionX * this.options.max).toString()
-
     this.view.updateHandleData(dataAmount)
   }
 }

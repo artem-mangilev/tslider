@@ -2,15 +2,21 @@ import { SliderOptions } from './SliderOptions'
 
 class Model implements Subject {
   public currentHandlePositionX: number
+  public currentHandlePositionY: number
+
   private options: SliderOptions
   private maxMinDiff: number
   private trackWidth: number
 
-  constructor(options: SliderOptions, trackWidth: number, handleSize: number) {
+  constructor(options: SliderOptions, trackWidth: number, trackHeight: number) {
     this.options = options
-    this.currentHandlePositionX = 0
+
+    this.currentHandlePositionX
+    this.currentHandlePositionY
+
+    this.trackWidth = trackWidth
+
     this.maxMinDiff = this.diff(this.options.max, this.options.min)
-    this.trackWidth = trackWidth  
   }
 
   // --- start of Subject functionality (Observer pattern) ---
@@ -66,12 +72,13 @@ class Model implements Subject {
     return this.trackWidth / this.numberOfSteps
   }
 
-  public handlePositionRatioX(targetPointX: number): void {
+  public handlePositionRatio(targetPointX: number): void {
     // if targetPointX closer to right boundry of step length, put handle to this boundry
     // otherwise put handle to left boundry
     const handleStep = Math.round(targetPointX / this.stepSegment)
-
     this.currentHandlePositionX = handleStep / this.numberOfSteps
+
+    this.currentHandlePositionY = 0.5
 
     this.notify()
   }
