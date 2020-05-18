@@ -40,14 +40,14 @@ class Tslider implements Observer {
 
   // TODO: hide implementation details of the Model. This class shouldn't know that model has a currentHandlePositionRatioX property
   public update(model: Model): void {
-    const currentHandlePositionRatioX = model.handlePositionRatioX
-    const currentHandlePositionRatioY = model.handlePositionRatioY
+    const currentHandlePositionX: Ratio = model.handlePositionX
+    const currentHandlePositionY: Ratio = model.handlePositionY
     this.view.moveHandle(
-      currentHandlePositionRatioX,
-      currentHandlePositionRatioY
+      currentHandlePositionX,
+      currentHandlePositionY
     )
 
-    this.view.updateRange(currentHandlePositionRatioX)
+    this.view.updateRange(currentHandlePositionX)
 
     this.view.updateHandleData(model.dataAmount.toString())
   }

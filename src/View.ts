@@ -1,4 +1,5 @@
 import { Point } from './Point'
+import { Ratio } from './aliases'
 
 class View {
   public $track: JQuery<HTMLElement>
@@ -33,10 +34,10 @@ class View {
     return this.$handle.width()
   }
 
-  public moveHandle(positionRatioX: number, positionRatioY: number): void {
+  public moveHandle(positionX: Ratio, positionY: Ratio): void {
     const translateRatio: Point = {
-      x: positionRatioX * this.trackWidth * 10,
-      y: positionRatioY * this.trackHeight * 10,
+      x: positionX * this.trackWidth * 10,
+      y: positionY * this.trackHeight * 10,
     }
 
     // TODO: this probably should be in the Model

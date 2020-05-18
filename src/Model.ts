@@ -1,8 +1,9 @@
 import { SliderOptions } from './SliderOptions'
+import { Ratio } from './aliases'
 
 class Model implements Subject {
-  public handlePositionRatioX: number
-  public handlePositionRatioY: number
+  public handlePositionX: Ratio
+  public handlePositionY: Ratio
 
   private options: SliderOptions
   private maxMinDiff: number
@@ -11,8 +12,8 @@ class Model implements Subject {
   constructor(options: SliderOptions, trackWidth: number, trackHeight: number) {
     this.options = options
 
-    this.handlePositionRatioX
-    this.handlePositionRatioY
+    this.handlePositionX
+    this.handlePositionY
 
     this.trackWidth = trackWidth
 
@@ -64,15 +65,16 @@ class Model implements Subject {
     // if targetPointX closer to right boundry of step length, put handle to this boundry
     // otherwise put handle to left boundry
     const handleStep = Math.round(targetPointX / this.stepSegment)
-    this.handlePositionRatioX = handleStep / this.numberOfSteps
+    this.handlePositionX = handleStep / this.numberOfSteps
 
-    this.handlePositionRatioY = 0.5
+    this.handlePositionY = 0.5
 
     this.notify()
   }
 
   get dataAmount(): number {
-    return this.handlePositionRatioX * this.maxMinDiff + this.options.min
+    return this.handlePositionX * this.maxMinDiff + this.options.min
+  }
   }
 }
 
