@@ -6,7 +6,7 @@ $(document).ready(() => {
   const options: SliderOptions = {
     min: 100,
     max: 200,
-    current: 20,
+    current: 100,
     step: 10
   }
 

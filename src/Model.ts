@@ -75,6 +75,9 @@ class Model implements Subject {
   get dataAmount(): number {
     return this.handlePositionX * this.maxMinDiff + this.options.min
   }
+
+  public convertDataToPointX(data: number): number {
+    return ((data - this.options.min) / this.maxMinDiff) * this.trackWidth
   }
 }
 

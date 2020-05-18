@@ -1,6 +1,7 @@
 import View from './View'
 import Model from './Model'
 import { SliderOptions } from './SliderOptions'
+import { Ratio } from './aliases'
 
 class Tslider implements Observer {
   private view: View
@@ -16,7 +17,7 @@ class Tslider implements Observer {
     // initialize the Model
     // TODO: decrease the number of arguments. Possible solution: create additional extended interface with needed properties for Model
     const model: Model = new Model(
-      options,
+      this.options,
       this.view.trackWidth,
       this.view.trackHeight
     )
@@ -24,8 +25,10 @@ class Tslider implements Observer {
     // register this class as observer of the model
     model.attach(this)
 
+    // compute the initial point
+    const initialPointX = model.convertDataToPointX(options.current)
     // set initial handle position
-    model.moveHandle(0)
+    model.moveHandle(initialPointX)
 
     // when user clicks to some area of the track, move the handle at this position
     this.view.trackClick((trackClickX) => {
