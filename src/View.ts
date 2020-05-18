@@ -34,12 +34,12 @@ class View {
   }
 
   public moveHandle(positionRatioX: number, positionRatioY: number): void {
-    // TODO: add type for this kind of objects
     const translateRatio: Point = {
       x: positionRatioX * this.trackWidth * 10,
       y: positionRatioY * this.trackHeight * 10,
     }
 
+    // TODO: this probably should be in the Model
     const middleOfHandle: number = this.handleWidth / 2
 
     this.$handle.css(
@@ -60,19 +60,22 @@ class View {
   }
 
   public trackClick(handler: (x: number) => void): void {
-    this.$track.click(({ clientX, target }) => {
-      const trackClickX = clientX - this.trackPositionX
+    const handlerWrapper = (e: MouseEvent): any => {
+      const trackClickX = e.clientX - this.trackPositionX
 
       // filter out negative values of trackClickX
       if (trackClickX < 0) return
 
       // call handler only if click occurs on track or range
-      const isTrack = target === this.$track[0]
-      const isRange = target === this.$range[0]
+      const isTrack = e.target === this.$track[0]
+      const isRange = e.target === this.$range[0]
       const correctTarget = isTrack || isRange
-      
+
       if (correctTarget) handler(trackClickX)
-    })
+    }
+
+    // TODO: find the way to attach an event handler with Jquery
+    this.$track[0].addEventListener('click', handlerWrapper)
   }
 }
 
