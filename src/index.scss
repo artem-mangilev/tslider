@@ -15,6 +15,7 @@ $track-height: 7px;
   position: absolute;
   width: 10px;
   height: 10px;
+  user-select: none;
   border-radius: 50%;
 
   // TODO: if border applied, handle displayed incorrectly

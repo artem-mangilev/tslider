@@ -77,6 +77,30 @@ class View {
     // TODO: find the way to attach an event handler with Jquery
     this.$track[0].addEventListener('click', handlerWrapper)
   }
+
+  public handleDrag(handler: (x: number) => void): void {
+    const mouseMoveHandler = (e: MouseEvent): void => {
+      const trackMouseX = e.clientX - this.trackPositionX
+
+      // evaluate handler only if mouse is inside of vertical track scope
+      if (trackMouseX <= this.trackWidth) handler(trackMouseX)
+    }
+
+    const $root = $('html')
+
+    // when user pushes left button
+    $root.mousedown((e) => {
+      // if target is handle, attach mousemove event
+      if (e.target === this.$handle[0]) {
+        $root[0].addEventListener('mousemove', mouseMoveHandler)
+      }
+    })
+
+    // when user releases the button in any place, remove event
+    $root.mouseup(() => {
+      $root[0].removeEventListener('mousemove', mouseMoveHandler)
+    })
+  }
 }
 
 export default View

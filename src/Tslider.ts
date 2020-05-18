@@ -31,6 +31,11 @@ class Tslider implements Observer {
     this.view.trackClick((trackClickX) => {
       model.moveHandle(trackClickX)
     })
+
+    // when the user dragged the handle, move it to apropriate position
+    this.view.handleDrag((trackMouseX) => {
+      model.moveHandle(trackMouseX)
+    })
   }
 
   // TODO: hide implementation details of the Model. This class shouldn't know that model has a currentHandlePositionRatioX property
