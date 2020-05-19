@@ -1,17 +1,22 @@
 import { Point } from './Point'
 import { Ratio } from './aliases'
+import HandleView from './HandleView'
 
 class View {
   public $track: JQuery<HTMLElement>
-  public $handle: JQuery<HTMLElement>
   public $data: JQuery<HTMLElement>
   public $range: JQuery<HTMLElement>
 
+  private handle: HandleView
+
   constructor() {
     this.$track = $('.track')
-    this.$handle = $('.handle')
     this.$range = $('.range')
     this.$data = $('.data')
+
+    // TODO: read about type casting
+    const handleElement = <HTMLElement>document.querySelector('.handle')
+    this.handle = new HandleView(handleElement)
   }
 
   get trackWidth(): number {
@@ -30,10 +35,6 @@ class View {
     return Math.floor(this.$track[0].getBoundingClientRect().y)
   }
 
-  get handleWidth(): number {
-    return this.$handle.width()
-  }
-
   public moveHandle(positionX: Ratio, positionY: Ratio): void {
     const translateRatio: Point = {
       x: positionX * this.trackWidth * 10,
@@ -41,9 +42,9 @@ class View {
     }
 
     // TODO: this probably should be in the Model
-    const middleOfHandle: number = this.handleWidth / 2
+    const middleOfHandle: number = this.handle.size / 2
 
-    this.$handle.css(
+    this.handle.$handle.css(
       'transform',
       `translate(
         calc(${translateRatio.x}% - ${middleOfHandle}px),
@@ -92,7 +93,7 @@ class View {
     // when user pushes left button
     $root.mousedown((e) => {
       // if target is handle, attach mousemove event
-      if (e.target === this.$handle[0]) {
+      if (e.target === this.handle.$handle[0]) {
         $root[0].addEventListener('mousemove', mouseMoveHandler)
       }
     })
