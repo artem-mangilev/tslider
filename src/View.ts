@@ -42,16 +42,7 @@ class View {
       y: positionY * this.track.height * 10,
     }
 
-    // TODO: this probably should be in the Model
-    const middleOfHandle: number = this.handle.size / 2
-
-    this.handle.$handle.css(
-      'transform',
-      `translate(
-        calc(${translateRatio.x}% - ${middleOfHandle}px),
-        calc(${translateRatio.y}% - ${middleOfHandle}px)
-      )`
-    )
+    this.handle.move(translateRatio)
   }
 
   public updateHandleData(data: string): void {

@@ -1,3 +1,5 @@
+import { Point } from './Point'
+
 class HandleView {
   $handle: JQuery<HTMLElement>
 
@@ -14,6 +16,18 @@ class HandleView {
     }
 
     throw 'Width and height of the handle have to be the same.'
+  }
+
+  public move(translatePosition: Point): void {
+    const middle = this.size / 2
+
+    this.$handle.css(
+      'transform',
+      `translate(
+        calc(${translatePosition.x}% - ${middle}px),
+        calc(${translatePosition.y}% - ${middle}px)
+      )`
+    )
   }
 }
 
