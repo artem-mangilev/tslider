@@ -1,7 +1,7 @@
 import View from './View'
 import Model from './Model'
 import { SliderOptions } from './SliderOptions'
-import { Ratio } from './aliases'
+import { RatioPoint } from './RatioPoint'
 
 class Tslider implements Observer {
   private view: View
@@ -41,16 +41,16 @@ class Tslider implements Observer {
     })
   }
 
-  // TODO: hide implementation details of the Model. This class shouldn't know that model has a currentHandlePositionRatioX property
+  // TODO: hide implementation details of the Model. This class shouldn't know that model has a handlePositionX and handlePositionY properties
   public update(model: Model): void {
-    const currentHandlePositionX: Ratio = model.handlePositionX
-    const currentHandlePositionY: Ratio = model.handlePositionY
-    this.view.moveHandle(
-      currentHandlePositionX,
-      currentHandlePositionY
-    )
+    const handlePosition: RatioPoint = {
+      x: model.handlePositionX,
+      y: model.handlePositionY,
+    }
 
-    this.view.updateRange(currentHandlePositionX)
+    this.view.moveHandle(handlePosition)
+
+    this.view.updateRange(handlePosition.x)
 
     this.view.updateHandleData(model.dataAmount.toString())
   }

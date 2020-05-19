@@ -1,8 +1,8 @@
 import { Point } from './Point'
-import { Ratio } from './aliases'
 import HandleView from './HandleView'
 import TrackView from './TrackView'
 import RangeView from './RangeView'
+import { RatioPoint } from './RatioPoint'
 
 class View {
   public $data: JQuery<HTMLElement>
@@ -36,10 +36,10 @@ class View {
     return this.track.height
   }
 
-  public moveHandle(positionX: Ratio, positionY: Ratio): void {
+  public moveHandle(position: RatioPoint): void {
     const newHandlePosition: Point = {
-      x: positionX * this.track.width,
-      y: positionY * this.track.height,
+      x: position.x * this.track.width,
+      y: position.y * this.track.height,
     }
 
     this.handle.move(newHandlePosition)
