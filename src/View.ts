@@ -2,16 +2,16 @@ import { Point } from './Point'
 import { Ratio } from './aliases'
 import HandleView from './HandleView'
 import TrackView from './TrackView'
+import RangeView from './RangeView'
 
 class View {
   public $data: JQuery<HTMLElement>
-  public $range: JQuery<HTMLElement>
 
   private handle: HandleView
   private track: TrackView
+  private range: RangeView
 
   constructor() {
-    this.$range = $('.range')
     this.$data = $('.data')
 
     const trackElement = <HTMLElement>document.querySelector('.track')
@@ -20,6 +20,9 @@ class View {
     // TODO: read about type casting
     const handleElement = <HTMLElement>document.querySelector('.handle')
     this.handle = new HandleView(handleElement)
+
+    const rangeElement = <HTMLElement>document.querySelector('.range')
+    this.range = new RangeView(rangeElement)
   }
 
   // These getters just duplicates the ones from the TrackView, so
@@ -56,7 +59,7 @@ class View {
   }
 
   public updateRange(positionRatioX: number): void {
-    this.$range.css('width', `${positionRatioX * 100}%`)
+    this.range.draw(positionRatioX)
   }
 
   public trackClick(handler: (x: number) => void): void {
@@ -68,7 +71,7 @@ class View {
 
       // call handler only if click occurs on track or range
       const isTrack = e.target === this.track.$track[0]
-      const isRange = e.target === this.$range[0]
+      const isRange = e.target === this.range.$range[0]
       const correctTarget = isTrack || isRange
 
       if (correctTarget) handler(trackClickX)
