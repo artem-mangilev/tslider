@@ -37,13 +37,12 @@ class View {
   }
 
   public moveHandle(positionX: Ratio, positionY: Ratio): void {
-    // TODO: remove magic number (10)
-    const translateRatio: Point = {
-      x: positionX * this.track.width * 10,
-      y: positionY * this.track.height * 10,
+    const newHandlePosition: Point = {
+      x: positionX * this.track.width,
+      y: positionY * this.track.height,
     }
 
-    this.handle.move(translateRatio)
+    this.handle.move(newHandlePosition)
   }
 
   public updateHandleData(data: string): void {

@@ -1,5 +1,5 @@
 $track-border: 1px;
-$track-height: 7px;
+$track-height: 3px;
 
 .track {
   box-sizing: border-box;
@@ -14,7 +14,6 @@ $track-height: 7px;
   box-sizing: border-box;
   position: absolute;
 
-  // TODO: when other values used, handle displayed incorrectly
   width: 10px;
   height: 10px;
 

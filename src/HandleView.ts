@@ -18,15 +18,12 @@ class HandleView {
     throw 'Width and height of the handle have to be the same.'
   }
 
-  public move(translatePosition: Point): void {
+  public move(position: Point): void {
     const middle = this.size / 2
 
     this.$handle.css(
       'transform',
-      `translate(
-        calc(${translatePosition.x}% - ${middle}px),
-        calc(${translatePosition.y}% - ${middle}px)
-      )`
+      `translate(${position.x - middle}px, ${position.y - middle}px)`
     )
   }
 }
