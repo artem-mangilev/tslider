@@ -1,44 +1,42 @@
 import { Point } from './Point'
 import { Ratio } from './aliases'
 import HandleView from './HandleView'
+import TrackView from './TrackView'
 
 class View {
-  public $track: JQuery<HTMLElement>
   public $data: JQuery<HTMLElement>
   public $range: JQuery<HTMLElement>
 
   private handle: HandleView
+  private track: TrackView
 
   constructor() {
-    this.$track = $('.track')
     this.$range = $('.range')
     this.$data = $('.data')
+
+    const trackElement = <HTMLElement>document.querySelector('.track')
+    this.track = new TrackView(trackElement)
 
     // TODO: read about type casting
     const handleElement = <HTMLElement>document.querySelector('.handle')
     this.handle = new HandleView(handleElement)
   }
 
-  get trackWidth(): number {
-    return this.$track.width()
+  // These getters just duplicates the ones from the TrackView, so
+  // TODO: find the way to remove these getters
+  public get trackWidth() {
+    return this.track.width
   }
 
-  get trackHeight(): number {
-    return this.$track.height()
+  public get trackHeight() {
+    return this.track.height
   }
 
-  get trackPositionX(): number {
-    return Math.floor(this.$track[0].getBoundingClientRect().x)
-  }
-
-  get trackPositionY(): number {
-    return Math.floor(this.$track[0].getBoundingClientRect().y)
-  }
 
   public moveHandle(positionX: Ratio, positionY: Ratio): void {
     const translateRatio: Point = {
-      x: positionX * this.trackWidth * 10,
-      y: positionY * this.trackHeight * 10,
+      x: positionX * this.track.width * 10,
+      y: positionY * this.track.height * 10,
     }
 
     // TODO: this probably should be in the Model
@@ -63,13 +61,13 @@ class View {
 
   public trackClick(handler: (x: number) => void): void {
     const handlerWrapper = (e: MouseEvent): any => {
-      const trackClickX = e.clientX - this.trackPositionX
+      const trackClickX = e.clientX - this.track.positionX
 
       // filter out negative values of trackClickX
       if (trackClickX < 0) return
 
       // call handler only if click occurs on track or range
-      const isTrack = e.target === this.$track[0]
+      const isTrack = e.target === this.track.$track[0]
       const isRange = e.target === this.$range[0]
       const correctTarget = isTrack || isRange
 
@@ -77,15 +75,15 @@ class View {
     }
 
     // TODO: find the way to attach an event handler with Jquery
-    this.$track[0].addEventListener('click', handlerWrapper)
+    this.track.$track[0].addEventListener('click', handlerWrapper)
   }
 
   public handleDrag(handler: (x: number) => void): void {
     const mouseMoveHandler = (e: MouseEvent): void => {
-      const trackMouseX = e.clientX - this.trackPositionX
+      const trackMouseX = e.clientX - this.track.positionX
 
       // evaluate handler only if mouse is inside of vertical track scope
-      if (trackMouseX <= this.trackWidth) handler(trackMouseX)
+      if (trackMouseX <= this.track.width) handler(trackMouseX)
     }
 
     const $root = $('html')
