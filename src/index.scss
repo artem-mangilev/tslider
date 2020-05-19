@@ -13,8 +13,11 @@ $track-height: 7px;
 .handle {
   box-sizing: border-box;
   position: absolute;
+
+  // TODO: when other values used, handle displayed incorrectly
   width: 10px;
   height: 10px;
+
   user-select: none;
   border-radius: 50%;
 

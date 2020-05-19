@@ -12,6 +12,7 @@ class View {
   private range: RangeView
 
   constructor() {
+    // TODO: decide how to separate this sub-view
     this.$data = $('.data')
 
     const trackElement = <HTMLElement>document.querySelector('.track')
@@ -35,8 +36,8 @@ class View {
     return this.track.height
   }
 
-
   public moveHandle(positionX: Ratio, positionY: Ratio): void {
+    // TODO: remove magic number (10)
     const translateRatio: Point = {
       x: positionX * this.track.width * 10,
       y: positionY * this.track.height * 10,
