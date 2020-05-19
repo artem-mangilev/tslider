@@ -76,8 +76,12 @@ class View {
     const mouseMoveHandler = (e: MouseEvent): void => {
       const trackMouseX = e.clientX - this.track.positionX
 
-      // evaluate handler only if mouse is inside of vertical track scope
-      if (trackMouseX <= this.track.width) handler(trackMouseX)
+      // evaluate handler only if mouse is inside of track scope
+      const isMouseAfterLeftBoundry = trackMouseX >= 0
+      const isMouseBeforeRightBoundry = trackMouseX <= this.track.width
+      const isMousePositionValid = isMouseAfterLeftBoundry && isMouseBeforeRightBoundry;
+
+      if (isMousePositionValid) handler(trackMouseX)
     }
 
     const $root = $('html')
