@@ -17,7 +17,7 @@ class Model extends Subject {
     this.options = options
 
     this.handlePositionX
-    this.handlePositionY
+    this.handlePositionY = 0.5
 
     this.trackWidth = options.trackWidth
 
@@ -37,8 +37,6 @@ class Model extends Subject {
     // otherwise put handle to left boundry
     const handleStep = Math.round(targetPointX / this.stepSegment)
     this.handlePositionX = handleStep / this.numberOfSteps
-
-    this.handlePositionY = 0.5
 
     this.notify()
   }
