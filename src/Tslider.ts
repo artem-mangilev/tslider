@@ -6,12 +6,8 @@ import { ModelOptions } from './ModelOptions'
 
 class Tslider implements Observer {
   private view: View
-  private options: SliderOptions
 
   constructor(options: SliderOptions) {
-    // initialize an options
-    this.options = options
-
     // initialize the View
     this.view = new View()
 
