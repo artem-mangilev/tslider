@@ -6,17 +6,12 @@ import { RatioPoint } from './RatioPoint'
 import LabelView from './LabelView'
 
 class View {
-  public $data: JQuery<HTMLElement>
-
   private handle: HandleView
   private track: TrackView
   private range: RangeView
   private label: LabelView
 
   constructor() {
-    // TODO: decide how to separate this sub-view
-    this.$data = $('.data')
-
     const trackElement = <HTMLElement>document.querySelector('.track')
     this.track = new TrackView(trackElement)
 
