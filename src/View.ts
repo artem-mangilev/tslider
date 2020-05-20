@@ -53,10 +53,9 @@ class View {
     // update the label's position and data
     this.label.move(labelPosition)
     this.label.updateData(data)
-  }
 
-  public updateRange(positionRatioX: number): void {
-    this.range.draw(positionRatioX)
+    // update the range
+    this.range.draw(position.x)
   }
 
   public trackClick(handler: (x: number) => void): void {
