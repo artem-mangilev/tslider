@@ -8,15 +8,18 @@ class LabelView {
   }
 
   get width(): number {
-    return this.$label[0].offsetWidth
+    return this.$label.width()
   }
 
   public move(position: Point): void {
     const middle = this.width / 2
 
+    // TODO: this number helps to align label with handle vertically. This behaviour should be implemented with a different way.
+    const magicNumber = 1
+
     this.$label.css(
       'transform',
-      `translate(${position.x - middle}px, ${position.y}px)`
+      `translate(${position.x - middle + magicNumber}px, ${position.y}px)`
     )
   }
 
