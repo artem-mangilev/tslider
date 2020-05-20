@@ -1,6 +1,7 @@
 import { SliderOptions } from './SliderOptions'
 import { Ratio } from './aliases'
 import Subject from './utils/Subject'
+import { ModelOptions } from './ModelOptions'
 
 class Model extends Subject {
   public handlePositionX: Ratio
@@ -10,7 +11,7 @@ class Model extends Subject {
   private maxMinDiff: number
   private trackWidth: number
 
-  constructor(options: SliderOptions, trackWidth: number, trackHeight: number) {
+  constructor(options: ModelOptions) {
     super()
 
     this.options = options
@@ -18,7 +19,7 @@ class Model extends Subject {
     this.handlePositionX
     this.handlePositionY
 
-    this.trackWidth = trackWidth
+    this.trackWidth = options.trackWidth
 
     this.maxMinDiff = this.options.max - this.options.min
   }

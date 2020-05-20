@@ -2,6 +2,7 @@ import View from './View'
 import Model from './Model'
 import { SliderOptions } from './SliderOptions'
 import { RatioPoint } from './RatioPoint'
+import { ModelOptions } from './ModelOptions'
 
 class Tslider implements Observer {
   private view: View
@@ -14,13 +15,14 @@ class Tslider implements Observer {
     // initialize the View
     this.view = new View()
 
+    // the Model needs an additional data
+    const modelOptions: ModelOptions = {
+      ...options,
+      trackWidth: this.view.trackWidth,
+    }
+
     // initialize the Model
-    // TODO: decrease the number of arguments. Possible solution: create additional extended interface with needed properties for Model
-    const model: Model = new Model(
-      this.options,
-      this.view.trackWidth,
-      this.view.trackHeight
-    )
+    const model: Model = new Model(modelOptions)
 
     // register this class as observer of the model
     model.attach(this)
