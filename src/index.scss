@@ -35,3 +35,17 @@ $track-height: 7px;
   border-radius: 3px;
   background: linear-gradient(180deg, #6fcf97 0%, #66d2ea 100%);
 }
+
+.current-label {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 30px;
+  height: 20px;
+  background: linear-gradient(180deg, #bc9cff 0%, #8ba4f9 100%);
+  color: #fff;
+  border-radius: 3px;
+  font-family: sans-serif;
+}

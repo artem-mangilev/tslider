@@ -46,11 +46,11 @@ class Tslider implements Observer {
       y: model.handlePositionY,
     }
 
-    this.view.moveHandle(handlePosition)
+    const data = model.dataAmount.toString()
+
+    this.view.slideTo(handlePosition, data)
 
     this.view.updateRange(handlePosition.x)
-
-    this.view.updateHandleData(model.dataAmount.toString())
   }
 }
 

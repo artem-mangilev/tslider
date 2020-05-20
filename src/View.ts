@@ -3,6 +3,7 @@ import HandleView from './HandleView'
 import TrackView from './TrackView'
 import RangeView from './RangeView'
 import { RatioPoint } from './RatioPoint'
+import LabelView from './LabelView'
 
 class View {
   public $data: JQuery<HTMLElement>
@@ -10,6 +11,7 @@ class View {
   private handle: HandleView
   private track: TrackView
   private range: RangeView
+  private label: LabelView
 
   constructor() {
     // TODO: decide how to separate this sub-view
@@ -24,6 +26,9 @@ class View {
 
     const rangeElement = <HTMLElement>document.querySelector('.range')
     this.range = new RangeView(rangeElement)
+
+    const labelElement = <HTMLElement>document.querySelector('.current-label')
+    this.label = new LabelView(labelElement)
   }
 
   // These getters just duplicates the ones from the TrackView, so
@@ -36,17 +41,23 @@ class View {
     return this.track.height
   }
 
-  public moveHandle(position: RatioPoint): void {
-    const newHandlePosition: Point = {
+  public slideTo(position: RatioPoint, data: string): void {
+    const newPosition: Point = {
       x: position.x * this.track.width,
       y: position.y * this.track.height,
     }
 
-    this.handle.move(newHandlePosition)
-  }
+    // move the handle
+    this.handle.move(newPosition)
 
-  public updateHandleData(data: string): void {
-    this.$data.html(data)
+    // label should only be moved vertically
+    const labelPosition: Point = {
+      x: newPosition.x,
+      y: 0,
+    }
+    // update the label's position and data
+    this.label.move(labelPosition)
+    this.label.updateData(data)
   }
 
   public updateRange(positionRatioX: number): void {
@@ -79,7 +90,8 @@ class View {
       // evaluate handler only if mouse is inside of track scope
       const isMouseAfterLeftBoundry = trackMouseX >= 0
       const isMouseBeforeRightBoundry = trackMouseX <= this.track.width
-      const isMousePositionValid = isMouseAfterLeftBoundry && isMouseBeforeRightBoundry;
+      const isMousePositionValid =
+        isMouseAfterLeftBoundry && isMouseBeforeRightBoundry
 
       if (isMousePositionValid) handler(trackMouseX)
     }
