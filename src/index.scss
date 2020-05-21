@@ -1,52 +1,54 @@
 $track-border: 1px;
 $track-height: 7px;
 
-.track {
-  box-sizing: border-box;
-  position: relative;
-  width: 200px;
-  height: $track-height;
-  border: $track-border solid rgba(31, 32, 65, 0.25);
-  border-radius: 3px;
-}
+.tslider {
+  &__track {
+    box-sizing: border-box;
+    position: relative;
+    width: 200px;
+    height: $track-height;
+    border: $track-border solid rgba(31, 32, 65, 0.25);
+    border-radius: 3px;
+  }
 
-.handle {
-  box-sizing: border-box;
-  position: absolute;
+  &__handle {
+    box-sizing: border-box;
+    position: absolute;
 
-  width: 10px;
-  height: 10px;
+    width: 10px;
+    height: 10px;
 
-  user-select: none;
-  border-radius: 50%;
+    user-select: none;
+    border-radius: 50%;
 
-  // TODO: if border applied, handle displayed incorrectly
-  // border: 2px solid #fff;
+    // TODO: if border applied, handle displayed incorrectly
+    // border: 2px solid #fff;
 
-  background: linear-gradient(180deg, #bc9cff 0%, #8ba4f9 100%);
-}
+    background: linear-gradient(180deg, #bc9cff 0%, #8ba4f9 100%);
+  }
 
-.range {
-  box-sizing: border-box;
-  position: absolute;
-  top: -$track-border;
-  left: -$track-border;
-  height: $track-height;
-  border-radius: 3px;
-  background: linear-gradient(180deg, #6fcf97 0%, #66d2ea 100%);
-}
+  &__range {
+    box-sizing: border-box;
+    position: absolute;
+    top: -$track-border;
+    left: -$track-border;
+    height: $track-height;
+    border-radius: 3px;
+    background: linear-gradient(180deg, #6fcf97 0%, #66d2ea 100%);
+  }
 
-.current-label {
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  &__label {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-  width: 30px;
-  height: 20px;
-  margin-bottom: 5px;
-  background: linear-gradient(180deg, #bc9cff 0%, #8ba4f9 100%);
-  color: #fff;
-  border-radius: 3px;
-  font-family: sans-serif;
+    width: 30px;
+    height: 20px;
+    margin-bottom: 5px;
+    background: linear-gradient(180deg, #bc9cff 0%, #8ba4f9 100%);
+    color: #fff;
+    border-radius: 3px;
+    font-family: sans-serif;
+  }
 }

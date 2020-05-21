@@ -15,19 +15,65 @@ class View {
 
   constructor(targetInput: HTMLInputElement) {
     this.targetInput = new InputView(targetInput)
-  
-    const trackElement = <HTMLElement>document.querySelector('.track')
-    this.track = new TrackView(trackElement)
 
+    // create the following structure of slider
+    // .tslider
+    //   .tslider__labels
+    //     .tslider__label
+    //   .tslider__track
+    //     .tslider__range
+    //     .tslider__handle
+
+    // create an container for slider
+    const $sliderContainer: JQuery<HTMLElement> = $('<div>', {
+      class: 'tslider',
+    })
+    // put it after the targetInput
+    this.targetInput.$element.after($sliderContainer)
+
+    // create the container for labels
+    const $labelsContainer = $('<div>', {
+      class: 'tslider__labels',
+    })
+    // put it inside the sliderContainer
+    $sliderContainer.append($labelsContainer)
+
+    // create the label
+    const $label = $('<div>', {
+      class: 'tslider__label',
+    })
+    // put it inside the labelsContainer
+    $labelsContainer.append($label)
+    // initialize the label class
+    this.label = new LabelView($label[0])
+
+    // create the track
+    const $track = $('<div>', {
+      class: 'tslider__track',
+    })
+    // put it inside the sliderContainer
+    $sliderContainer.append($track)
+    // initialize the TrackView class
+    this.track = new TrackView($track[0])
+
+    // create the range
+    const $range = $('<div>', {
+      class: 'tslider__range',
+    })
+    // put it inside the track
+    $track.append($range)
+    // initialize the class
+    this.range = new RangeView($range[0])
+
+    // create the handle
     // TODO: read about type casting
-    const handleElement = <HTMLElement>document.querySelector('.handle')
-    this.handle = new HandleView(handleElement)
-
-    const rangeElement = <HTMLElement>document.querySelector('.range')
-    this.range = new RangeView(rangeElement)
-
-    const labelElement = <HTMLElement>document.querySelector('.current-label')
-    this.label = new LabelView(labelElement)
+    const $handle = $('<div>', {
+      class: 'tslider__handle',
+    })
+    // put it inside the track
+    $track.append($handle)
+    // initialize the class
+    this.handle = new HandleView($handle[0])
   }
 
   // These getters just duplicates the ones from the TrackView, so
