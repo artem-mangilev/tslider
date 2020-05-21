@@ -1,7 +1,6 @@
 import View from './View'
 import Model from './Model'
 import { SliderOptions } from './SliderOptions'
-import { RatioPoint } from './RatioPoint'
 import { ModelOptions } from './ModelOptions'
 import Observer from './utils/Observer'
 
@@ -44,7 +43,6 @@ class Tslider implements Observer {
   // TODO: hide implementation details of the Model. This class shouldn't know that model has a handlePositionX and handlePositionY properties
   public update(model: Model): void {
     const data = model.dataAmount.toString()
-
     this.view.slideTo(model.handlePosition, data)
   }
 }
