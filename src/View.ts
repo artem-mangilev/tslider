@@ -2,9 +2,9 @@ import { Point } from './Point'
 import HandleView from './HandleView'
 import TrackView from './TrackView'
 import RangeView from './RangeView'
-import { RatioPoint } from './RatioPoint'
 import LabelView from './LabelView'
 import InputView from './InputView'
+import { Ratio } from './aliases'
 
 class View {
   private handle: HandleView
@@ -88,10 +88,13 @@ class View {
     return this.track.height
   }
 
-  public slideTo(position: RatioPoint, data: string): void {
+  // TODO: position here is a Ratio (position) and a Point (newPosition), so it's better to give them different names
+  public slideTo(position: Ratio, data: string): void {
+    const trackMiddle: Ratio = 0.5
+
     const newPosition: Point = {
-      x: position.x * this.track.width,
-      y: position.y * this.track.height,
+      x: position * this.track.width,
+      y: trackMiddle * this.track.height,
     }
 
     // move the handle
@@ -107,7 +110,7 @@ class View {
     this.label.updateData(data)
 
     // update the range
-    this.range.draw(position.x)
+    this.range.draw(position)
 
     // update the target input's value
     this.targetInput.setValue(data)
