@@ -1,3 +1,6 @@
+import Observer from "./Observer"
+
+
 class Subject {
   private observers: Observer[] = []
 

@@ -3,6 +3,7 @@ import Model from './Model'
 import { SliderOptions } from './SliderOptions'
 import { RatioPoint } from './RatioPoint'
 import { ModelOptions } from './ModelOptions'
+import Observer from './utils/Observer'
 
 class Tslider implements Observer {
   private view: View
