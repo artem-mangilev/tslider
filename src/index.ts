@@ -8,6 +8,7 @@ $(document).ready(() => {
     max: 200,
     current: 100,
     step: 10,
+    orientation: 'horizontal',
     targetInput: document.querySelector('.tsl-target')
   }
 

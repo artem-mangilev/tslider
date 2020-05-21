@@ -3,5 +3,6 @@ export interface SliderOptions {
   max: number
   current: number
   step: number
+  orientation: 'vertical' | 'horizontal'
   targetInput: HTMLInputElement
 }
