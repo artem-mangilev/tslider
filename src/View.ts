@@ -24,6 +24,8 @@ class View {
     //     .tslider__range
     //     .tslider__handle
 
+    // TODO: find the more nice looking way to build this structure
+
     // create an container for slider
     const $sliderContainer: JQuery<HTMLElement> = $('<div>', {
       class: 'tslider',
