@@ -7,7 +7,8 @@ $(document).ready(() => {
     min: 100,
     max: 200,
     current: 100,
-    step: 10
+    step: 10,
+    targetInput: document.querySelector('.tsl-target')
   }
 
   new Tslider(options)

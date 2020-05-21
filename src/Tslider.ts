@@ -10,8 +10,9 @@ class Tslider implements Observer {
 
   constructor(options: SliderOptions) {
     // initialize the View
-    this.view = new View()
+    this.view = new View(options.targetInput)
 
+    // TODO: remove input node from modelOptions
     // the Model needs an additional data
     const modelOptions: ModelOptions = {
       ...options,

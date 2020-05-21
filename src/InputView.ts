@@ -1,0 +1,17 @@
+class InputView {
+  input: HTMLInputElement
+
+  constructor(input: HTMLInputElement) {
+    this.input = input
+
+    // TODO: probably i should add this flag to global parameters
+    // the input should be hidden
+    this.input.hidden = true
+  }
+
+  public setValue(value: string): void {
+    this.input.value = value
+  }
+}
+
+export default InputView

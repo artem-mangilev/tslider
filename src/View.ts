@@ -4,14 +4,18 @@ import TrackView from './TrackView'
 import RangeView from './RangeView'
 import { RatioPoint } from './RatioPoint'
 import LabelView from './LabelView'
+import InputView from './InputView'
 
 class View {
   private handle: HandleView
   private track: TrackView
   private range: RangeView
   private label: LabelView
+  private targetInput: InputView
 
-  constructor() {
+  constructor(targetInput: HTMLInputElement) {
+    this.targetInput = new InputView(targetInput)
+  
     const trackElement = <HTMLElement>document.querySelector('.track')
     this.track = new TrackView(trackElement)
 
@@ -56,6 +60,9 @@ class View {
 
     // update the range
     this.range.draw(position.x)
+
+    // update the target input's value
+    this.targetInput.setValue(data)
   }
 
   public trackClick(handler: (x: number) => void): void {
