@@ -5,6 +5,7 @@ import RangeView from './RangeView'
 import LabelView from './LabelView'
 import InputView from './InputView'
 import { Ratio } from './aliases'
+import ViewOptions from './ViewOptions'
 
 class View {
   private handle: HandleView
@@ -13,8 +14,8 @@ class View {
   private label: LabelView
   private targetInput: InputView
 
-  constructor(targetInput: HTMLInputElement) {
-    this.targetInput = new InputView(targetInput)
+  constructor(options: ViewOptions) {
+    this.targetInput = new InputView(options.targetInput)
 
     // create the following structure of slider
     // .tslider

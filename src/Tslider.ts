@@ -3,13 +3,19 @@ import Model from './Model'
 import { SliderOptions } from './SliderOptions'
 import { ModelOptions } from './ModelOptions'
 import Observer from './utils/Observer'
+import ViewOptions from './ViewOptions'
 
 class Tslider implements Observer {
   private view: View
 
   constructor(options: SliderOptions) {
+    // create view options
+    const viewOptions: ViewOptions = {
+      targetInput: options.targetInput,
+    }
+
     // initialize the View
-    this.view = new View(options.targetInput)
+    this.view = new View(viewOptions)
 
     // TODO: remove input node from modelOptions
     // the Model needs an additional data

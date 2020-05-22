@@ -1,8 +1,10 @@
+import { Orientation } from "./aliases";
+
 export interface SliderOptions {
   min: number
   max: number
   current: number
   step: number
-  orientation: 'vertical' | 'horizontal'
+  orientation: Orientation
   targetInput: HTMLInputElement
 }
