@@ -1,6 +1,6 @@
 import './index.scss'
 import Tslider from './Tslider'
-import { SliderOptions } from './SliderOptions'
+import SliderOptions from './SliderOptions'
 
 $(document).ready(() => {
   const options: SliderOptions = {
@@ -9,7 +9,7 @@ $(document).ready(() => {
     current: 100,
     step: 10,
     orientation: 'horizontal',
-    targetInput: document.querySelector('.tsl-target')
+    targetInput: document.querySelector('.tsl-target'),
   }
 
   new Tslider(options)

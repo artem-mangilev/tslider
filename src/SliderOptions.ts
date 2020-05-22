@@ -1,6 +1,6 @@
-import { Orientation } from "./aliases";
+import { Orientation } from './aliases'
 
-export interface SliderOptions {
+export default interface SliderOptions {
   min: number
   max: number
   current: number

@@ -1,5 +1,5 @@
-import { SliderOptions } from './SliderOptions'
+import SliderOptions from './SliderOptions'
 
-export interface ModelOptions extends SliderOptions {
+export default interface ModelOptions extends SliderOptions {
   trackWidth: number
 }

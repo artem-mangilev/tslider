@@ -1,7 +1,7 @@
 import View from './View'
 import Model from './Model'
-import { SliderOptions } from './SliderOptions'
-import { ModelOptions } from './ModelOptions'
+import SliderOptions from './SliderOptions'
+import ModelOptions from './ModelOptions'
 import Observer from './utils/Observer'
 import ViewOptions from './ViewOptions'
 

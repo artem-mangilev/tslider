@@ -1,7 +1,8 @@
 import { Ratio } from './aliases'
 import Subject from './utils/Subject'
-import { ModelOptions } from './ModelOptions'
+import ModelOptions from './ModelOptions'
 
+// TODO: the model should compute coorditates according to orientation
 class Model extends Subject {
   public handlePosition: Ratio
 
