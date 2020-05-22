@@ -1,11 +1,12 @@
+// TODO: create a scss config for slider
 $track-border: 1px;
 $track-height: 7px;
+$handle-size: 10px;
 
 .tslider {
   &__track {
     box-sizing: border-box;
     position: relative;
-    width: 200px;
     height: $track-height;
     border: $track-border solid rgba(31, 32, 65, 0.25);
     border-radius: 3px;
@@ -15,8 +16,8 @@ $track-height: 7px;
     box-sizing: border-box;
     position: absolute;
 
-    width: 10px;
-    height: 10px;
+    width: $handle-size;
+    height: $handle-size;
 
     user-select: none;
     border-radius: 50%;
@@ -51,4 +52,9 @@ $track-height: 7px;
     border-radius: 3px;
     font-family: sans-serif;
   }
+}
+
+.slider-container {
+  width: 300px;
+  height: 200px;
 }
