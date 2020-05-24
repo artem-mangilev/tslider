@@ -16,6 +16,14 @@ class TrackView {
     return this.$track.height()
   }
 
+  public set width(newWidth: number) {
+    this.$track.css('width', `${newWidth}px`)
+  }
+
+  public set height(newHeight: number) {
+    this.$track.css('height', `${newHeight}px`)
+  }
+
   public get positionX(): number {
     // this is the x position of first point of the track,
     // relative to the viewport

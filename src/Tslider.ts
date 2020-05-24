@@ -22,27 +22,32 @@ class Tslider implements Observer {
     const modelOptions: ModelOptions = {
       ...options,
       trackWidth: this.view.trackWidth,
+      trackHeight: this.view.trackHeight,
     }
 
     // initialize the Model
     const model: Model = new Model(modelOptions)
 
+    // set correct orientation of the track
+    this.view.trackWidth = model.trackWidth
+    this.view.trackHeight = model.trackHeight
+
     // register this class as observer of the model
     model.attach(this)
 
     // compute the initial point
-    const initialPointX = model.convertDataToPointX(options.current)
+    const initialPoint = model.convertDataToPoint(options.current)
     // set initial handle position
-    model.moveHandle(initialPointX)
+    model.moveHandle(initialPoint)
 
     // when user clicks to some area of the track, move the handle at this position
-    this.view.trackClick((trackClickX) => {
-      model.moveHandle(trackClickX)
+    this.view.onTrackClick((point) => {
+      model.moveHandle(point)
     })
 
     // when the user dragged the handle, move it to apropriate position
-    this.view.handleDrag((trackMouseX) => {
-      model.moveHandle(trackMouseX)
+    this.view.handleDrag((point) => {
+      model.moveHandle(point)
     })
   }
 

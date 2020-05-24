@@ -6,6 +6,7 @@ import LabelView from './LabelView'
 import InputView from './InputView'
 import { Ratio } from './aliases'
 import ViewOptions from './ViewOptions'
+import { RatioPoint } from './RatioPoint'
 
 class View {
   private handle: HandleView
@@ -89,13 +90,21 @@ class View {
     return this.track.height
   }
 
+  public set trackWidth(width) {
+    this.track.width = width
+  }
+
+  public set trackHeight(height) {
+    this.track.height = height
+  }
+
   // TODO: position here is a Ratio (position) and a Point (newPosition), so it's better to give them different names
-  public slideTo(position: Ratio, data: string): void {
-    const trackMiddle: Ratio = 0.5
+  public slideTo(position: RatioPoint, data: string): void {
+    // const trackMiddle: Ratio = 0.5
 
     const newPosition: Point = {
-      x: position * this.track.width,
-      y: trackMiddle * this.track.height,
+      x: position.x * this.track.width,
+      y: position.y * this.track.height,
     }
 
     // move the handle
@@ -111,42 +120,44 @@ class View {
     this.label.updateData(data)
 
     // update the range
-    this.range.draw(position)
+    this.range.draw(position.x)
 
     // update the target input's value
     this.targetInput.setValue(data)
   }
 
-  public trackClick(handler: (x: number) => void): void {
+  public onTrackClick(handler: (point: Point) => void): void {
     const handlerWrapper = (e: MouseEvent): any => {
-      const trackClickX = e.clientX - this.track.positionX
+      const x = e.clientX - this.track.positionX
+      const y = e.clientY - this.track.positionY
 
-      // filter out negative values of trackClickX
-      if (trackClickX < 0) return
+      // filter out negative values of x
+      if (x < 0) return
 
       // call handler only if click occurs on track or range
       const isTrack = e.target === this.track.$track[0]
       const isRange = e.target === this.range.$range[0]
       const correctTarget = isTrack || isRange
 
-      if (correctTarget) handler(trackClickX)
+      if (correctTarget) handler({ x, y })
     }
 
     // TODO: find the way to attach an event handler with Jquery
     this.track.$track[0].addEventListener('click', handlerWrapper)
   }
 
-  public handleDrag(handler: (x: number) => void): void {
+  public handleDrag(handler: (point: Point) => void): void {
     const mouseMoveHandler = (e: MouseEvent): void => {
-      const trackMouseX = e.clientX - this.track.positionX
+      const x = e.clientX - this.track.positionX
+      const y = e.clientY - this.track.positionY
 
       // evaluate handler only if mouse is inside of track scope
-      const isMouseAfterLeftBoundry = trackMouseX >= 0
-      const isMouseBeforeRightBoundry = trackMouseX <= this.track.width
+      const isMouseAfterLeftBoundry = x >= 0
+      const isMouseBeforeRightBoundry = x <= this.track.width
       const isMousePositionValid =
         isMouseAfterLeftBoundry && isMouseBeforeRightBoundry
 
-      if (isMousePositionValid) handler(trackMouseX)
+      if (isMousePositionValid) handler({ x, y })
     }
 
     const $root = $('html')
