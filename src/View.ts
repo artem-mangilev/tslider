@@ -4,7 +4,7 @@ import TrackView from './TrackView'
 import RangeView from './RangeView'
 import LabelView from './LabelView'
 import InputView from './InputView'
-import { Ratio } from './aliases'
+import { Ratio, Orientation } from './aliases'
 import ViewOptions from './ViewOptions'
 import { RatioPoint } from './RatioPoint'
 
@@ -14,9 +14,11 @@ class View {
   private range: RangeView
   private label: LabelView
   private targetInput: InputView
+  orientation: Orientation
 
   constructor(options: ViewOptions) {
     this.targetInput = new InputView(options.targetInput)
+    this.orientation = options.orientation
 
     // create the following structure of slider
     // .tslider
@@ -100,8 +102,6 @@ class View {
 
   // TODO: position here is a Ratio (position) and a Point (newPosition), so it's better to give them different names
   public slideTo(position: RatioPoint, data: string): void {
-    // const trackMiddle: Ratio = 0.5
-
     const newPosition: Point = {
       x: position.x * this.track.width,
       y: position.y * this.track.height,
@@ -119,11 +119,16 @@ class View {
     this.label.move(labelPosition)
     this.label.updateData(data)
 
-    // update the range
-    this.range.draw(position.x)
-
     // update the target input's value
     this.targetInput.setValue(data)
+  }
+
+  public updateRange(
+    width: number,
+    height: number,
+    position: RatioPoint
+  ): void {
+    this.range.draw(width, height, position)
   }
 
   public onTrackClick(handler: (point: Point) => void): void {

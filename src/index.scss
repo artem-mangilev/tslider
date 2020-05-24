@@ -32,8 +32,11 @@ $handle-size: 10px;
   &__range {
     box-sizing: border-box;
     position: absolute;
-    top: -$track-border;
-    left: -$track-border;
+
+    // TODO: range should be display correctly in different orientations
+    // top: -$track-border;
+    // left: -$track-border;
+
     height: $track-height + (2 * $track-border);
     border-radius: 3px;
     background: linear-gradient(180deg, #6fcf97 0%, #66d2ea 100%);

@@ -12,6 +12,7 @@ class Tslider implements Observer {
     // create view options
     const viewOptions: ViewOptions = {
       targetInput: options.targetInput,
+      orientation: options.orientation,
     }
 
     // initialize the View
@@ -55,6 +56,13 @@ class Tslider implements Observer {
   public update(model: Model): void {
     const data = model.dataAmount.toString()
     this.view.slideTo(model.handlePosition, data)
+
+    // TODO: find the way to hide this functionality back to slideTo
+    this.view.updateRange(
+      model.rangeWidth,
+      model.rangeHeight,
+      model.rangeStartPosition
+    )
   }
 }
 

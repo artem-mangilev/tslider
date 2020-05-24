@@ -1,4 +1,4 @@
-import { Ratio } from "./aliases"
+import { Point } from './Point'
 
 class RangeView {
   $range: JQuery<HTMLElement>
@@ -7,8 +7,11 @@ class RangeView {
     this.$range = $(element)
   }
 
-  draw(endX: Ratio): void {
-    this.$range.css('width', `${endX * 100}%`)
+  draw(width: number, height: number, position: Point): void {
+    this.$range
+      .css('width', `${width}px`)
+      .css('height', `${height}px`)
+      .css('transform', `translate(${position.x}px, ${position.y}px)`)
   }
 }
 

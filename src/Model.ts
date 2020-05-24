@@ -82,6 +82,37 @@ class Model extends Subject {
       ? this.options.trackHeight
       : this.options.trackWidth
   }
+
+  public get rangeWidth(): number {
+    if (this.orientation === 'horizontal') {
+      return this.handlePosition.x * this.trackWidth
+    } else if (this.orientation === 'vetical') {
+      return this.trackWidth
+    }
+  }
+
+  public get rangeHeight(): number {
+    if (this.orientation === 'horizontal') {
+      return this.trackHeight
+    } else if (this.orientation === 'vetical') {
+      const invertedHandlePositionY: Ratio = 1 - this.handlePosition.y
+      return invertedHandlePositionY * this.trackHeight
+    }
+  }
+
+  public get rangeStartPosition(): Point {
+    if (this.orientation === 'horizontal') {
+      return {
+        x: 0,
+        y: 0,
+      }
+    } else if (this.orientation === 'vetical') {
+      return {
+        x: 0,
+        y: this.handlePosition.y * this.trackHeight,
+      }
+    }
+  }
 }
 
 export default Model
