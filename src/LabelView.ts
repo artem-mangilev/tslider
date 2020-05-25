@@ -11,16 +11,20 @@ class LabelView {
     return this.$label.width()
   }
 
+  get height(): number {
+    return this.$label.height()
+  }
+
+  set width(newWidth: number) {
+    this.$label.css('width', `${newWidth}px`)
+  }
+
+  set height(newHeight: number) {
+    this.$label.css('height', `${newHeight}px`)
+  }
+
   public move(position: Point): void {
-    const middle = this.width / 2
-
-    // TODO: this number helps to align label with handle vertically. This behaviour should be implemented with a different way.
-    const magicNumber = 1
-
-    this.$label.css(
-      'transform',
-      `translate(${position.x - middle + magicNumber}px, ${position.y}px)`
-    )
+    this.$label.css('transform', `translate(${position.x}px, ${position.y}px)`)
   }
 
   public updateData(newData: string): void {

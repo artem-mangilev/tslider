@@ -31,18 +31,18 @@ class View {
     // TODO: find the more nice looking way to build this structure
 
     // create an container for slider
-    const $sliderContainer: JQuery<HTMLElement> = $('<div>', {
+    const $slider: JQuery<HTMLElement> = $('<div>', {
       class: 'tslider',
     })
     // put it after the targetInput
-    this.targetInput.$element.after($sliderContainer)
+    this.targetInput.$element.after($slider)
 
     // create the container for labels
     const $labelsContainer = $('<div>', {
       class: 'tslider__labels',
     })
     // put it inside the sliderContainer
-    $sliderContainer.append($labelsContainer)
+    $slider.append($labelsContainer)
 
     // create the label
     const $label = $('<div>', {
@@ -58,7 +58,7 @@ class View {
       class: 'tslider__track',
     })
     // put it inside the sliderContainer
-    $sliderContainer.append($track)
+    $slider.append($track)
     // initialize the TrackView class
     this.track = new TrackView($track[0])
 
@@ -110,15 +110,6 @@ class View {
     // move the handle
     this.handle.move(newPosition)
 
-    // label should only be moved vertically
-    const labelPosition: Point = {
-      x: newPosition.x,
-      y: 0,
-    }
-    // update the label's position and data
-    this.label.move(labelPosition)
-    this.label.updateData(data)
-
     // update the target input's value
     this.targetInput.setValue(data)
   }
@@ -129,6 +120,27 @@ class View {
     position: RatioPoint
   ): void {
     this.range.draw(width, height, position)
+  }
+
+  public updateLabel(position: Point, data: number) {
+    this.label.move(position)
+    this.label.updateData(data.toString())
+  }
+
+  public get labelWidth() {
+    return this.label.width
+  }
+
+  public set labelWidth(newWidth) {
+    this.label.width = newWidth
+  }
+
+  public get labelHeight() {
+    return this.label.height
+  }
+
+  public set labelHeight(newHeight) {
+    this.label.height = newHeight
   }
 
   public onTrackClick(handler: (point: Point) => void): void {

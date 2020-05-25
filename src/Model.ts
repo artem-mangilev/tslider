@@ -113,6 +113,29 @@ class Model extends Subject {
       }
     }
   }
+
+  private get labelWidth(): number {
+    return this.options.labelWidth
+  }
+
+  private get labelHeight(): number {
+    return this.options.labelHeight
+  }
+
+  public get labelPosition(): Point {
+    if (this.orientation === 'horizontal') {
+      const middle = this.labelWidth / 2
+
+      // TODO: this number helps to align label with handle vertically. This behaviour should be implemented with a different way.
+      const magicNumber = 1
+
+      return {
+        x: this.handlePosition.x * this.trackWidth - middle + magicNumber,
+        y: 0,
+      }
+    }
+    // TODO: implement vertical label position
+  }
 }
 
 export default Model

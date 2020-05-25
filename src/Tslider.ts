@@ -24,6 +24,8 @@ class Tslider implements Observer {
       ...options,
       trackWidth: this.view.trackWidth,
       trackHeight: this.view.trackHeight,
+      labelWidth: this.view.labelWidth,
+      labelHeight: this.view.labelHeight,
     }
 
     // initialize the Model
@@ -63,6 +65,8 @@ class Tslider implements Observer {
       model.rangeHeight,
       model.rangeStartPosition
     )
+
+    this.view.updateLabel(model.labelPosition, model.dataAmount)
   }
 }
 
