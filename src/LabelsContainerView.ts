@@ -1,8 +1,13 @@
+import { Orientation } from './aliases'
+
 class LabelsContainerView {
   $element: JQuery<HTMLElement>
+  orientation: Orientation
 
-  constructor(element: HTMLElement) {
-    this.$element = $(element)  }
+  constructor(element: HTMLElement, orientation: Orientation) {
+    this.$element = $(element)
+    this.orientation = orientation
+  }
 
   get width(): number {
     return this.$element.width()
@@ -14,8 +19,10 @@ class LabelsContainerView {
 
   setMarginFromTrack(margin: number): void {
     // in vertical orientation, labelsContainer should be placed above the track
-    this.$element.css('top', `${-this.height - margin}px`)
-
+    if (this.orientation === 'horizontal') {
+      this.$element.css('top', `${-this.height - margin}px`)
+    }
+    this.$element.css('right', `${-this.width - margin}px`)
   }
 }
 

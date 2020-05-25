@@ -130,6 +130,11 @@ class Model extends Subject {
         y: 0,
       }
     }
+    const middle = this.labelHeight / 2
+    return {
+      x: 0,
+      y: this.handlePosition.y * this.trackHeight - middle,
+    }
     // TODO: implement vertical label position
   }
 }

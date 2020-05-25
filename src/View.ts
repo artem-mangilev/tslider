@@ -22,6 +22,7 @@ class View {
     this.targetInput = new InputView(options.targetInput)
     this.orientation = options.orientation
 
+    // TODO: probably tslider now doesn't make sense and creates unnesessary nesting, so it should be removed
     // create the following structure of slider
     // .tslider
     //   .tslider__track
@@ -65,7 +66,10 @@ class View {
     this.label = new LabelView($label[0])
 
     // init the labelsContainer class (this call is here because this class should know the size of label)
-    this.labelsContainer = new LabelsContainerView($labelsContainer[0])
+    this.labelsContainer = new LabelsContainerView(
+      $labelsContainer[0],
+      this.orientation
+    )
 
     // set margin from track
     this.labelsContainer.setMarginFromTrack(options.labelMarginFromTrack)
