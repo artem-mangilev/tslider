@@ -13,6 +13,7 @@ class Tslider implements Observer {
     const viewOptions: ViewOptions = {
       targetInput: options.targetInput,
       orientation: options.orientation,
+      labelMarginFromTrack: options.labelMarginFromTrack
     }
 
     // initialize the View

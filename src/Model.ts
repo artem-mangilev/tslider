@@ -125,12 +125,8 @@ class Model extends Subject {
   public get labelPosition(): Point {
     if (this.orientation === 'horizontal') {
       const middle = this.labelWidth / 2
-
-      // TODO: this number helps to align label with handle vertically. This behaviour should be implemented with a different way.
-      const magicNumber = 1
-
       return {
-        x: this.handlePosition.x * this.trackWidth - middle + magicNumber,
+        x: this.handlePosition.x * this.trackWidth - middle,
         y: 0,
       }
     }

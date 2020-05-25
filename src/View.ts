@@ -7,6 +7,7 @@ import InputView from './InputView'
 import { Ratio, Orientation } from './aliases'
 import ViewOptions from './ViewOptions'
 import { RatioPoint } from './RatioPoint'
+import LabelsContainerView from './LabelsContainerView'
 
 class View {
   private handle: HandleView
@@ -14,7 +15,8 @@ class View {
   private range: RangeView
   private label: LabelView
   private targetInput: InputView
-  orientation: Orientation
+  private orientation: Orientation
+  private labelsContainer: LabelsContainerView
 
   constructor(options: ViewOptions) {
     this.targetInput = new InputView(options.targetInput)
@@ -22,9 +24,9 @@ class View {
 
     // create the following structure of slider
     // .tslider
-    //   .tslider__labels
-    //     .tslider__label
     //   .tslider__track
+    //     .tslider__labels
+    //       .tslider__label
     //     .tslider__range
     //     .tslider__handle
 
@@ -37,12 +39,21 @@ class View {
     // put it after the targetInput
     this.targetInput.$element.after($slider)
 
+    // create the track
+    const $track = $('<div>', {
+      class: 'tslider__track',
+    })
+    // put it inside the sliderContainer
+    $slider.append($track)
+    // initialize the TrackView class
+    this.track = new TrackView($track[0])
+
     // create the container for labels
     const $labelsContainer = $('<div>', {
       class: 'tslider__labels',
     })
-    // put it inside the sliderContainer
-    $slider.append($labelsContainer)
+    // put it inside the track
+    $track.append($labelsContainer)
 
     // create the label
     const $label = $('<div>', {
@@ -53,14 +64,11 @@ class View {
     // initialize the label class
     this.label = new LabelView($label[0])
 
-    // create the track
-    const $track = $('<div>', {
-      class: 'tslider__track',
-    })
-    // put it inside the sliderContainer
-    $slider.append($track)
-    // initialize the TrackView class
-    this.track = new TrackView($track[0])
+    // init the labelsContainer class (this call is here because this class should know the size of label)
+    this.labelsContainer = new LabelsContainerView($labelsContainer[0])
+
+    // set margin from track
+    this.labelsContainer.setMarginFromTrack(options.labelMarginFromTrack)
 
     // create the range
     const $range = $('<div>', {
