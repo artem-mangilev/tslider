@@ -1,4 +1,4 @@
-import { Point } from './Point'
+import Point from './utils/Point'
 import HandleView from './HandleView'
 import TrackView from './TrackView'
 import RangeView from './RangeView'
@@ -6,7 +6,7 @@ import LabelView from './LabelView'
 import InputView from './InputView'
 import { Ratio, Orientation } from './aliases'
 import ViewOptions from './ViewOptions'
-import { RatioPoint } from './RatioPoint'
+import RatioPoint from './utils/RatioPoint'
 import LabelsContainerView from './LabelsContainerView'
 
 class View {

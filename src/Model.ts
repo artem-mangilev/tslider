@@ -1,8 +1,9 @@
 import { Ratio, Orientation } from './aliases'
 import Subject from './utils/Subject'
 import ModelOptions from './ModelOptions'
-import { Point } from './Point'
-import { RatioPoint } from './RatioPoint'
+import Point from './utils/Point'
+import RatioPoint from './utils/RatioPoint'
+import TrackModel from './TrackModel'
 
 // TODO: simplify implementation of switching the orientation
 class Model extends Subject {

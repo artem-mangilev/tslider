@@ -1,4 +1,4 @@
-import { Point } from './Point'
+import Point from './utils/Point'
 
 class LabelView {
   $label: JQuery<HTMLElement>
