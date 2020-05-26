@@ -3,7 +3,6 @@ import Subject from './utils/Subject'
 import ModelOptions from './ModelOptions'
 import Point from './utils/Point'
 import RatioPoint from './utils/RatioPoint'
-import TrackModel from './TrackModel'
 
 // TODO: simplify implementation of switching the orientation
 class Model extends Subject {
@@ -19,9 +18,11 @@ class Model extends Subject {
     this.options = options
     this.orientation = this.options.orientation
 
+    const middleOfTrack = this.trackWidth / 2
+
     this.handlePosition = {
-      x: this.orientation === 'horizontal' ? 0 : 0.5,
-      y: this.orientation === 'horizontal' ? 0.5 : 0,
+      x: this.orientation === 'horizontal' ? 0 : middleOfTrack,
+      y: this.orientation === 'horizontal' ? middleOfTrack : 0,
     }
 
     this.maxMinDiff = this.options.max - this.options.min
@@ -40,32 +41,48 @@ class Model extends Subject {
       // if targetPointX closer to right boundry of step length, put handle to this boundry
       // otherwise put handle to left boundry
       const handleStep = Math.round(targetPoint.x / this.stepSegment)
-      this.handlePosition.x = handleStep / this.numberOfSteps
+      this.handlePosition.x =
+        (handleStep / this.numberOfSteps) * this.trackWidth
     } else if (this.orientation === 'vetical') {
       const handleStep = Math.round(targetPoint.y / this.stepSegment)
-      this.handlePosition.y = handleStep / this.numberOfSteps
+      this.handlePosition.y =
+        (handleStep / this.numberOfSteps) * this.trackHeight
     }
 
     this.notify()
   }
 
-  get dataAmount(): number {
-    if (this.orientation === 'horizontal') {
-      return this.handlePosition.x * this.maxMinDiff + this.options.min
-    } else if (this.orientation === 'vetical') {
-      const reversedHandlePositionY: Ratio = 1 - this.handlePosition.y
-      return reversedHandlePositionY * this.maxMinDiff + this.options.min
+  // TODO: find the better name for function and argument
+  private handlePositionToRatio(): Ratio {
+    switch (this.orientation) {
+      case 'horizontal':
+        return this.handlePosition.x / this.trackWidth
+      case 'vetical':
+        return this.handlePosition.y / this.trackHeight
     }
   }
 
-  public convertDataToPoint(data: number): RatioPoint {
+  get dataAmount(): number {
+    switch (this.orientation) {
+      case 'horizontal':
+        return this.handlePositionToRatio() * this.maxMinDiff + this.options.min
+      case 'vetical':
+        const reversedHandlePosition: Ratio = 1 - this.handlePositionToRatio()
+        return reversedHandlePosition * this.maxMinDiff + this.options.min
+    }
+  }
+
+  private dataToRatio(data: number): Ratio {
+    return (data - this.options.min) / this.maxMinDiff
+  }
+
+  public convertDataToPoint(data: number): Point {
     if (this.orientation === 'horizontal') {
-      const x: Ratio =
-        ((data - this.options.min) / this.maxMinDiff) * this.trackWidth
+      const x: Ratio = this.dataToRatio(data) * this.trackWidth
 
       return { x, y: this.handlePosition.y }
     } else if (this.orientation === 'vetical') {
-      const reversedDataRatio = 1 - (data - this.options.min) / this.maxMinDiff
+      const reversedDataRatio = 1 - this.dataToRatio(data)
       const y: Ratio = reversedDataRatio * this.trackHeight
 
       return { x: this.handlePosition.x, y }
@@ -86,7 +103,7 @@ class Model extends Subject {
 
   public get rangeWidth(): number {
     if (this.orientation === 'horizontal') {
-      return this.handlePosition.x * this.trackWidth
+      return this.handlePosition.x
     } else if (this.orientation === 'vetical') {
       return this.trackWidth
     }
@@ -96,22 +113,15 @@ class Model extends Subject {
     if (this.orientation === 'horizontal') {
       return this.trackHeight
     } else if (this.orientation === 'vetical') {
-      const invertedHandlePositionY: Ratio = 1 - this.handlePosition.y
-      return invertedHandlePositionY * this.trackHeight
+      return this.trackHeight - this.handlePosition.y
     }
   }
 
   public get rangeStartPosition(): Point {
     if (this.orientation === 'horizontal') {
-      return {
-        x: 0,
-        y: 0,
-      }
+      return { x: 0, y: 0 }
     } else if (this.orientation === 'vetical') {
-      return {
-        x: 0,
-        y: this.handlePosition.y * this.trackHeight,
-      }
+      return { x: 0, y: this.handlePosition.y }
     }
   }
 
@@ -127,16 +137,15 @@ class Model extends Subject {
     if (this.orientation === 'horizontal') {
       const middle = this.labelWidth / 2
       return {
-        x: this.handlePosition.x * this.trackWidth - middle,
+        x: this.handlePosition.x - middle,
         y: 0,
       }
     }
     const middle = this.labelHeight / 2
     return {
       x: 0,
-      y: this.handlePosition.y * this.trackHeight - middle,
+      y: this.handlePosition.y - middle,
     }
-    // TODO: implement vertical label position
   }
 }
 

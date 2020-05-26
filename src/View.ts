@@ -113,14 +113,9 @@ class View {
   }
 
   // TODO: position here is a Ratio (position) and a Point (newPosition), so it's better to give them different names
-  public slideTo(position: RatioPoint, data: string): void {
-    const newPosition: Point = {
-      x: position.x * this.track.width,
-      y: position.y * this.track.height,
-    }
-
+  public slideTo(position: Point, data: string): void {
     // move the handle
-    this.handle.move(newPosition)
+    this.handle.move(position)
 
     // update the target input's value
     this.targetInput.setValue(data)
