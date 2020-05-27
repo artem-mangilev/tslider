@@ -20,6 +20,7 @@ class TrackView {
     this.$track.css('width', `${newWidth}px`)
   }
 
+  // TODO: the height of the track should be fit in the containing element's height
   public set height(newHeight: number) {
     this.$track.css('height', `${newHeight}px`)
   }
