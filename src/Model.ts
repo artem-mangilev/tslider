@@ -18,7 +18,7 @@ class Model extends Subject {
     this.options = options
     this.orientation = this.options.orientation
 
-    const middleOfTrack = this.trackWidth / 2
+    const middleOfTrack = this.options.trackHeight / 2
 
     this.handlePosition = {
       x: this.orientation === 'horizontal' ? 0 : middleOfTrack,
