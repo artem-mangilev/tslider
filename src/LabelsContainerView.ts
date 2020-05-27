@@ -21,8 +21,9 @@ class LabelsContainerView {
     // in vertical orientation, labelsContainer should be placed above the track
     if (this.orientation === 'horizontal') {
       this.$element.css('top', `${-this.height - margin}px`)
+    } else {
+      this.$element.css('right', `${-this.width - margin}px`)
     }
-    this.$element.css('right', `${-this.width - margin}px`)
   }
 }
 
