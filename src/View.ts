@@ -175,6 +175,7 @@ class View {
       const x = e.clientX - this.track.positionX
       const y = e.clientY - this.track.positionY
 
+      // TODO: handle could move outside the track, should be fixed
       // evaluate handler only if mouse is inside of horizontal or vertical track scope
       let isMousePositionValid
       if (this.orientation === 'horizontal') {

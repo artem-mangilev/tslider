@@ -1,17 +1,20 @@
-import { Ratio, Orientation } from './aliases'
+import { Ratio, Orientation, OneDimensionalSpacePoint } from './aliases'
 import Subject from './utils/Subject'
 import ModelOptions from './ModelOptions'
 import Point from './utils/Point'
 import TrackModel from './TrackModel'
+import HandleModel from './HandleModel'
+import DataModel from './DataModel'
 
 // TODO: simplify implementation of switching the orientation
 class Model extends Subject {
-  public handlePosition: Point
-
   private options: ModelOptions
   private maxMinDiff: number
   private orientation: Orientation
   private track: TrackModel
+  handle: HandleModel
+  data: DataModel
+  middleOfTrack: number
 
   constructor(options: ModelOptions) {
     super()
@@ -31,70 +34,73 @@ class Model extends Subject {
 
     // middle of short side of the track,
     // handle position is static at thix axle
-    const middleOfTrack = this.track.height / 2
+    this.middleOfTrack = this.track.height / 2
 
-    this.handlePosition = {
-      x: this.orientation === 'horizontal' ? 0 : middleOfTrack,
-      y: this.orientation === 'horizontal' ? middleOfTrack : 0,
-    }
+    // initialize the handle
+    const handleInitialPosition = this.track.getAvailablePoint({
+      x: 0,
+      y: this.middleOfTrack,
+    })
+    this.handle = new HandleModel(handleInitialPosition)
+
+    // initialize the data
+    this.data = new DataModel(
+      this.options.min,
+      this.options.max,
+      this.orientation
+    )
 
     this.maxMinDiff = this.options.max - this.options.min
   }
 
-  private get numberOfSteps(): number {
-    return this.maxMinDiff / this.options.step
-  }
-
-  private get stepSegment(): number {
-    return this.track.width / this.numberOfSteps
+  public get handlePosition(): Point {
+    return this.handle.position
   }
 
   public moveHandle(targetPoint: Point): void {
-    const { x,  y } = this.track.getAvailablePoint(
-      targetPoint
-    )
+    const newHandlePosition = this.track.getAvailablePoint(targetPoint)
 
-    this.handlePosition.x = x
-    this.handlePosition.y = y
+    this.handle.position = newHandlePosition
 
     this.notify()
   }
 
-  // TODO: find the better name for function and argument
-  private handlePositionToRatio(): Ratio {
-    switch (this.orientation) {
-      case 'horizontal':
-        return this.handlePosition.x / this.track.width
-      case 'vetical':
-        return this.handlePosition.y / this.track.width
-    }
-  }
-
   get dataAmount(): number {
-    switch (this.orientation) {
-      case 'horizontal':
-        return this.handlePositionToRatio() * this.maxMinDiff + this.options.min
-      case 'vetical':
-        const reversedHandlePosition: Ratio = 1 - this.handlePositionToRatio()
-        return reversedHandlePosition * this.maxMinDiff + this.options.min
-    }
+    const handlePositionRatio = this.track.pointToRatio(this.handlePosition)
+
+    return this.data.getAmount(
+      this.orientation === 'horizontal'
+        ? handlePositionRatio
+        : 1 - handlePositionRatio
+    )
   }
 
   private dataToRatio(data: number): Ratio {
     return (data - this.options.min) / this.maxMinDiff
   }
 
-  public convertDataToPoint(data: number): Point {
+  public convertDataToHandlePoint(data: number): Point {
     if (this.orientation === 'horizontal') {
       const x: Ratio = this.dataToRatio(data) * this.track.width
 
-      return { x, y: this.handlePosition.y }
+      return { x, y: this.handle.position.y }
     } else if (this.orientation === 'vetical') {
       const reversedDataRatio = 1 - this.dataToRatio(data)
       const y: Ratio = reversedDataRatio * this.track.width
 
-      return { x: this.handlePosition.x, y }
+      return { x: this.handle.position.x, y }
     }
+
+    // const dataRatio =
+    //   this.orientation === 'horizontal'
+    //     ? this.dataToRatio(data)
+    //     : 1 - this.dataToRatio(data)
+    // const point: OneDimensionalSpacePoint = dataRatio * this.track.width
+
+    // return this.track.getAvailablePoint({
+    //   x: point,
+    //   y: this.middleOfTrack,
+    // })
   }
 
   public get rangeWidth(): number {

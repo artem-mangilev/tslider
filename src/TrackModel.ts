@@ -19,19 +19,14 @@ class TrackModel {
     this.numberOfSteps = this.maxMinDiff / step
     this.stepSegment = this.width / this.numberOfSteps
     this.passiveLineMiddle = this.height / 2
-
   }
 
   private getActiveAxisPoint(point: Point): OneDimensionalSpacePoint {
     return this.orientation === 'horizontal' ? point.x : point.y
   }
 
-  private get activeAxisName(): string {
-    return this.orientation === 'horizontal' ? 'x' : 'y'
-  }
-
-  private get passiveAxisName(): string {
-    return this.orientation === 'horizontal' ? 'y' : 'x'
+  private getPassiveAxisPoint(point: Point): OneDimensionalSpacePoint {
+    return this.orientation === 'horizontal' ? point.y : point.x
   }
 
   private getNearStep(point: OneDimensionalSpacePoint) {
@@ -39,8 +34,9 @@ class TrackModel {
   }
 
   // track decides which point is available for handle
-  public getAvailablePoint(point: Point) {
+  public getAvailablePoint(point: Point): Point {
     const activeAxis = this.getActiveAxisPoint(point)
+    const passiveAxis = this.getPassiveAxisPoint(point)
 
     const availablePointRatio: Ratio =
       this.getNearStep(activeAxis) / this.numberOfSteps
@@ -48,9 +44,19 @@ class TrackModel {
       availablePointRatio * this.width
 
     return {
-      [this.activeAxisName]: availablePoint,
-      [this.passiveAxisName]: this.passiveLineMiddle,
+      x:
+        this.orientation === 'horizontal'
+          ? availablePoint
+          : this.passiveLineMiddle,
+      y:
+        this.orientation === 'horizontal'
+          ? this.passiveLineMiddle
+          : availablePoint,
     }
+  }
+
+  public pointToRatio(point: Point): Ratio {
+    return this.getActiveAxisPoint(point) / this.width
   }
 }
 
