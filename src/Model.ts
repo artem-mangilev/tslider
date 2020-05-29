@@ -2,15 +2,16 @@ import { Ratio, Orientation } from './aliases'
 import Subject from './utils/Subject'
 import ModelOptions from './ModelOptions'
 import Point from './utils/Point'
-import RatioPoint from './utils/RatioPoint'
+import TrackModel from './TrackModel'
 
 // TODO: simplify implementation of switching the orientation
 class Model extends Subject {
-  public handlePosition: RatioPoint
+  public handlePosition: Point
 
   private options: ModelOptions
   private maxMinDiff: number
   private orientation: Orientation
+  private track: TrackModel
 
   constructor(options: ModelOptions) {
     super()
@@ -18,7 +19,19 @@ class Model extends Subject {
     this.options = options
     this.orientation = this.options.orientation
 
-    const middleOfTrack = this.options.trackHeight / 2
+    // initialize track class
+    this.track = new TrackModel(
+      this.options.min,
+      this.options.max,
+      this.options.step,
+      this.options.trackWidth,
+      this.options.trackHeight,
+      this.orientation
+    )
+
+    // middle of short side of the track,
+    // handle position is static at thix axle
+    const middleOfTrack = this.track.height / 2
 
     this.handlePosition = {
       x: this.orientation === 'horizontal' ? 0 : middleOfTrack,
@@ -33,21 +46,16 @@ class Model extends Subject {
   }
 
   private get stepSegment(): number {
-    return this.options.trackWidth / this.numberOfSteps
+    return this.track.width / this.numberOfSteps
   }
 
   public moveHandle(targetPoint: Point): void {
-    if (this.orientation === 'horizontal') {
-      // if targetPointX closer to right boundry of step length, put handle to this boundry
-      // otherwise put handle to left boundry
-      const handleStep = Math.round(targetPoint.x / this.stepSegment)
-      this.handlePosition.x =
-        (handleStep / this.numberOfSteps) * this.trackWidth
-    } else if (this.orientation === 'vetical') {
-      const handleStep = Math.round(targetPoint.y / this.stepSegment)
-      this.handlePosition.y =
-        (handleStep / this.numberOfSteps) * this.trackHeight
-    }
+    const { x,  y } = this.track.getAvailablePoint(
+      targetPoint
+    )
+
+    this.handlePosition.x = x
+    this.handlePosition.y = y
 
     this.notify()
   }
@@ -56,9 +64,9 @@ class Model extends Subject {
   private handlePositionToRatio(): Ratio {
     switch (this.orientation) {
       case 'horizontal':
-        return this.handlePosition.x / this.trackWidth
+        return this.handlePosition.x / this.track.width
       case 'vetical':
-        return this.handlePosition.y / this.trackHeight
+        return this.handlePosition.y / this.track.width
     }
   }
 
@@ -78,42 +86,30 @@ class Model extends Subject {
 
   public convertDataToPoint(data: number): Point {
     if (this.orientation === 'horizontal') {
-      const x: Ratio = this.dataToRatio(data) * this.trackWidth
+      const x: Ratio = this.dataToRatio(data) * this.track.width
 
       return { x, y: this.handlePosition.y }
     } else if (this.orientation === 'vetical') {
       const reversedDataRatio = 1 - this.dataToRatio(data)
-      const y: Ratio = reversedDataRatio * this.trackHeight
+      const y: Ratio = reversedDataRatio * this.track.width
 
       return { x: this.handlePosition.x, y }
     }
-  }
-
-  public get trackWidth() {
-    return this.orientation === 'horizontal'
-      ? this.options.trackWidth
-      : this.options.trackHeight
-  }
-
-  public get trackHeight() {
-    return this.orientation === 'horizontal'
-      ? this.options.trackHeight
-      : this.options.trackWidth
   }
 
   public get rangeWidth(): number {
     if (this.orientation === 'horizontal') {
       return this.handlePosition.x
     } else if (this.orientation === 'vetical') {
-      return this.trackWidth
+      return this.track.height
     }
   }
 
   public get rangeHeight(): number {
     if (this.orientation === 'horizontal') {
-      return this.trackHeight
+      return this.track.height
     } else if (this.orientation === 'vetical') {
-      return this.trackHeight - this.handlePosition.y
+      return this.track.width - this.handlePosition.y
     }
   }
 

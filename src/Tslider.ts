@@ -4,6 +4,7 @@ import SliderOptions from './SliderOptions'
 import ModelOptions from './ModelOptions'
 import Observer from './utils/Observer'
 import ViewOptions from './ViewOptions'
+import Point from './utils/Point'
 
 class Tslider implements Observer {
   private view: View
@@ -13,7 +14,7 @@ class Tslider implements Observer {
     const viewOptions: ViewOptions = {
       targetInput: options.targetInput,
       orientation: options.orientation,
-      labelMarginFromTrack: options.labelMarginFromTrack
+      labelMarginFromTrack: options.labelMarginFromTrack,
     }
 
     // initialize the View
@@ -33,8 +34,11 @@ class Tslider implements Observer {
     const model: Model = new Model(modelOptions)
 
     // set correct orientation of the track
-    this.view.trackWidth = model.trackWidth
-    this.view.trackHeight = model.trackHeight
+    if (options.orientation === 'vetical') {
+      const width = this.view.trackWidth
+      this.view.trackWidth = this.view.trackHeight
+      this.view.trackHeight = width
+    }
 
     // register this class as observer of the model
     model.attach(this)
