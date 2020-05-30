@@ -9,12 +9,10 @@ import DataModel from './DataModel'
 // TODO: simplify implementation of switching the orientation
 class Model extends Subject {
   private options: ModelOptions
-  private maxMinDiff: number
   private orientation: Orientation
   private track: TrackModel
   private handle: HandleModel
   private data: DataModel
-  private trackMiddle: number
 
   constructor(options: ModelOptions) {
     super()
@@ -31,18 +29,12 @@ class Model extends Subject {
       this.options.trackHeight
     )
 
-    // middle of short side of the track,
-    // handle position is static at thix axis
-    this.trackMiddle = this.track.height / 2
-
     // initialize the data
     this.data = new DataModel(
       this.options.min,
       this.options.max,
       this.orientation
     )
-
-    this.maxMinDiff = this.options.max - this.options.min
   }
 
   public get handlePosition(): Point {
@@ -64,21 +56,18 @@ class Model extends Subject {
       this.handle.currentPositionActiveAxis
     )
 
-    return this.data.getAmount(
-      this.orientation === 'horizontal'
-        ? handlePositionRatio
-        : 1 - handlePositionRatio
-    )
+    return this.data.getAmount(handlePositionRatio)
   }
 
   public initHandleWithData(data: number): Point {
-    const dataRatio =
-      this.orientation === 'horizontal'
-        ? this.data.getAmountAsRatio(data)
-        : 1 - this.data.getAmountAsRatio(data)
+    const dataRatio = this.data.getAmountAsRatio(data)
+
     const x: OneDimensionalSpacePoint = dataRatio * this.track.width
 
-    this.handle = new HandleModel({ x, y: this.trackMiddle }, this.orientation)
+    this.handle = new HandleModel(
+      { x, y: this.track.height / 2 },
+      this.orientation
+    )
 
     // TODO: probably returned value isn't expected from method with this name
     return this.handle.position

@@ -1,7 +1,7 @@
 import { Ratio, Orientation } from './aliases'
 
 class DataModel {
-  maxMinDiff: number
+  private maxMinDiff: number
 
   constructor(
     private min: number,
@@ -11,15 +11,22 @@ class DataModel {
     this.maxMinDiff = max - min
   }
 
+  private validateRatio(ratio: Ratio): Ratio {
+    const totalRatio: Ratio = 1
+    return this.orientation === 'horizontal' ? ratio : totalRatio - ratio
+  }
+
   public getAmount(ratio: Ratio): number {
-    return ratio * this.maxMinDiff + this.min
+    const dataAmountRatio = this.validateRatio(ratio)
+
+    return dataAmountRatio * this.maxMinDiff + this.min
   }
 
   public getAmountAsRatio(dataAmount: number): Ratio {
-    return (dataAmount - this.min) / this.maxMinDiff
-  }
+    const dataAmountRatio = (dataAmount - this.min) / this.maxMinDiff
 
-  
+    return this.validateRatio(dataAmountRatio)
+  }
 }
 
 export default DataModel
