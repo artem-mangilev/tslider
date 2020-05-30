@@ -1,6 +1,7 @@
 import { OneDimensionalSpacePoint, Ratio } from './aliases'
 
-// TODO: probably this class could work without knowledge about min, max and step values (if use ratio)
+// TODO: probably this class could work without knowledge about min, max and step values
+// (compute stepSegment in Model, compute getAvailablePoint with passing the ratio, not the actual coordinate)
 class TrackModel {
   maxMinDiff: number
   numberOfSteps: number
