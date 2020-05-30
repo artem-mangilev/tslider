@@ -1,6 +1,6 @@
-import { Orientation, OneDimensionalSpacePoint, Ratio } from './aliases'
-import Point from './utils/Point'
+import { OneDimensionalSpacePoint, Ratio } from './aliases'
 
+// TODO: probably this class could work without knowledge about min, max and step values (if use ratio)
 class TrackModel {
   maxMinDiff: number
   numberOfSteps: number
