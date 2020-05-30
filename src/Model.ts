@@ -71,22 +71,16 @@ class Model extends Subject {
     )
   }
 
-  private dataToRatio(data: number): Ratio {
-    return (data - this.options.min) / this.maxMinDiff
-  }
-
   public initHandleWithData(data: number): Point {
     const dataRatio =
       this.orientation === 'horizontal'
-        ? this.dataToRatio(data)
-        : 1 - this.dataToRatio(data)
+        ? this.data.getAmountAsRatio(data)
+        : 1 - this.data.getAmountAsRatio(data)
     const x: OneDimensionalSpacePoint = dataRatio * this.track.width
 
-    this.handle = new HandleModel(
-      { x, y: this.trackMiddle },
-      this.orientation
-    )
+    this.handle = new HandleModel({ x, y: this.trackMiddle }, this.orientation)
 
+    // TODO: probably returned value isn't expected from method with this name
     return this.handle.position
   }
 
