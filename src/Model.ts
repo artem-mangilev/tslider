@@ -28,20 +28,12 @@ class Model extends Subject {
       this.options.max,
       this.options.step,
       this.options.trackWidth,
-      this.options.trackHeight,
-      this.orientation
+      this.options.trackHeight
     )
 
     // middle of short side of the track,
-    // handle position is static at thix axle
+    // handle position is static at thix axis
     this.middleOfTrack = this.track.height / 2
-
-    // initialize the handle
-    const handleInitialPosition = this.track.getAvailablePoint({
-      x: 0,
-      y: this.middleOfTrack,
-    })
-    this.handle = new HandleModel(handleInitialPosition)
 
     // initialize the data
     this.data = new DataModel(
@@ -58,15 +50,19 @@ class Model extends Subject {
   }
 
   public moveHandle(targetPoint: Point): void {
-    const newHandlePosition = this.track.getAvailablePoint(targetPoint)
+    const newHandlePosition = this.track.getAvailablePoint(
+      this.handle.getActiveAxisPoint(targetPoint)
+    )
 
-    this.handle.position = newHandlePosition
+    this.handle.move(newHandlePosition)
 
     this.notify()
   }
 
   get dataAmount(): number {
-    const handlePositionRatio = this.track.pointToRatio(this.handlePosition)
+    const handlePositionRatio = this.track.pointToRatio(
+      this.handle.currentPositionActiveAxis
+    )
 
     return this.data.getAmount(
       this.orientation === 'horizontal'
@@ -79,28 +75,21 @@ class Model extends Subject {
     return (data - this.options.min) / this.maxMinDiff
   }
 
-  public convertDataToHandlePoint(data: number): Point {
-    if (this.orientation === 'horizontal') {
-      const x: Ratio = this.dataToRatio(data) * this.track.width
+  public initHandleWithData(data: number): Point {
+    const dataRatio =
+      this.orientation === 'horizontal'
+        ? this.dataToRatio(data)
+        : 1 - this.dataToRatio(data)
+    const point: OneDimensionalSpacePoint = dataRatio * this.track.width
 
-      return { x, y: this.handle.position.y }
-    } else if (this.orientation === 'vetical') {
-      const reversedDataRatio = 1 - this.dataToRatio(data)
-      const y: Ratio = reversedDataRatio * this.track.width
+    // TODO: make initialization less verbose 
+    this.handle = new HandleModel(
+      { x: 0, y: this.middleOfTrack },
+      this.orientation
+    )
+    this.handle.move(point)
 
-      return { x: this.handle.position.x, y }
-    }
-
-    // const dataRatio =
-    //   this.orientation === 'horizontal'
-    //     ? this.dataToRatio(data)
-    //     : 1 - this.dataToRatio(data)
-    // const point: OneDimensionalSpacePoint = dataRatio * this.track.width
-
-    // return this.track.getAvailablePoint({
-    //   x: point,
-    //   y: this.middleOfTrack,
-    // })
+    return this.handle.position
   }
 
   public get rangeWidth(): number {

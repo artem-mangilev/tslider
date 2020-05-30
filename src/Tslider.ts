@@ -44,7 +44,7 @@ class Tslider implements Observer {
     model.attach(this)
 
     // compute the initial point
-    const initialPoint = model.convertDataToHandlePoint(options.current)
+    const initialPoint = model.initHandleWithData(options.current)
     // set initial handle position
     model.moveHandle(initialPoint)
 
