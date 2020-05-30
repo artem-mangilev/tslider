@@ -12,9 +12,9 @@ class Model extends Subject {
   private maxMinDiff: number
   private orientation: Orientation
   private track: TrackModel
-  handle: HandleModel
-  data: DataModel
-  middleOfTrack: number
+  private handle: HandleModel
+  private data: DataModel
+  private trackMiddle: number
 
   constructor(options: ModelOptions) {
     super()
@@ -33,7 +33,7 @@ class Model extends Subject {
 
     // middle of short side of the track,
     // handle position is static at thix axis
-    this.middleOfTrack = this.track.height / 2
+    this.trackMiddle = this.track.height / 2
 
     // initialize the data
     this.data = new DataModel(
@@ -80,14 +80,12 @@ class Model extends Subject {
       this.orientation === 'horizontal'
         ? this.dataToRatio(data)
         : 1 - this.dataToRatio(data)
-    const point: OneDimensionalSpacePoint = dataRatio * this.track.width
+    const x: OneDimensionalSpacePoint = dataRatio * this.track.width
 
-    // TODO: make initialization less verbose 
     this.handle = new HandleModel(
-      { x: 0, y: this.middleOfTrack },
+      { x, y: this.trackMiddle },
       this.orientation
     )
-    this.handle.move(point)
 
     return this.handle.position
   }
