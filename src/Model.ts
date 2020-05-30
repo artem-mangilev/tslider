@@ -5,6 +5,7 @@ import Point from './utils/Point'
 import TrackModel from './TrackModel'
 import HandleModel from './HandleModel'
 import DataModel from './DataModel'
+import LabelModel from './LabelModel'
 
 // TODO: simplify implementation of switching the orientation
 class Model extends Subject {
@@ -13,6 +14,7 @@ class Model extends Subject {
   private track: TrackModel
   private handle: HandleModel
   private data: DataModel
+  private label: LabelModel
 
   constructor(options: ModelOptions) {
     super()
@@ -41,12 +43,15 @@ class Model extends Subject {
     return this.handle.position
   }
 
+  // TODO: create different name for this method
   public moveHandle(targetPoint: Point): void {
     const newHandlePosition = this.track.getAvailablePoint(
       this.handle.getActiveAxisPoint(targetPoint)
     )
 
     this.handle.move(newHandlePosition)
+
+    this.label.move(newHandlePosition)
 
     this.notify()
   }
@@ -59,13 +64,23 @@ class Model extends Subject {
     return this.data.getAmount(handlePositionRatio)
   }
 
+  // TODO: create different name for this method
   public initHandleWithData(data: number): Point {
     const dataRatio = this.data.getAmountAsRatio(data)
 
     const x: OneDimensionalSpacePoint = dataRatio * this.track.width
 
+    // TODO: handle and label has simular switching coordinate algorithm,
+    // so it could be separated somehow in order to avoid code duplication
     this.handle = new HandleModel(
       { x, y: this.track.height / 2 },
+      this.orientation
+    )
+
+    this.label = new LabelModel(
+      this.options.labelWidth,
+      this.options.labelHeight,
+      { x, y: 0 },
       this.orientation
     )
 
@@ -97,27 +112,8 @@ class Model extends Subject {
     }
   }
 
-  private get labelWidth(): number {
-    return this.options.labelWidth
-  }
-
-  private get labelHeight(): number {
-    return this.options.labelHeight
-  }
-
   public get labelPosition(): Point {
-    if (this.orientation === 'horizontal') {
-      const middle = this.labelWidth / 2
-      return {
-        x: this.handlePosition.x - middle,
-        y: 0,
-      }
-    }
-    const middle = this.labelHeight / 2
-    return {
-      x: 0,
-      y: this.handlePosition.y - middle,
-    }
+    return this.label.position
   }
 }
 
