@@ -104,12 +104,17 @@ class View {
     return this.track.height
   }
 
-  public set trackWidth(width) {
-    this.track.width = width
-  }
-
-  public set trackHeight(height) {
-    this.track.height = height
+  public drawTrack(width: number, height: number): void {
+    switch (this.orientation) {
+      case 'horizontal':
+        this.track.width = width
+        this.track.height = height
+        break
+      case 'vetical':
+        const widthTemp = this.track.width
+        this.track.width = this.track.height
+        this.track.height = widthTemp
+    }
   }
 
   // TODO: position here is a Ratio (position) and a Point (newPosition), so it's better to give them different names

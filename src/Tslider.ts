@@ -33,12 +33,9 @@ class Tslider implements Observer {
     // initialize the Model
     const model: Model = new Model(modelOptions)
 
+    // TODO: maybe the model should provide width and height?
     // set correct orientation of the track
-    if (options.orientation === 'vetical') {
-      const width = this.view.trackWidth
-      this.view.trackWidth = this.view.trackHeight
-      this.view.trackHeight = width
-    }
+    this.view.drawTrack(this.view.trackWidth, this.view.trackHeight)
 
     // register this class as observer of the model
     model.attach(this)
