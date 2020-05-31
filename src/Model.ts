@@ -43,6 +43,10 @@ class Model extends Subject {
     return this.handle.position
   }
 
+  public get labelPosition(): Point {
+    return this.label.position
+  }
+
   // TODO: create different name for this method
   public moveHandle(targetPoint: Point): void {
     const newHandlePosition = this.track.getAvailablePoint(
@@ -110,10 +114,6 @@ class Model extends Subject {
     } else if (this.orientation === 'vetical') {
       return { x: 0, y: this.handlePosition.y }
     }
-  }
-
-  public get labelPosition(): Point {
-    return this.label.position
   }
 }
 
