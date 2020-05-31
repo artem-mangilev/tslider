@@ -22,20 +22,19 @@ class Model extends Subject {
     this.options = options
     this.orientation = this.options.orientation
 
-    // initialize track class
-    this.track = new TrackModel(
-      this.options.min,
-      this.options.max,
-      this.options.step,
-      this.options.trackWidth,
-      this.options.trackHeight
-    )
-
     // initialize the data
     this.data = new DataModel(
       this.options.min,
       this.options.max,
+      this.options.step,
       this.orientation
+    )
+
+    // initialize track class
+    this.track = new TrackModel(
+      this.data.numberOfSteps,
+      this.options.trackWidth,
+      this.options.trackHeight
     )
   }
 

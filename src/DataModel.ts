@@ -6,6 +6,7 @@ class DataModel {
   constructor(
     private min: number,
     private max: number,
+    private step: number,
     private orientation: Orientation
   ) {
     this.maxMinDiff = max - min
@@ -26,6 +27,10 @@ class DataModel {
     const dataAmountRatio = (dataAmount - this.min) / this.maxMinDiff
 
     return this.validateRatio(dataAmountRatio)
+  }
+
+  public get numberOfSteps(): number {
+    return this.maxMinDiff / this.step
   }
 }
 

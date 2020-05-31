@@ -1,22 +1,15 @@
 import { OneDimensionalSpacePoint, Ratio } from './aliases'
 
-// TODO: probably this class could work without knowledge about min, max and step values
-// (compute stepSegment in Model, compute getAvailablePoint with passing the ratio, not the actual coordinate)
 class TrackModel {
   maxMinDiff: number
-  numberOfSteps: number
   stepSegment: number
   passiveLineMiddle: number
 
   constructor(
-    min: number,
-    max: number,
-    step: number,
+    private numberOfSteps: number,
     public width: number,
     public height: number
   ) {
-    this.maxMinDiff = max - min
-    this.numberOfSteps = this.maxMinDiff / step
     this.stepSegment = this.width / this.numberOfSteps
   }
 
