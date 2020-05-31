@@ -48,21 +48,17 @@ class Model extends Subject {
 
   // TODO: create different name for this method
   public moveHandle(targetPoint: Point): void {
-    const newHandlePosition = this.track.getAvailablePoint(
-      this.handle.getActiveAxisPoint(targetPoint)
-    )
+    const availablePoint = this.track.getAvailablePoint(targetPoint.x)
 
-    this.handle.move(newHandlePosition)
+    this.handle.move(availablePoint)
 
-    this.label.move(newHandlePosition)
+    this.label.move(availablePoint)
 
     this.notify()
   }
 
   get dataAmount(): number {
-    const handlePositionRatio = this.track.pointToRatio(
-      this.handle.currentPositionActiveAxis
-    )
+    const handlePositionRatio = this.track.pointToRatio(this.handle.position.x)
 
     return this.data.getAmount(handlePositionRatio)
   }
@@ -73,11 +69,7 @@ class Model extends Subject {
 
     const x: OneDimensionalSpacePoint = dataRatio * this.track.width
 
-    // TODO: handle and label has simular switching coordinate algorithm,
-    // so it could be separated somehow in order to avoid code duplication
-    this.handle = new HandleModel(
-      { x, y: this.track.height / 2 },
-    )
+    this.handle = new HandleModel({ x, y: this.track.height / 2 })
 
     this.label = new LabelModel(
       this.options.labelWidth,
@@ -92,8 +84,8 @@ class Model extends Subject {
 
   public get rangeWidth(): number {
     return this.orientation === 'horizontal'
-      ? this.handle.currentPositionActiveAxis
-      : this.track.width - this.handle.currentPositionActiveAxis
+      ? this.handle.position.x
+      : this.track.width - this.handle.position.x
   }
 
   public get rangeHeight(): number {
@@ -104,7 +96,7 @@ class Model extends Subject {
     if (this.orientation === 'horizontal') {
       return { x: 0, y: 0 }
     } else if (this.orientation === 'vetical') {
-      return { x: 0, y: this.handle.currentPositionActiveAxis }
+      return { x: 0, y: this.handle.position.x }
     }
   }
 }

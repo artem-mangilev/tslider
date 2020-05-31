@@ -21,14 +21,6 @@ class HandleModel {
     this.currentPosition = { x: whereTo, y: this.passiveAxis }
 
   }
-
-  public getActiveAxisPoint(point: Point): OneDimensionalSpacePoint {
-    return point.x
-  }
-
-  public get currentPositionActiveAxis(): OneDimensionalSpacePoint {
-    return this.getActiveAxisPoint(this.position)
-  }
 }
 
 export default HandleModel
