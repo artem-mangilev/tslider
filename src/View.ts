@@ -131,7 +131,14 @@ class View {
     height: number,
     position: RatioPoint
   ): void {
-    this.range.draw(width, height, position)
+    switch (this.orientation) {
+      case 'horizontal':
+        this.range.draw(width, height, position)
+        break
+      case 'vetical':
+        this.range.draw(height, width, position)
+        break
+    }
   }
 
   public updateLabel(position: Point, data: number) {

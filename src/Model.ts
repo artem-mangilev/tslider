@@ -92,19 +92,13 @@ class Model extends Subject {
   }
 
   public get rangeWidth(): number {
-    if (this.orientation === 'horizontal') {
-      return this.handlePosition.x
-    } else if (this.orientation === 'vetical') {
-      return this.track.height
-    }
+    return this.orientation === 'horizontal'
+      ? this.handle.currentPositionActiveAxis
+      : this.track.width - this.handle.currentPositionActiveAxis
   }
 
   public get rangeHeight(): number {
-    if (this.orientation === 'horizontal') {
-      return this.track.height
-    } else if (this.orientation === 'vetical') {
-      return this.track.width - this.handlePosition.y
-    }
+    return this.track.height
   }
 
   public get rangeStartPosition(): Point {
