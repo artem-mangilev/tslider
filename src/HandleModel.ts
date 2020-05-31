@@ -1,11 +1,11 @@
 import Point from './utils/Point'
-import { Orientation, OneDimensionalSpacePoint } from './aliases'
+import { OneDimensionalSpacePoint } from './aliases'
 
 class HandleModel {
   private currentPosition: Point
   private passiveAxis: OneDimensionalSpacePoint
 
-  constructor(initialPosition: Point, private orientation: Orientation) {
+  constructor(initialPosition: Point) {
     // when this class is initialized, it assumes that
     // passed coordinate is for horizontal orientation,
     // so Y uses as a passive axis which isn't changes
@@ -18,22 +18,12 @@ class HandleModel {
   }
 
   public move(whereTo: OneDimensionalSpacePoint): void {
-    switch (this.orientation) {
-      case 'horizontal':
-        this.currentPosition = { x: whereTo, y: this.passiveAxis }
-        break
-      case 'vetical':
-        this.currentPosition = { x: this.passiveAxis, y: whereTo }
-    }
+    this.currentPosition = { x: whereTo, y: this.passiveAxis }
+
   }
 
   public getActiveAxisPoint(point: Point): OneDimensionalSpacePoint {
-    switch (this.orientation) {
-      case 'horizontal':
-        return point.x
-      case 'vetical':
-        return point.y
-    }
+    return point.x
   }
 
   public get currentPositionActiveAxis(): OneDimensionalSpacePoint {

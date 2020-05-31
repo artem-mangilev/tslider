@@ -9,7 +9,7 @@ import Point from './utils/Point'
 class Tslider implements Observer {
   private view: View
 
-  constructor(options: SliderOptions) {
+  constructor(private options: SliderOptions) {
     // create view options
     const viewOptions: ViewOptions = {
       targetInput: options.targetInput,
@@ -47,19 +47,19 @@ class Tslider implements Observer {
 
     // when user clicks to some area of the track, move the handle at this position
     this.view.onTrackClick((point) => {
-      model.moveHandle(point)
+      model.moveHandle(this.validatePoint(point))
     })
 
     // when the user dragged the handle, move it to apropriate position
     this.view.handleDrag((point) => {
-      model.moveHandle(point)
+      model.moveHandle(this.validatePoint(point))
     })
   }
 
   // TODO: hide implementation details of the Model. This class shouldn't know that model has a handlePositionX and handlePositionY properties
   public update(model: Model): void {
     const data = model.dataAmount.toString()
-    this.view.slideTo(model.handlePosition, data)
+    this.view.slideTo(this.validatePoint(model.handlePosition), data)
 
     // TODO: find the way to hide this functionality back to slideTo
     this.view.updateRange(
@@ -68,7 +68,15 @@ class Tslider implements Observer {
       model.rangeStartPosition
     )
 
-    this.view.updateLabel(model.labelPosition, model.dataAmount)
+    this.view.updateLabel(this.validatePoint(model.labelPosition), model.dataAmount)
+  }
+
+  private validatePoint(point: Point): Point {
+    if (this.options.orientation === 'vetical') {
+      return { x: point.y, y: point.x }
+    }
+
+    return point
   }
 }
 

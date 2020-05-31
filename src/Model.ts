@@ -77,7 +77,6 @@ class Model extends Subject {
     // so it could be separated somehow in order to avoid code duplication
     this.handle = new HandleModel(
       { x, y: this.track.height / 2 },
-      this.orientation
     )
 
     this.label = new LabelModel(
@@ -105,7 +104,7 @@ class Model extends Subject {
     if (this.orientation === 'horizontal') {
       return { x: 0, y: 0 }
     } else if (this.orientation === 'vetical') {
-      return { x: 0, y: this.handlePosition.y }
+      return { x: 0, y: this.handle.currentPositionActiveAxis }
     }
   }
 }
