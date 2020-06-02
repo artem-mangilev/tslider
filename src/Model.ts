@@ -93,6 +93,16 @@ class Model extends Subject {
     return this.handle.position
   }
 
+  public get trackWidth(): number {
+    return this.track.width
+  }
+
+  
+  public get trackHeight() : number {
+    return this.track.height
+  }
+  
+
   public get rangeWidth(): number {
     return this.range.width
   }

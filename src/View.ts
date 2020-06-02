@@ -8,6 +8,7 @@ import { Ratio, Orientation } from './aliases'
 import ViewOptions from './ViewOptions'
 import RatioPoint from './utils/RatioPoint'
 import LabelsContainerView from './LabelsContainerView'
+import ContainerView from './ContainerView'
 
 class View {
   private handle: HandleView
@@ -17,9 +18,9 @@ class View {
   private targetInput: InputView
   private orientation: Orientation
   private labelsContainer: LabelsContainerView
+  private container: ContainerView
 
   constructor(options: ViewOptions) {
-    this.targetInput = new InputView(options.targetInput)
     this.orientation = options.orientation
 
     // TODO: probably tslider now doesn't make sense and creates unnesessary nesting, so it should be removed
@@ -37,7 +38,9 @@ class View {
     const $slider: JQuery<HTMLElement> = $('<div>', {
       class: 'tslider',
     })
+    this.container = new ContainerView($slider[0])
     // put it after the targetInput
+    this.targetInput = new InputView(options.targetInput)
     this.targetInput.$element.after($slider)
 
     // create the track
@@ -94,6 +97,14 @@ class View {
     this.handle = new HandleView($handle[0])
   }
 
+  public get containerWidth(): number {
+    return this.container.width
+  }
+
+  public get containerHeight(): number {
+    return this.container.height
+  }
+
   // These getters just duplicates the ones from the TrackView, so
   // TODO: find the way to remove these getters
   public get trackWidth() {
@@ -111,9 +122,8 @@ class View {
         this.track.height = height
         break
       case 'vetical':
-        const widthTemp = this.track.width
-        this.track.width = this.track.height
-        this.track.height = widthTemp
+        this.track.width = height
+        this.track.height = width
     }
   }
 
