@@ -9,7 +9,7 @@ $(document).ready(() => {
     current: 150,
     step: 10,
     labelMarginFromTrack: 5,
-    orientation: 'horizontal',
+    orientation: 'vetical',
     targetInput: document.querySelector('.tsl-target'),
   }
 

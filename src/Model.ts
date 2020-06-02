@@ -6,6 +6,7 @@ import TrackModel from './TrackModel'
 import HandleModel from './HandleModel'
 import DataModel from './DataModel'
 import LabelModel from './LabelModel'
+import RangeModel from './RangeModel'
 
 // TODO: simplify implementation of switching the orientation
 class Model extends Subject {
@@ -15,6 +16,7 @@ class Model extends Subject {
   private handle: HandleModel
   private data: DataModel
   private label: LabelModel
+  private range: RangeModel
 
   constructor(options: ModelOptions) {
     super()
@@ -54,6 +56,8 @@ class Model extends Subject {
 
     this.label.move(availablePoint)
 
+    this.range.startPosition = { x: availablePoint, y: 0 }
+
     this.notify()
   }
 
@@ -78,26 +82,27 @@ class Model extends Subject {
       this.orientation
     )
 
+    this.range = new RangeModel(
+      this.track.width,
+      this.track.height,
+      { x, y: 0 },
+      this.orientation
+    )
+
     // TODO: probably returned value isn't expected from method with this name
     return this.handle.position
   }
 
   public get rangeWidth(): number {
-    return this.orientation === 'horizontal'
-      ? this.handle.position.x
-      : this.track.width - this.handle.position.x
+    return this.range.width
   }
 
   public get rangeHeight(): number {
-    return this.track.height
+    return this.range.height
   }
 
   public get rangeStartPosition(): Point {
-    if (this.orientation === 'horizontal') {
-      return { x: 0, y: 0 }
-    } else if (this.orientation === 'vetical') {
-      return { x: 0, y: this.handle.position.x }
-    }
+    return this.range.startPosition
   }
 }
 

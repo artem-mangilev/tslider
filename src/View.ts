@@ -81,7 +81,7 @@ class View {
     // put it inside the track
     $track.append($range)
     // initialize the class
-    this.range = new RangeView($range[0])
+    this.range = new RangeView($range[0], this.orientation)
 
     // create the handle
     // TODO: read about type casting

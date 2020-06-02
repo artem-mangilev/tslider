@@ -65,10 +65,13 @@ class Tslider implements Observer {
     this.view.updateRange(
       model.rangeWidth,
       model.rangeHeight,
-      model.rangeStartPosition
+      this.validatePoint(model.rangeStartPosition)
     )
 
-    this.view.updateLabel(this.validatePoint(model.labelPosition), model.dataAmount)
+    this.view.updateLabel(
+      this.validatePoint(model.labelPosition),
+      model.dataAmount
+    )
   }
 
   private validatePoint(point: Point): Point {
