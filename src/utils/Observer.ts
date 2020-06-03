@@ -1,5 +1,5 @@
 import Subject from './Subject'
 
 export default interface Observer {
-  update(subject: Subject): void
+  update(updateType: number, subject: Subject): void
 }

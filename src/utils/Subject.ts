@@ -1,5 +1,4 @@
-import Observer from "./Observer"
-
+import Observer from './Observer'
 
 class Subject {
   private observers: Observer[] = []
@@ -24,10 +23,10 @@ class Subject {
     console.log('Subject: Detached an observer.')
   }
 
-  public notify(): void {
+  public notify(updateType: number): void {
     console.log('Subject: Notifying observers...')
     for (const observer of this.observers) {
-      observer.update(this)
+      observer.update(updateType, this)
     }
   }
 }

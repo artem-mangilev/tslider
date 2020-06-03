@@ -1,4 +1,4 @@
-import { Ratio, Orientation, OneDimensionalSpacePoint } from './aliases'
+import { Orientation, OneDimensionalSpacePoint } from './aliases'
 import Subject from './utils/Subject'
 import ModelOptions from './ModelOptions'
 import Point from './utils/Point'
@@ -7,6 +7,7 @@ import HandleModel from './HandleModel'
 import DataModel from './DataModel'
 import LabelModel from './LabelModel'
 import RangeModel from './RangeModel'
+import { ModelUpdateTypes } from './ModelUpdateTypes'
 
 // TODO: simplify implementation of switching the orientation
 class Model extends Subject {
@@ -89,7 +90,7 @@ class Model extends Subject {
       this.orientation
     )
 
-    this.notify()
+    this.notify(ModelUpdateTypes.Initialization)
   }
 
   // TODO: create different name for this method
@@ -102,7 +103,7 @@ class Model extends Subject {
 
     this.range.startPosition = { x: availablePoint, y: 0 }
 
-    this.notify()
+    this.notify(ModelUpdateTypes.Slide)
   }
 
   get dataAmount(): number {
