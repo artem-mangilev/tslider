@@ -1,28 +1,29 @@
 import { Orientation } from './aliases'
+import ViewTreeNode from './utils/ViewTreeNode'
 
-class LabelsContainerView {
-  $element: JQuery<HTMLElement>
+class LabelsContainerView extends ViewTreeNode {
   orientation: Orientation
 
-  constructor(element: HTMLElement, orientation: Orientation) {
-    this.$element = $(element)
+  constructor(className: string, orientation: Orientation) {
+    super('div', className)
+
     this.orientation = orientation
   }
 
   get width(): number {
-    return this.$element.width()
+    return this.$elem.width()
   }
 
   get height(): number {
-    return this.$element.height()
+    return this.$elem.height()
   }
 
   setMarginFromTrack(margin: number): void {
     // in vertical orientation, labelsContainer should be placed above the track
     if (this.orientation === 'horizontal') {
-      this.$element.css('top', `${-this.height - margin}px`)
+      this.$elem.css('top', `${-this.height - margin}px`)
     } else {
-      this.$element.css('right', `${-this.width - margin}px`)
+      this.$elem.css('right', `${-this.width - margin}px`)
     }
   }
 }

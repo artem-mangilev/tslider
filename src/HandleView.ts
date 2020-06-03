@@ -1,15 +1,14 @@
 import Point from './utils/Point'
+import ViewTreeNode from './utils/ViewTreeNode'
 
-class HandleView {
-  $handle: JQuery<HTMLElement>
-
-  constructor(element: HTMLElement) {
-    this.$handle = $(element)
+class HandleView extends ViewTreeNode {
+  constructor(className: string) {
+    super('div', className)
   }
 
   get size(): number {
-    const width = this.$handle.width()
-    const height = this.$handle.height()
+    const width = this.$elem.width()
+    const height = this.$elem.height()
 
     if (width === height) {
       return width
@@ -21,7 +20,7 @@ class HandleView {
   public move(position: Point): void {
     const middle = this.size / 2
 
-    this.$handle.css(
+    this.$elem.css(
       'transform',
       `translate(${position.x - middle}px, ${position.y - middle}px)`
     )

@@ -4,7 +4,7 @@ import TrackView from './TrackView'
 import RangeView from './RangeView'
 import LabelView from './LabelView'
 import InputView from './InputView'
-import { Ratio, Orientation } from './aliases'
+import { Orientation } from './aliases'
 import ViewOptions from './ViewOptions'
 import RatioPoint from './utils/RatioPoint'
 import LabelsContainerView from './LabelsContainerView'
@@ -17,8 +17,8 @@ class View {
   private label: LabelView
   private targetInput: InputView
   private orientation: Orientation
-  private labelsContainer: LabelsContainerView
   private container: ContainerView
+  private labels: LabelsContainerView
 
   constructor(options: ViewOptions) {
     this.orientation = options.orientation
@@ -32,69 +32,30 @@ class View {
     //     .tslider__range
     //     .tslider__handle
 
-    // TODO: find the more nice looking way to build this structure
+    this.container = new ContainerView('tslider')
+    this.track = new TrackView('tslider__track')
+    this.labels = new LabelsContainerView('tslider__labels', this.orientation)
+    this.label = new LabelView('tslider__label')
+    this.range = new RangeView('tslider__range', this.orientation)
+    this.handle = new HandleView('tslider__handle')
 
-    // create an container for slider
-    const $slider: JQuery<HTMLElement> = $('<div>', {
-      class: 'tslider',
-    })
-    this.container = new ContainerView($slider[0])
     // put it after the targetInput
     this.targetInput = new InputView(options.targetInput)
-    this.targetInput.$element.after($slider)
+    this.targetInput.$element.after(this.container.$elem)
 
-    // create the track
-    const $track = $('<div>', {
-      class: 'tslider__track',
-    })
-    // put it inside the sliderContainer
-    $slider.append($track)
-    // initialize the TrackView class
-    this.track = new TrackView($track[0])
-
-    // create the container for labels
-    const $labelsContainer = $('<div>', {
-      class: 'tslider__labels',
-    })
-    // put it inside the track
-    $track.append($labelsContainer)
-
-    // create the label
-    const $label = $('<div>', {
-      class: 'tslider__label',
-    })
-    // put it inside the labelsContainer
-    $labelsContainer.append($label)
-    // initialize the label class
-    this.label = new LabelView($label[0])
-
-    // init the labelsContainer class (this call is here because this class should know the size of label)
-    this.labelsContainer = new LabelsContainerView(
-      $labelsContainer[0],
-      this.orientation
+    // prettier-ignore
+    this.container.childs(
+      this.track.childs(
+        this.labels.childs(
+          this.label
+        ), 
+        this.range,
+        this.handle
+      )
     )
 
     // set margin from track
-    this.labelsContainer.setMarginFromTrack(options.labelMarginFromTrack)
-
-    // create the range
-    const $range = $('<div>', {
-      class: 'tslider__range',
-    })
-    // put it inside the track
-    $track.append($range)
-    // initialize the class
-    this.range = new RangeView($range[0], this.orientation)
-
-    // create the handle
-    // TODO: read about type casting
-    const $handle = $('<div>', {
-      class: 'tslider__handle',
-    })
-    // put it inside the track
-    $track.append($handle)
-    // initialize the class
-    this.handle = new HandleView($handle[0])
+    this.labels.setMarginFromTrack(options.labelMarginFromTrack)
   }
 
   public get containerWidth(): number {
@@ -127,7 +88,6 @@ class View {
     }
   }
 
-  // TODO: position here is a Ratio (position) and a Point (newPosition), so it's better to give them different names
   public slideTo(position: Point, data: string): void {
     // move the handle
     this.handle.move(position)
@@ -181,15 +141,15 @@ class View {
       if (x < 0) return
 
       // call handler only if click occurs on track or range
-      const isTrack = e.target === this.track.$track[0]
-      const isRange = e.target === this.range.$range[0]
+      const isTrack = e.target === this.track.$elem[0]
+      const isRange = e.target === this.range.$elem[0]
       const correctTarget = isTrack || isRange
 
       if (correctTarget) handler({ x, y })
     }
 
     // TODO: find the way to attach an event handler with Jquery
-    this.track.$track[0].addEventListener('click', handlerWrapper)
+    this.track.$elem[0].addEventListener('click', handlerWrapper)
   }
 
   public handleDrag(handler: (point: Point) => void): void {
@@ -220,7 +180,7 @@ class View {
     // when user pushes left button
     $root.mousedown((e) => {
       // if target is handle, attach mousemove event
-      if (e.target === this.handle.$handle[0]) {
+      if (e.target === this.handle.$elem[0]) {
         $root[0].addEventListener('mousemove', mouseMoveHandler)
       }
     })

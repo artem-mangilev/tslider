@@ -1,34 +1,35 @@
 import Point from './utils/Point'
+import ViewTreeNode from './utils/ViewTreeNode'
 
-class LabelView {
-  $label: JQuery<HTMLElement>
+class LabelView extends ViewTreeNode {
+  $elem: JQuery<HTMLElement>
 
-  constructor(element: HTMLElement) {
-    this.$label = $(element)
+  constructor(className: string) {
+    super('div', className)
   }
 
   get width(): number {
-    return this.$label.width()
+    return this.$elem.width()
   }
 
   get height(): number {
-    return this.$label.height()
+    return this.$elem.height()
   }
 
   set width(newWidth: number) {
-    this.$label.css('width', `${newWidth}px`)
+    this.$elem.css('width', `${newWidth}px`)
   }
 
   set height(newHeight: number) {
-    this.$label.css('height', `${newHeight}px`)
+    this.$elem.css('height', `${newHeight}px`)
   }
 
   public move(position: Point): void {
-    this.$label.css('transform', `translate(${position.x}px, ${position.y}px)`)
+    this.$elem.css('transform', `translate(${position.x}px, ${position.y}px)`)
   }
 
   public updateData(newData: string): void {
-    this.$label.html(newData)
+    this.$elem.html(newData)
   }
 }
 

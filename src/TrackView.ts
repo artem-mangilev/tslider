@@ -1,40 +1,37 @@
-class TrackView {
-  public $track: JQuery<HTMLElement>
+import ViewTreeNode from './utils/ViewTreeNode'
 
-  private track: HTMLElement
-
-  constructor(element: HTMLElement) {
-    this.track = element
-    this.$track = $(this.track)
+class TrackView extends ViewTreeNode {
+  constructor(className: string) {
+    super('div', className)
   }
 
   public get width() {
-    return this.$track.width()
+    return this.$elem.width()
   }
 
   public get height() {
-    return this.$track.height()
+    return this.$elem.height()
   }
 
   public set width(newWidth: number) {
-    this.$track.css('width', `${newWidth}px`)
+    this.$elem.css('width', `${newWidth}px`)
   }
 
   public set height(newHeight: number) {
-    this.$track.css('height', `${newHeight}px`)
+    this.$elem.css('height', `${newHeight}px`)
   }
 
   public get positionX(): number {
     // this is the x position of first point of the track,
     // relative to the viewport
-    const x = this.track.getBoundingClientRect().x
+    const x = this.$elem[0].getBoundingClientRect().x
     return Math.floor(x)
   }
 
   public get positionY(): number {
     // this is the y position of first point of the track,
     // relative to the viewport
-    const y = this.track.getBoundingClientRect().y
+    const y = this.$elem[0].getBoundingClientRect().y
     return Math.floor(y)
   }
 }

@@ -1,16 +1,20 @@
-class ContainerView {
-  $element: JQuery<HTMLElement>
+import ViewTreeNode from './utils/ViewTreeNode'
 
-  constructor(element: HTMLElement) {
-    this.$element = $(element)
+class ContainerView extends ViewTreeNode {
+  constructor(className: string) {
+    super('div', className)
+
+    // this.$elem = $('<div>', {
+    //   class: className,
+    // })
   }
 
   public get width(): number {
-    return this.$element.width()
+    return this.$elem.width()
   }
 
   public get height(): number {
-    return this.$element.height()
+    return this.$elem.height()
   }
 }
 
