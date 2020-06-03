@@ -36,13 +36,13 @@ class Tslider implements Observer {
     // initialize the Model
     const model: Model = new Model(modelOptions)
 
-    // set correct orientation of the track
-    this.view.drawTrack(model.trackWidth, model.trackHeight)
-
     // register this class as observer of the model
     model.attach(this)
 
     model.initSlider(options.current)
+
+    // set correct orientation of the track
+    this.view.drawTrack(model.trackWidth, model.trackHeight)
 
     // when user clicks to some area of the track, move the handle at this position
     this.view.onTrackClick((point) => {

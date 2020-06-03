@@ -40,6 +40,22 @@ class Model extends Subject {
     )
   }
 
+  public get trackWidth(): number {
+    return this.track.width
+  }
+
+  public get trackHeight(): number {
+    return this.track.height
+  }
+
+  public get rangeWidth(): number {
+    return this.range.width
+  }
+
+  public get rangeHeight(): number {
+    return this.range.height
+  }
+
   public get handlePosition(): Point {
     return this.handle.position
   }
@@ -48,23 +64,8 @@ class Model extends Subject {
     return this.label.position
   }
 
-  // TODO: create different name for this method
-  public moveHandle(targetPoint: Point): void {
-    const availablePoint = this.track.getAvailablePoint(targetPoint.x)
-
-    this.handle.move(availablePoint)
-
-    this.label.move(availablePoint)
-
-    this.range.startPosition = { x: availablePoint, y: 0 }
-
-    this.notify()
-  }
-
-  get dataAmount(): number {
-    const handlePositionRatio = this.track.pointToRatio(this.handle.position.x)
-
-    return this.data.getAmount(handlePositionRatio)
+  public get rangeStartPosition(): Point {
+    return this.range.startPosition
   }
 
   public initSlider(data: number): void {
@@ -91,26 +92,23 @@ class Model extends Subject {
     this.notify()
   }
 
-  public get trackWidth(): number {
-    return this.track.width
+  // TODO: create different name for this method
+  public moveHandle(targetPoint: Point): void {
+    const availablePoint = this.track.getAvailablePoint(targetPoint.x)
+
+    this.handle.move(availablePoint)
+
+    this.label.move(availablePoint)
+
+    this.range.startPosition = { x: availablePoint, y: 0 }
+
+    this.notify()
   }
 
-  
-  public get trackHeight() : number {
-    return this.track.height
-  }
-  
+  get dataAmount(): number {
+    const handlePositionRatio = this.track.pointToRatio(this.handle.position.x)
 
-  public get rangeWidth(): number {
-    return this.range.width
-  }
-
-  public get rangeHeight(): number {
-    return this.range.height
-  }
-
-  public get rangeStartPosition(): Point {
-    return this.range.startPosition
+    return this.data.getAmount(handlePositionRatio)
   }
 }
 
