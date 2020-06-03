@@ -67,8 +67,7 @@ class Model extends Subject {
     return this.data.getAmount(handlePositionRatio)
   }
 
-  // TODO: create different name for this method
-  public initHandleWithData(data: number): Point {
+  public initSlider(data: number): void {
     const dataRatio = this.data.getAmountAsRatio(data)
 
     const x: OneDimensionalSpacePoint = dataRatio * this.track.width
@@ -89,8 +88,7 @@ class Model extends Subject {
       this.orientation
     )
 
-    // TODO: probably returned value isn't expected from method with this name
-    return this.handle.position
+    this.notify()
   }
 
   public get trackWidth(): number {

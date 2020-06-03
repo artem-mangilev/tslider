@@ -42,10 +42,7 @@ class Tslider implements Observer {
     // register this class as observer of the model
     model.attach(this)
 
-    // compute the initial point
-    const initialPoint = model.initHandleWithData(options.current)
-    // set initial handle position
-    model.moveHandle(initialPoint)
+    model.initSlider(options.current)
 
     // when user clicks to some area of the track, move the handle at this position
     this.view.onTrackClick((point) => {
