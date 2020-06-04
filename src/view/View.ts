@@ -1,14 +1,14 @@
-import Point from '../utils/Point'
-import Handle from './Handle'
-import Track from './Track'
-import Range from './Range'
-import Label from './Label'
-import Input from './Input'
 import { Orientation } from '../utils/aliases'
-import ViewOptions from './ViewOptions'
+import Point from '../utils/Point'
 import RatioPoint from '../utils/RatioPoint'
-import LabelsContainer from './LabelsContainer'
 import Container from './Container'
+import Handle from './Handle'
+import Input from './Input'
+import Label from './Label'
+import LabelsContainer from './LabelsContainer'
+import Range from './Range'
+import Track from './Track'
+import ViewOptions from './ViewOptions'
 
 class View {
   private handle: Handle

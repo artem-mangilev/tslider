@@ -1,5 +1,5 @@
-import Point from '../utils/Point'
 import { OneDimensionalSpacePoint } from '../utils/aliases'
+import Point from '../utils/Point'
 
 class Handle {
   private currentPosition: Point

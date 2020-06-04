@@ -1,4 +1,4 @@
-import { Orientation, OneDimensionalSpacePoint } from '../utils/aliases'
+import { OneDimensionalSpacePoint, Orientation } from '../utils/aliases'
 import Point from '../utils/Point'
 
 class Label {

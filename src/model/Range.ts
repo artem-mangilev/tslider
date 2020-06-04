@@ -1,5 +1,5 @@
-import Point from '../utils/Point'
 import { Orientation } from '../utils/aliases'
+import Point from '../utils/Point'
 
 class Range {
   startPos: Point

@@ -1,6 +1,6 @@
 import './index.scss'
-import Tslider from './Tslider'
 import SliderOptions from './SliderOptions'
+import Tslider from './Tslider'
 
 $(document).ready(() => {
   const options: SliderOptions = {

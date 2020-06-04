@@ -1,13 +1,13 @@
-import { Orientation, OneDimensionalSpacePoint } from '../utils/aliases'
-import Subject from '../utils/Subject'
-import ModelOptions from './ModelOptions'
+import { OneDimensionalSpacePoint, Orientation } from '../utils/aliases'
 import Point from '../utils/Point'
-import Track from './Track'
-import Handle from './Handle'
+import Subject from '../utils/Subject'
 import Data from './Data'
+import Handle from './Handle'
 import Label from './Label'
-import Range from './Range'
+import ModelOptions from './ModelOptions'
 import { ModelUpdateTypes } from './ModelUpdateTypes'
+import Range from './Range'
+import Track from './Track'
 
 // TODO: simplify implementation of switching the orientation
 class Model extends Subject {

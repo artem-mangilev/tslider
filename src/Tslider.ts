@@ -1,11 +1,11 @@
-import View from './view/View'
 import Model from './model/Model'
-import SliderOptions from './SliderOptions'
 import ModelOptions from './model/ModelOptions'
-import Observer from './utils/Observer'
-import ViewOptions from './view/ViewOptions'
-import Point from './utils/Point'
 import { ModelUpdateTypes } from './model/ModelUpdateTypes'
+import SliderOptions from './SliderOptions'
+import Observer from './utils/Observer'
+import Point from './utils/Point'
+import View from './view/View'
+import ViewOptions from './view/ViewOptions'
 
 class Tslider implements Observer {
   private view: View
