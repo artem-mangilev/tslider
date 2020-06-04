@@ -1,7 +1,7 @@
-import Point from './utils/Point'
-import ViewTreeNode from './utils/ViewTreeNode'
+import Point from '../utils/Point'
+import ViewTreeNode from '../utils/ViewTreeNode'
 
-class LabelView extends ViewTreeNode {
+class Label extends ViewTreeNode {
   $elem: JQuery<HTMLElement>
 
   constructor(className: string) {
@@ -33,4 +33,4 @@ class LabelView extends ViewTreeNode {
   }
 }
 
-export default LabelView
+export default Label

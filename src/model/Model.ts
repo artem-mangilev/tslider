@@ -1,23 +1,23 @@
-import { Orientation, OneDimensionalSpacePoint } from './aliases'
-import Subject from './utils/Subject'
+import { Orientation, OneDimensionalSpacePoint } from '../utils/aliases'
+import Subject from '../utils/Subject'
 import ModelOptions from './ModelOptions'
-import Point from './utils/Point'
-import TrackModel from './TrackModel'
-import HandleModel from './HandleModel'
-import DataModel from './DataModel'
-import LabelModel from './LabelModel'
-import RangeModel from './RangeModel'
+import Point from '../utils/Point'
+import Track from './Track'
+import Handle from './Handle'
+import Data from './Data'
+import Label from './Label'
+import Range from './Range'
 import { ModelUpdateTypes } from './ModelUpdateTypes'
 
 // TODO: simplify implementation of switching the orientation
 class Model extends Subject {
   private options: ModelOptions
   private orientation: Orientation
-  private track: TrackModel
-  private handle: HandleModel
-  private data: DataModel
-  private label: LabelModel
-  private range: RangeModel
+  private track: Track
+  private handle: Handle
+  private data: Data
+  private label: Label
+  private range: Range
 
   constructor(options: ModelOptions) {
     super()
@@ -26,7 +26,7 @@ class Model extends Subject {
     this.orientation = this.options.orientation
 
     // initialize the data
-    this.data = new DataModel(
+    this.data = new Data(
       this.options.min,
       this.options.max,
       this.options.step,
@@ -34,7 +34,7 @@ class Model extends Subject {
     )
 
     // initialize track class
-    this.track = new TrackModel(
+    this.track = new Track(
       this.data.numberOfSteps,
       this.options.trackWidth,
       this.options.trackHeight
@@ -69,21 +69,21 @@ class Model extends Subject {
     return this.range.startPosition
   }
 
-  public initSlider(data: number): void {
-    const dataRatio = this.data.getAmountAsRatio(data)
+  public initSlider(fromData: number, toData: number): void {
+    const dataRatio = this.data.getAmountAsRatio(fromData)
 
     const x: OneDimensionalSpacePoint = dataRatio * this.track.width
 
-    this.handle = new HandleModel({ x, y: this.track.height / 2 })
+    this.handle = new Handle({ x, y: this.track.height / 2 })
 
-    this.label = new LabelModel(
+    this.label = new Label(
       this.options.labelWidth,
       this.options.labelHeight,
       { x, y: 0 },
       this.orientation
     )
 
-    this.range = new RangeModel(
+    this.range = new Range(
       this.track.width,
       this.track.height,
       { x, y: 0 },

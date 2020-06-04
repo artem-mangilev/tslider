@@ -1,6 +1,6 @@
-import ViewTreeNode from './utils/ViewTreeNode'
+import ViewTreeNode from '../utils/ViewTreeNode'
 
-class ContainerView extends ViewTreeNode {
+class Container extends ViewTreeNode {
   constructor(className: string) {
     super('div', className)
 
@@ -18,4 +18,4 @@ class ContainerView extends ViewTreeNode {
   }
 }
 
-export default ContainerView
+export default Container

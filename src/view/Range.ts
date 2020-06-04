@@ -1,8 +1,8 @@
-import Point from './utils/Point'
-import { Orientation } from './aliases'
-import ViewTreeNode from './utils/ViewTreeNode'
+import Point from '../utils/Point'
+import { Orientation } from '../utils/aliases'
+import ViewTreeNode from '../utils/ViewTreeNode'
 
-class RangeView extends ViewTreeNode {
+class Range extends ViewTreeNode {
   constructor(className: string, private orientation: Orientation) {
     super('div', className)
   }
@@ -19,4 +19,4 @@ class RangeView extends ViewTreeNode {
   }
 }
 
-export default RangeView
+export default Range

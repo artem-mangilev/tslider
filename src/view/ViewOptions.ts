@@ -1,4 +1,4 @@
-import { Orientation } from './aliases'
+import { Orientation } from '../utils/aliases'
 
 // this interface is subset of SliderOptions, so
 // TODO: find out how to avoid copy-pasting the fields

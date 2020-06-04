@@ -1,26 +1,26 @@
-import Point from './utils/Point'
-import HandleView from './HandleView'
-import TrackView from './TrackView'
-import RangeView from './RangeView'
-import LabelView from './LabelView'
-import InputView from './InputView'
-import { Orientation } from './aliases'
+import Point from '../utils/Point'
+import Handle from './Handle'
+import Track from './Track'
+import Range from './Range'
+import Label from './Label'
+import Input from './Input'
+import { Orientation } from '../utils/aliases'
 import ViewOptions from './ViewOptions'
-import RatioPoint from './utils/RatioPoint'
-import LabelsContainerView from './LabelsContainerView'
-import ContainerView from './ContainerView'
+import RatioPoint from '../utils/RatioPoint'
+import LabelsContainer from './LabelsContainer'
+import Container from './Container'
 
 class View {
-  private handle: HandleView
-  private track: TrackView
-  private range: RangeView
-  private label: LabelView
-  private targetInput: InputView
+  private handle: Handle
+  private track: Track
+  private range: Range
+  private label: Label
+  private targetInput: Input
   private orientation: Orientation
-  private container: ContainerView
-  private labels: LabelsContainerView
+  private container: Container
+  private labels: LabelsContainer
 
-  constructor(options: ViewOptions) {
+  constructor(private options: ViewOptions) {
     this.orientation = options.orientation
 
     // TODO: probably tslider now doesn't make sense and creates unnesessary nesting, so it should be removed
@@ -32,21 +32,21 @@ class View {
     //     .tslider__range
     //     .tslider__handle
 
-    this.container = new ContainerView('tslider')
-    this.track = new TrackView('tslider__track')
-    this.labels = new LabelsContainerView('tslider__labels', this.orientation)
-    this.label = new LabelView('tslider__label')
-    this.range = new RangeView('tslider__range', this.orientation)
-    this.handle = new HandleView('tslider__handle')
+    this.container = new Container('tslider')
+    this.track = new Track('tslider__track')
+    this.labels = new LabelsContainer('tslider__labels', this.orientation)
+    this.label = new Label('tslider__label')
+    this.range = new Range('tslider__range', this.orientation)
+    this.handle = new Handle('tslider__handle')
 
     // put it after the targetInput
-    this.targetInput = new InputView(options.targetInput)
+    this.targetInput = new Input(this.options.targetInput)
     this.targetInput.$element.after(this.container.$elem)
 
     // prettier-ignore
-    this.container.childs(
-      this.track.childs(
-        this.labels.childs(
+    this.container.add(
+      this.track.add(
+        this.labels.add(
           this.label
         ), 
         this.range,
@@ -55,7 +55,7 @@ class View {
     )
 
     // set margin from track
-    this.labels.setMarginFromTrack(options.labelMarginFromTrack)
+    this.labels.setMarginFromTrack(this.options.labelMarginFromTrack)
   }
 
   public get containerWidth(): number {
@@ -66,7 +66,7 @@ class View {
     return this.container.height
   }
 
-  // These getters just duplicates the ones from the TrackView, so
+  // These getters just duplicates the ones from the Track, so
   // TODO: find the way to remove these getters
   public get trackWidth() {
     return this.track.width
@@ -74,6 +74,22 @@ class View {
 
   public get trackHeight() {
     return this.track.height
+  }
+
+  public get labelWidth() {
+    return this.label.width
+  }
+
+  public set labelWidth(newWidth) {
+    this.label.width = newWidth
+  }
+
+  public get labelHeight() {
+    return this.label.height
+  }
+
+  public set labelHeight(newHeight) {
+    this.label.height = newHeight
   }
 
   public drawTrack(width: number, height: number): void {
@@ -114,22 +130,6 @@ class View {
   public updateLabel(position: Point, data: number) {
     this.label.move(position)
     this.label.updateData(data.toString())
-  }
-
-  public get labelWidth() {
-    return this.label.width
-  }
-
-  public set labelWidth(newWidth) {
-    this.label.width = newWidth
-  }
-
-  public get labelHeight() {
-    return this.label.height
-  }
-
-  public set labelHeight(newHeight) {
-    this.label.height = newHeight
   }
 
   public onTrackClick(handler: (point: Point) => void): void {

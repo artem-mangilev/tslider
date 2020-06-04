@@ -1,7 +1,7 @@
-import Point from './utils/Point'
-import { OneDimensionalSpacePoint } from './aliases'
+import Point from '../utils/Point'
+import { OneDimensionalSpacePoint } from '../utils/aliases'
 
-class HandleModel {
+class Handle {
   private currentPosition: Point
   private passiveAxis: OneDimensionalSpacePoint
 
@@ -19,8 +19,7 @@ class HandleModel {
 
   public move(whereTo: OneDimensionalSpacePoint): void {
     this.currentPosition = { x: whereTo, y: this.passiveAxis }
-
   }
 }
 
-export default HandleModel
+export default Handle

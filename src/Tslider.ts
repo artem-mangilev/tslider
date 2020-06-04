@@ -1,11 +1,11 @@
-import View from './View'
-import Model from './Model'
+import View from './view/View'
+import Model from './model/Model'
 import SliderOptions from './SliderOptions'
-import ModelOptions from './ModelOptions'
+import ModelOptions from './model/ModelOptions'
 import Observer from './utils/Observer'
-import ViewOptions from './ViewOptions'
+import ViewOptions from './view/ViewOptions'
 import Point from './utils/Point'
-import { ModelUpdateTypes } from './ModelUpdateTypes'
+import { ModelUpdateTypes } from './model/ModelUpdateTypes'
 
 class Tslider implements Observer {
   private view: View
@@ -34,16 +34,11 @@ class Tslider implements Observer {
       labelHeight: this.view.labelHeight,
     }
 
-    // initialize the Model
+    // initialize the Model and attach this class to Model as observer of changes
     const model: Model = new Model(modelOptions)
-
-    // register this class as observer of the model
     model.attach(this)
 
-    model.initSlider(options.current)
-
-    // set correct orientation of the track
-    this.view.drawTrack(model.trackWidth, model.trackHeight)
+    model.initSlider(options.from, options.to)
   }
 
   public update(updateType: ModelUpdateTypes, model: Model): void {
@@ -60,7 +55,22 @@ class Tslider implements Observer {
     }
   }
 
-  // TODO: hide implementation details of the Model. This class shouldn't know that model has a handlePositionX and handlePositionY properties
+  private handleInitializationAction(model: Model): void {
+    // set correct orientation of the track
+    this.view.drawTrack(model.trackWidth, model.trackHeight)
+
+    // when user clicks to some area of the track, move the handle at this position
+    this.view.onTrackClick((point) => {
+      model.moveHandle(this.validatePoint(point))
+    })
+
+    // when the user dragged the handle, move it to apropriate position
+    this.view.handleDrag((point) => {
+      model.moveHandle(this.validatePoint(point))
+    })
+  }
+
+  // TODO: hide implementation details of the Model
   private handleSlideAction(model: Model): void {
     const data = model.dataAmount.toString()
     this.view.slideTo(this.validatePoint(model.handlePosition), data)
@@ -76,18 +86,6 @@ class Tslider implements Observer {
       this.validatePoint(model.labelPosition),
       model.dataAmount
     )
-  }
-
-  private handleInitializationAction(model: Model): void {
-    // when user clicks to some area of the track, move the handle at this position
-    this.view.onTrackClick((point) => {
-      model.moveHandle(this.validatePoint(point))
-    })
-
-    // when the user dragged the handle, move it to apropriate position
-    this.view.handleDrag((point) => {
-      model.moveHandle(this.validatePoint(point))
-    })
   }
 
   private validatePoint(point: Point): Point {

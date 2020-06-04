@@ -1,4 +1,4 @@
-class InputView {
+class Input {
   input: HTMLInputElement
   $element: JQuery<HTMLInputElement>
 
@@ -16,4 +16,4 @@ class InputView {
   }
 }
 
-export default InputView
+export default Input

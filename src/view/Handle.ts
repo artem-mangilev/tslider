@@ -1,7 +1,7 @@
-import Point from './utils/Point'
-import ViewTreeNode from './utils/ViewTreeNode'
+import Point from '../utils/Point'
+import ViewTreeNode from '../utils/ViewTreeNode'
 
-class HandleView extends ViewTreeNode {
+class Handle extends ViewTreeNode {
   constructor(className: string) {
     super('div', className)
   }
@@ -27,4 +27,4 @@ class HandleView extends ViewTreeNode {
   }
 }
 
-export default HandleView
+export default Handle

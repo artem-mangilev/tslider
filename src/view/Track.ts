@@ -1,6 +1,6 @@
-import ViewTreeNode from './utils/ViewTreeNode'
+import ViewTreeNode from '../utils/ViewTreeNode'
 
-class TrackView extends ViewTreeNode {
+class Track extends ViewTreeNode {
   constructor(className: string) {
     super('div', className)
   }
@@ -36,4 +36,4 @@ class TrackView extends ViewTreeNode {
   }
 }
 
-export default TrackView
+export default Track

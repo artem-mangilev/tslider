@@ -6,10 +6,11 @@ $(document).ready(() => {
   const options: SliderOptions = {
     min: 100,
     max: 200,
-    current: 150,
+    from: 150,
+    to: 170,
     step: 10,
     labelMarginFromTrack: 5,
-    orientation: 'horizontal',
+    orientation: 'vetical',
     targetInput: document.querySelector('.tsl-target'),
   }
 

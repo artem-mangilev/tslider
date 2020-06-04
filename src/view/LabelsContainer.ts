@@ -1,7 +1,7 @@
-import { Orientation } from './aliases'
-import ViewTreeNode from './utils/ViewTreeNode'
+import { Orientation } from '../utils/aliases'
+import ViewTreeNode from '../utils/ViewTreeNode'
 
-class LabelsContainerView extends ViewTreeNode {
+class LabelsContainer extends ViewTreeNode {
   orientation: Orientation
 
   constructor(className: string, orientation: Orientation) {
@@ -28,4 +28,4 @@ class LabelsContainerView extends ViewTreeNode {
   }
 }
 
-export default LabelsContainerView
+export default LabelsContainer

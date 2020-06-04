@@ -1,6 +1,6 @@
-import { OneDimensionalSpacePoint, Ratio } from './aliases'
+import { OneDimensionalSpacePoint, Ratio } from '../utils/aliases'
 
-class TrackModel {
+class Track {
   maxMinDiff: number
   stepSegment: number
   passiveLineMiddle: number
@@ -33,4 +33,4 @@ class TrackModel {
   }
 }
 
-export default TrackModel
+export default Track

@@ -1,9 +1,9 @@
-import Point from './utils/Point'
-import { Orientation } from './aliases'
+import Point from '../utils/Point'
+import { Orientation } from '../utils/aliases'
 
-class RangeModel {
+class Range {
   startPos: Point
-  
+
   constructor(
     private maxWidth: number,
     public height: number,
@@ -28,4 +28,4 @@ class RangeModel {
   }
 }
 
-export default RangeModel
+export default Range

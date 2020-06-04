@@ -1,4 +1,4 @@
-import { Ratio } from '../aliases'
+import { Ratio } from './aliases'
 
 export default interface RatioPoint {
   x: Ratio

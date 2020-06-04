@@ -1,7 +1,7 @@
-import { Orientation, OneDimensionalSpacePoint } from './aliases'
-import Point from './utils/Point'
+import { Orientation, OneDimensionalSpacePoint } from '../utils/aliases'
+import Point from '../utils/Point'
 
-class LabelModel {
+class Label {
   currentPosition: { x: number; y: number }
 
   constructor(
@@ -26,4 +26,4 @@ class LabelModel {
   }
 }
 
-export default LabelModel
+export default Label

@@ -1,6 +1,6 @@
-import { Ratio, Orientation } from './aliases'
+import { Orientation, Ratio } from '../utils/aliases'
 
-class DataModel {
+class Data {
   private maxMinDiff: number
 
   constructor(
@@ -34,4 +34,4 @@ class DataModel {
   }
 }
 
-export default DataModel
+export default Data
