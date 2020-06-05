@@ -16,6 +16,7 @@ class Tslider implements Observer {
       targetInput: options.targetInput,
       orientation: options.orientation,
       labelMarginFromTrack: options.labelMarginFromTrack,
+      numberOfHandles: options.to ? 2 : 1,
     }
 
     // initialize the View
@@ -23,6 +24,7 @@ class Tslider implements Observer {
 
     // TODO: remove input node from modelOptions
     // the Model needs an additional data
+    // evaluate this code only when slider is liaded
     const modelOptions: ModelOptions = {
       ...options,
       trackWidth:
@@ -58,6 +60,14 @@ class Tslider implements Observer {
   private handleInitializationAction(model: Model): void {
     // set correct orientation of the track
     this.view.drawTrack(model.trackWidth, model.trackHeight)
+    // draw handles on track
+    // this.view.initHandles(
+    //   ...model.handlePositions.map((position) => this.validatePoint(position))
+    // )
+    // // draw labels on track
+    // this.view.initLabels(
+    //   ...model.labelPositions.map((position) => this.validatePoint(position))
+    // )
 
     // when user clicks to some area of the track, move the handle at this position
     this.view.onTrackClick((point) => {
@@ -72,18 +82,20 @@ class Tslider implements Observer {
 
   // TODO: hide implementation details of the Model
   private handleSlideAction(model: Model): void {
-    const data = model.dataAmount.toString()
-    this.view.slideTo(this.validatePoint(model.handlePosition), data)
-
-    // TODO: find the way to hide this functionality back to slideTo
-    this.view.updateRange(
-      model.rangeWidth,
-      model.rangeHeight,
-      this.validatePoint(model.rangeStartPosition)
+    // const data = model.dataAmount.toString()
+    this.view.slideTo(
+      model.handlePositions.map((position) => this.validatePoint(position))
     )
 
-    this.view.updateLabel(
-      this.validatePoint(model.labelPosition),
+    // TODO: find the way to hide this functionality back to slideTo
+    // this.view.updateRange(
+    //   model.rangeWidth,
+    //   model.rangeHeight,
+    //   this.validatePoint(model.rangeStartPosition)
+    // )
+
+    this.view.updateLabels(
+      model.labelPositions.map((position) => this.validatePoint(position)),
       model.dataAmount
     )
   }

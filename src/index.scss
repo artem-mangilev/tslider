@@ -2,6 +2,8 @@
 $track-border: 1px;
 $track-height: 5px;
 $handle-size: 10px;
+$label-width: 30px;
+$label-height: 20px;
 
 .tslider {
   width: 100%;
@@ -45,6 +47,9 @@ $handle-size: 10px;
 
   &__labels {
     position: absolute;
+
+    width: $label-width;
+    height: $label-height;
   }
 
   &__label {
@@ -53,8 +58,10 @@ $handle-size: 10px;
     justify-content: center;
     align-items: center;
 
-    width: 30px;
-    height: 20px;
+    position: absolute;
+    
+    width: $label-width;
+    height: $label-height;
     background: linear-gradient(180deg, #bc9cff 0%, #8ba4f9 100%);
     color: #fff;
     border-radius: 3px;

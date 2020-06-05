@@ -11,14 +11,14 @@ import Track from './Track'
 import ViewOptions from './ViewOptions'
 
 class View {
-  private handle: Handle
   private track: Track
   private range: Range
-  private label: Label
   private targetInput: Input
   private orientation: Orientation
   private container: Container
-  private labels: LabelsContainer
+  private labelsContainer: LabelsContainer
+  private handles: Handle[] = []
+  private labels: Label[] = []
 
   constructor(private options: ViewOptions) {
     this.orientation = options.orientation
@@ -34,28 +34,37 @@ class View {
 
     this.container = new Container('tslider')
     this.track = new Track('tslider__track')
-    this.labels = new LabelsContainer('tslider__labels', this.orientation)
-    this.label = new Label('tslider__label')
+    this.labelsContainer = new LabelsContainer(
+      'tslider__labels',
+      this.orientation
+    )
     this.range = new Range('tslider__range', this.orientation)
-    this.handle = new Handle('tslider__handle')
 
     // put it after the targetInput
     this.targetInput = new Input(this.options.targetInput)
     this.targetInput.$element.after(this.container.$elem)
 
+    // this is the functional way to iterate when only finish number is given
+    // for example, if length === 2, callback will be evaluated 2 times.
+    // this code just generates labels and handles
+    Array.from({ length: options.numberOfHandles }, () => {
+      this.handles.push(new Handle('tslider__handle'))
+      this.labels.push(new Label('tslider__label'))
+    })
+
     // prettier-ignore
     this.container.add(
       this.track.add(
-        this.labels.add(
-          this.label
-        ), 
+        this.labelsContainer.add(
+          ...this.labels
+        ),
         this.range,
-        this.handle
+        ...this.handles
       )
     )
 
     // set margin from track
-    this.labels.setMarginFromTrack(this.options.labelMarginFromTrack)
+    this.labelsContainer.setMarginFromTrack(this.options.labelMarginFromTrack)
   }
 
   public get containerWidth(): number {
@@ -77,20 +86,20 @@ class View {
   }
 
   public get labelWidth() {
-    return this.label.width
+    return this.labels[0].width
   }
 
-  public set labelWidth(newWidth) {
-    this.label.width = newWidth
-  }
+  // public set labelWidth(newWidth) {
+  //   this.label.width = newWidth
+  // }
 
   public get labelHeight() {
-    return this.label.height
+    return this.labels[0].height
   }
 
-  public set labelHeight(newHeight) {
-    this.label.height = newHeight
-  }
+  // public set labelHeight(newHeight) {
+  //   this.label.height = newHeight
+  // }
 
   public drawTrack(width: number, height: number): void {
     switch (this.orientation) {
@@ -104,12 +113,42 @@ class View {
     }
   }
 
-  public slideTo(position: Point, data: string): void {
-    // move the handle
-    this.handle.move(position)
+  // public initHandles(...handlePoints: Point[]): void {
+  //   this.handles = []
 
-    // update the target input's value
-    this.targetInput.setValue(data)
+  //   handlePoints.forEach((handlePoint) => {
+  //     const handle = new Handle('tslider__handle')
+
+  //     handle.move(handlePoint)
+
+  //     this.handles.push(handle)
+  //   })
+
+  //   this.track.add(...this.handles)
+  // }
+
+  // public initLabels(...labelPoints: Point[]): void {
+  //   this.labels = []
+
+  //   labelPoints.forEach((point) => {
+  //     const label = new Label('tslider__label')
+
+  //     label.move(point)
+
+  //     this.labels.push(label)
+  //   })
+
+  //   this.labelsContainer.add(...this.labels)
+  // }
+
+  public slideTo(handlePositions: Point[]): void {
+    // move the handles
+    handlePositions.forEach((position, i) => {
+      this.handles[i].move(position)
+    })
+
+    // // update the target input's value
+    // this.targetInput.setValue(data)
   }
 
   public updateRange(
@@ -127,9 +166,11 @@ class View {
     }
   }
 
-  public updateLabel(position: Point, data: number) {
-    this.label.move(position)
-    this.label.updateData(data.toString())
+  public updateLabels(positions: Point[], data: number[]) {
+    positions.forEach((position, i) => {
+      this.labels[i].move(position)
+      this.labels[i].updateData(data[i].toString())
+    })
   }
 
   public onTrackClick(handler: (point: Point) => void): void {
@@ -180,7 +221,7 @@ class View {
     // when user pushes left button
     $root.mousedown((e) => {
       // if target is handle, attach mousemove event
-      if (e.target === this.handle.$elem[0]) {
+      if (e.target === this.handles[0].$elem[0]) {
         $root[0].addEventListener('mousemove', mouseMoveHandler)
       }
     })

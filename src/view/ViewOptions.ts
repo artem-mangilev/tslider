@@ -6,4 +6,5 @@ export default interface ViewOptions {
   targetInput: HTMLInputElement
   orientation: Orientation
   labelMarginFromTrack: number
+  numberOfHandles: number
 }

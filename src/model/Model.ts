@@ -1,4 +1,4 @@
-import { OneDimensionalSpacePoint, Orientation } from '../utils/aliases'
+import { OneDimensionalSpacePoint, Orientation, Ratio } from '../utils/aliases'
 import Point from '../utils/Point'
 import Subject from '../utils/Subject'
 import Data from './Data'
@@ -14,10 +14,12 @@ class Model extends Subject {
   private options: ModelOptions
   private orientation: Orientation
   private track: Track
-  private handle: Handle
+  // private handle: Handle
   private data: Data
   private label: Label
   private range: Range
+  private handles: Handle[]
+  private labels: Label[]
 
   constructor(options: ModelOptions) {
     super()
@@ -57,12 +59,12 @@ class Model extends Subject {
     return this.range.height
   }
 
-  public get handlePosition(): Point {
-    return this.handle.position
+  public get handlePositions(): Point[] {
+    return this.handles.map((handle) => handle.position)
   }
 
-  public get labelPosition(): Point {
-    return this.label.position
+  public get labelPositions(): Point[] {
+    return this.labels.map((label) => label.position)
   }
 
   public get rangeStartPosition(): Point {
@@ -70,25 +72,33 @@ class Model extends Subject {
   }
 
   public initSlider(fromData: number, toData: number): void {
-    const dataRatio = this.data.getAmountAsRatio(fromData)
+    const initialData: number[] = [fromData, toData]
+    this.handles = []
+    this.labels = []
 
-    const x: OneDimensionalSpacePoint = dataRatio * this.track.width
+    initialData.forEach((data) => {
+      const dataRatio = this.data.getAmountAsRatio(data)
 
-    this.handle = new Handle({ x, y: this.track.height / 2 })
+      const x: OneDimensionalSpacePoint = dataRatio * this.track.width
 
-    this.label = new Label(
-      this.options.labelWidth,
-      this.options.labelHeight,
-      { x, y: 0 },
-      this.orientation
-    )
+      this.handles.push(new Handle({ x, y: this.track.height / 2 }))
 
-    this.range = new Range(
-      this.track.width,
-      this.track.height,
-      { x, y: 0 },
-      this.orientation
-    )
+      this.labels.push(
+        new Label(
+          this.options.labelWidth,
+          this.options.labelHeight,
+          { x, y: 0 },
+          this.orientation
+        )
+      )
+    })
+
+    // this.range = new Range(
+    //   this.track.width,
+    //   this.track.height,
+    //   { x, y: 0 },
+    //   this.orientation
+    // )
 
     this.notify(ModelUpdateTypes.Initialization)
   }
@@ -97,19 +107,27 @@ class Model extends Subject {
   public moveHandle(targetPoint: Point): void {
     const availablePoint = this.track.getAvailablePoint(targetPoint.x)
 
-    this.handle.move(availablePoint)
+    // decide which handle should move to this point
+    const movablePointIndex = this.track.getClothestPointIndex(
+      targetPoint.x,
+      this.handles.map((handle) => handle.position.x)
+    )
 
-    this.label.move(availablePoint)
+    this.handles[movablePointIndex].move(availablePoint)
 
-    this.range.startPosition = { x: availablePoint, y: 0 }
+    this.labels[movablePointIndex].move(availablePoint)
+
+    // this.range.startPosition = { x: availablePoint, y: 0 }
 
     this.notify(ModelUpdateTypes.Slide)
   }
 
-  get dataAmount(): number {
-    const handlePositionRatio = this.track.pointToRatio(this.handle.position.x)
+  get dataAmount(): number[] {
+    const handlePositionRatios: Ratio[] = this.handlePositions.map((position) =>
+      this.track.pointToRatio(position.x)
+    )
 
-    return this.data.getAmount(handlePositionRatio)
+    return handlePositionRatios.map((ratio) => this.data.getAmount(ratio))
   }
 }
 
