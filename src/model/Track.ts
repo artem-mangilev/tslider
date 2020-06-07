@@ -29,6 +29,7 @@ class Track {
     return availablePoint
   }
 
+  // TODO: improve naming
   public getClothestPointIndex(
     targetPoint: OneDimensionalSpacePoint,
     points: OneDimensionalSpacePoint[]

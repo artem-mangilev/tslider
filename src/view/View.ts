@@ -89,17 +89,9 @@ class View {
     return this.labels[0].width
   }
 
-  // public set labelWidth(newWidth) {
-  //   this.label.width = newWidth
-  // }
-
   public get labelHeight() {
     return this.labels[0].height
   }
-
-  // public set labelHeight(newHeight) {
-  //   this.label.height = newHeight
-  // }
 
   public drawTrack(width: number, height: number): void {
     switch (this.orientation) {
@@ -112,34 +104,6 @@ class View {
         this.track.height = width
     }
   }
-
-  // public initHandles(...handlePoints: Point[]): void {
-  //   this.handles = []
-
-  //   handlePoints.forEach((handlePoint) => {
-  //     const handle = new Handle('tslider__handle')
-
-  //     handle.move(handlePoint)
-
-  //     this.handles.push(handle)
-  //   })
-
-  //   this.track.add(...this.handles)
-  // }
-
-  // public initLabels(...labelPoints: Point[]): void {
-  //   this.labels = []
-
-  //   labelPoints.forEach((point) => {
-  //     const label = new Label('tslider__label')
-
-  //     label.move(point)
-
-  //     this.labels.push(label)
-  //   })
-
-  //   this.labelsContainer.add(...this.labels)
-  // }
 
   public slideTo(handlePositions: Point[]): void {
     // move the handles
@@ -198,7 +162,7 @@ class View {
       const x = e.clientX - this.track.positionX
       const y = e.clientY - this.track.positionY
 
-      // TODO: handle could move outside the track, should be fixed
+      // TODO: probably these computations should be performed in Model
       // evaluate handler only if mouse is inside of horizontal or vertical track scope
       let isMousePositionValid
       if (this.orientation === 'horizontal') {
@@ -218,12 +182,15 @@ class View {
 
     const $root = $('html')
 
+    // TODO: when first handle meet other handle, other handle's position should be the max position of first handle
     // when user pushes left button
     $root.mousedown((e) => {
-      // if target is handle, attach mousemove event
-      if (e.target === this.handles[0].$elem[0]) {
-        $root[0].addEventListener('mousemove', mouseMoveHandler)
-      }
+      // if target is one of the handles, attach mousemove event
+      this.handles.forEach((handle) => {
+        if (e.target === handle.$elem[0]) {
+          $root[0].addEventListener('mousemove', mouseMoveHandler)
+        }
+      })
     })
 
     // when user releases the button in any place, remove event
