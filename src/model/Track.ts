@@ -32,37 +32,27 @@ class Track {
   public getClothestPointIndex(
     targetPoint: OneDimensionalSpacePoint,
     points: OneDimensionalSpacePoint[]
-  ): OneDimensionalSpacePoint {
-    const firstPointIndex = 0
-    const lastPointIndex = points.length - 1
+  ): number {
+    const firstPointIndex: number = 0
+    const lastPointIndex: number = points.length - 1
 
-    const firstPoint = points[firstPointIndex]
-    const lastPoint = points[lastPointIndex]
+    const firstPoint: number = points[firstPointIndex]
+    const lastPoint: number = points[lastPointIndex]
 
-    const firstLastMiddle = (lastPoint - firstPoint) / 2
+    const firstLastMiddle: number = (lastPoint + firstPoint) / 2
 
-    const isTargetPointBeforeFirstPoint = targetPoint < firstPoint
-    const isTargetPointAfterLastPoint = lastPoint < targetPoint
-    const isTargetPointBetweenPoints =
+    const isTargetPointBeforeFirstPoint: boolean = targetPoint < firstPoint
+    const isTargetPointAfterLastPoint: boolean = lastPoint < targetPoint
+    const isTargetPointBetweenPoints: boolean =
       targetPoint > firstPoint && targetPoint < lastPoint
-    const isTargetPointCloserToFirstPoint =
+    const isTargetPointCloserToFirstPoint: boolean =
       isTargetPointBetweenPoints && targetPoint < firstLastMiddle
-    const isTargetPointCloserToLastPoint =
+    const isTargetPointCloserToLastPoint: boolean =
       isTargetPointBetweenPoints && targetPoint > firstLastMiddle
 
-    if (isTargetPointBeforeFirstPoint) {
+    if (isTargetPointBeforeFirstPoint || isTargetPointCloserToFirstPoint) {
       return firstPointIndex
-    }
-
-    if (isTargetPointAfterLastPoint) {
-      return lastPointIndex
-    }
-
-    if (isTargetPointCloserToFirstPoint) {
-      return firstPointIndex
-    }
-
-    if (isTargetPointCloserToLastPoint) {
+    } else if (isTargetPointAfterLastPoint || isTargetPointCloserToLastPoint) {
       return lastPointIndex
     }
   }
