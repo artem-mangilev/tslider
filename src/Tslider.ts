@@ -62,14 +62,6 @@ class Tslider implements Observer {
   private handleInitializationAction(model: Model): void {
     // set correct orientation of the track
     this.view.drawTrack(model.trackWidth, model.trackHeight)
-    // draw handles on track
-    // this.view.initHandles(
-    //   ...model.handlePositions.map((position) => this.validatePoint(position))
-    // )
-    // // draw labels on track
-    // this.view.initLabels(
-    //   ...model.labelPositions.map((position) => this.validatePoint(position))
-    // )
 
     // when user clicks to some area of the track, move the handle at this position
     this.view.onTrackClick((point) => {
@@ -84,7 +76,6 @@ class Tslider implements Observer {
 
   // TODO: hide implementation details of the Model
   private handleSlideAction(model: Model): void {
-    // const data = model.dataAmount.toString()
     this.view.slideTo(
       model.handlePositions.map((position) => this.validatePoint(position))
     )

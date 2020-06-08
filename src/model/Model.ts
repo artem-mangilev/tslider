@@ -14,9 +14,7 @@ class Model extends Subject {
   private options: ModelOptions
   private orientation: Orientation
   private track: Track
-  // private handle: Handle
   private data: Data
-  private label: Label
   private range: Range
   private handles: Handle[]
   private labels: Label[]
