@@ -169,10 +169,10 @@ class View {
 
     // TODO: when first handle meet other handle, other handle's position should be the max position of first handle
     // when user pushes left button
-    $root.mousedown((e) => {
+    $root.mousedown(({ target }) => {
       // if target is one of the handles, attach mousemove event
       this.handles.forEach((handle) => {
-        if (e.target === handle.$elem[0]) {
+        if (target === handle.$elem[0]) {
           $root[0].addEventListener('mousemove', mouseMoveHandler)
         }
       })

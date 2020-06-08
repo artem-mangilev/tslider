@@ -71,18 +71,28 @@ class Track {
 
     const firstLastMiddle: number = (lastPoint + firstPoint) / 2
 
+    const isTargetPointIsFirstPoint: boolean = targetPoint === firstPoint
+    const isTargetPointIsLastPoint: boolean = targetPoint === lastPoint
     const isTargetPointBeforeFirstPoint: boolean = targetPoint < firstPoint
-    const isTargetPointAfterLastPoint: boolean = lastPoint < targetPoint
+    const isTargetPointAfterLastPoint: boolean = targetPoint > lastPoint
     const isTargetPointBetweenPoints: boolean =
       targetPoint > firstPoint && targetPoint < lastPoint
     const isTargetPointCloserToFirstPoint: boolean =
-      isTargetPointBetweenPoints && targetPoint < firstLastMiddle
+      isTargetPointBetweenPoints && targetPoint <= firstLastMiddle
     const isTargetPointCloserToLastPoint: boolean =
       isTargetPointBetweenPoints && targetPoint > firstLastMiddle
 
-    if (isTargetPointBeforeFirstPoint || isTargetPointCloserToFirstPoint) {
+    if (
+      isTargetPointIsFirstPoint ||
+      isTargetPointBeforeFirstPoint ||
+      isTargetPointCloserToFirstPoint
+    ) {
       return firstPointIndex
-    } else if (isTargetPointAfterLastPoint || isTargetPointCloserToLastPoint) {
+    } else if (
+      isTargetPointIsLastPoint ||
+      isTargetPointAfterLastPoint ||
+      isTargetPointCloserToLastPoint
+    ) {
       return lastPointIndex
     }
   }
