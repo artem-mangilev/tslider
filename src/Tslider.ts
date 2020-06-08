@@ -16,17 +16,19 @@ class Tslider implements Observer {
       targetInput: options.targetInput,
       orientation: options.orientation,
       labelMarginFromTrack: options.labelMarginFromTrack,
+      // TODO: find more nice way to set this option
       numberOfHandles: options.to ? 2 : 1,
     }
 
     // initialize the View
     this.view = new View(viewOptions)
 
-    // TODO: remove input node from modelOptions
     // the Model needs an additional data
-    // evaluate this code only when slider is liaded
     const modelOptions: ModelOptions = {
-      ...options,
+      max: options.max,
+      min: options.min,
+      step: options.step,
+      orientation: options.orientation,
       trackWidth:
         options.orientation === 'horizontal'
           ? this.view.containerWidth
