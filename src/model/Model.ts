@@ -105,13 +105,13 @@ class Model extends Subject {
 
   // TODO: create different name for this method
   public moveHandle(targetPoint: Point): void {
-    const availablePoint = this.track.getAvailablePoint(targetPoint.x)
-
     // decide which handle should move to this point
     const movablePointIndex = this.track.getClothestPointIndex(
       targetPoint.x,
       this.handles.map((handle) => handle.position.x)
     )
+
+    const availablePoint = this.track.getAvailablePoint(targetPoint.x)
 
     this.handles[movablePointIndex].move(availablePoint)
 

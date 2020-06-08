@@ -162,22 +162,7 @@ class View {
       const x = e.clientX - this.track.positionX
       const y = e.clientY - this.track.positionY
 
-      // TODO: probably these computations should be performed in Model
-      // evaluate handler only if mouse is inside of horizontal or vertical track scope
-      let isMousePositionValid
-      if (this.orientation === 'horizontal') {
-        const isMouseAfterLeftBoundry = x >= 0
-        const isMouseBeforeRightBoundry = x <= this.track.width
-        isMousePositionValid =
-          isMouseAfterLeftBoundry && isMouseBeforeRightBoundry
-      } else if (this.orientation === 'vetical') {
-        const isMouseAfterTopBoundry = y >= 0
-        const isMouseBeforeBottomBoundry = y <= this.track.height
-        isMousePositionValid =
-          isMouseAfterTopBoundry && isMouseBeforeBottomBoundry
-      }
-
-      if (isMousePositionValid) handler({ x, y })
+      handler({ x, y })
     }
 
     const $root = $('html')

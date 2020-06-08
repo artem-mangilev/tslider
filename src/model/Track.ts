@@ -18,15 +18,44 @@ class Track {
     return Math.round(point / this.stepSegment)
   }
 
+  private get leftBoundry(): number {
+    return 0
+  }
+
+  private get rightBoundry(): number {
+    return this.width
+  }
+
+  private isPointInBoundries(point: OneDimensionalSpacePoint): boolean {
+    const isPointAfterLeftBoundry = point >= this.leftBoundry
+    const isPointBeforeRightBoundry = point <= this.rightBoundry
+
+    return isPointAfterLeftBoundry && isPointBeforeRightBoundry
+  }
+
+  private isPointBeforeLeftBoundry(point: OneDimensionalSpacePoint): boolean {
+    return point <= this.leftBoundry
+  }
+
+  private isPointAfterRightBoundry(point: OneDimensionalSpacePoint): boolean {
+    return point >= this.rightBoundry
+  }
+
   public getAvailablePoint(
     point: OneDimensionalSpacePoint
   ): OneDimensionalSpacePoint {
-    const availablePointRatio: Ratio =
-      this.getNearStep(point) / this.numberOfSteps
-    const availablePoint: OneDimensionalSpacePoint =
-      availablePointRatio * this.width
+    if (this.isPointInBoundries(point)) {
+      const availablePointRatio: Ratio =
+        this.getNearStep(point) / this.numberOfSteps
+      const availablePoint: OneDimensionalSpacePoint =
+        availablePointRatio * this.width
 
-    return availablePoint
+      return availablePoint
+    } else if (this.isPointBeforeLeftBoundry(point)) {
+      return this.leftBoundry
+    } else if (this.isPointAfterRightBoundry(point)) {
+      return this.rightBoundry
+    }
   }
 
   // TODO: improve naming
