@@ -74,15 +74,12 @@ class Track {
   }
 
   // TODO: improve naming
-  public getClothestPointIndex(
-    targetPoint: OneDimensionalSpacePoint,
-    points: OneDimensionalSpacePoint[]
-  ): number {
+  public getClothestPointIndex(targetPoint: OneDimensionalSpacePoint): number {
     const firstPointIndex: number = 0
-    const lastPointIndex: number = points.length - 1
+    const lastPointIndex: number = this.handles.length - 1
 
-    const firstPoint: number = points[firstPointIndex]
-    const lastPoint: number = points[lastPointIndex]
+    const firstPoint: number = this.firstHandle.position.x
+    const lastPoint: number = this.lastHandle.position.x
 
     const firstLastMiddle: number = (lastPoint + firstPoint) / 2
 
@@ -90,8 +87,9 @@ class Track {
     const isTargetPointIsLastPoint: boolean = targetPoint === lastPoint
     const isTargetPointBeforeFirstPoint: boolean = targetPoint < firstPoint
     const isTargetPointAfterLastPoint: boolean = targetPoint > lastPoint
-    const isTargetPointBetweenPoints: boolean =
-      targetPoint > firstPoint && targetPoint < lastPoint
+    const isTargetPointBetweenPoints: boolean = this.isPointInBoundries(
+      targetPoint
+    )
     const isTargetPointCloserToFirstPoint: boolean =
       isTargetPointBetweenPoints && targetPoint <= firstLastMiddle
     const isTargetPointCloserToLastPoint: boolean =

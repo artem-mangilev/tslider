@@ -115,10 +115,7 @@ class Model extends Subject {
     } else {
       this.track.setActiveHandle(null)
       // decide which handle should move to this point
-      activeHandleIndex = this.track.getClothestPointIndex(
-        targetPoint.x,
-        this.handles.map((handle) => handle.position.x)
-      )
+      activeHandleIndex = this.track.getClothestPointIndex(targetPoint.x)
     }
 
     const availablePoint = this.track.getAvailablePoint(targetPoint.x)
