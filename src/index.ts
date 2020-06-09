@@ -7,10 +7,12 @@ $(document).ready(() => {
     min: 100,
     max: 200,
     from: 150,
+    // TODO: fix working in the mode with 1 handle
     to: 170,
-    step: 10,
+    step: 1,
     labelMarginFromTrack: 5,
-    orientation: 'horizontal',
+    // TODO: fix flickering the handle, when moved in vertical orientation
+    orientation: 'vetical',
     targetInput: document.querySelector('.tsl-target'),
   }
 
