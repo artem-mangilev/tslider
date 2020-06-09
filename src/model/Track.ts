@@ -9,6 +9,8 @@ class Track {
   handles: Handle[]
 
   private activeHandle: Handle
+  private firstHandle: Handle
+  private lastHandle: Handle
 
   constructor(
     private numberOfSteps: number,
@@ -24,24 +26,18 @@ class Track {
   }
 
   private get leftBoundry(): number {
-    const lastHandleIndex = this.handles.length - 1
-
-    if (!this.activeHandle || this.activeHandle === this.handles[0]) {
+    if (!this.activeHandle || this.activeHandle === this.firstHandle) {
       return 0
-    } else if (this.activeHandle === this.handles[lastHandleIndex]) {
+    } else if (this.activeHandle === this.lastHandle) {
       return this.handles[0].position.x
     }
   }
 
   private get rightBoundry(): number {
-    const lastHandleIndex = this.handles.length - 1
-    if (
-      !this.activeHandle ||
-      this.activeHandle === this.handles[lastHandleIndex]
-    ) {
+    if (!this.activeHandle || this.activeHandle === this.lastHandle) {
       return this.width
-    } else if (this.activeHandle === this.handles[0]) {
-      return this.handles[lastHandleIndex].position.x
+    } else if (this.activeHandle === this.firstHandle) {
+      return this.lastHandle.position.x
     }
   }
 
@@ -122,6 +118,8 @@ class Track {
 
   public registerHandles(handles: Handle[]) {
     this.handles = handles
+    this.firstHandle = this.handles[0]
+    this.lastHandle = this.handles[this.handles.length - 1]
   }
 
   public setActiveHandle(handle: Handle | null) {

@@ -105,32 +105,29 @@ class Model extends Subject {
 
   // TODO: create different name for this method
   public moveHandle(targetPoint: Point, handleIndex?: number): void {
+    let activeHandleIndex
+    // these conditions help the Model to decide how to act when user drags particular handle
+    // or just click on some area of the track
     if (handleIndex !== undefined) {
-      const activeHandle = this.handles[handleIndex]
+      activeHandleIndex = handleIndex
 
-      this.track.setActiveHandle(activeHandle)
-
-      const availablePoint = this.track.getAvailablePoint(targetPoint.x)
-
-      activeHandle.move(availablePoint)
-
-      this.labels[handleIndex].move(availablePoint)
-
-      // this.range.startPosition = { x: availablePoint, y: 0 }
+      this.track.setActiveHandle(this.handles[activeHandleIndex])
     } else {
       this.track.setActiveHandle(null)
       // decide which handle should move to this point
-      const movablePointIndex = this.track.getClothestPointIndex(
+      activeHandleIndex = this.track.getClothestPointIndex(
         targetPoint.x,
         this.handles.map((handle) => handle.position.x)
       )
-
-      const availablePoint = this.track.getAvailablePoint(targetPoint.x)
-
-      this.handles[movablePointIndex].move(availablePoint)
-
-      this.labels[movablePointIndex].move(availablePoint)
     }
+
+    const availablePoint = this.track.getAvailablePoint(targetPoint.x)
+
+    this.handles[activeHandleIndex].move(availablePoint)
+
+    this.labels[activeHandleIndex].move(availablePoint)
+
+    // this.range.startPosition = { x: availablePoint, y: 0 }
 
     this.notify(ModelUpdateTypes.Slide)
   }
