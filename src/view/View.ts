@@ -137,8 +137,10 @@ class View {
     })
   }
 
-  public onTrackClick(handler: (point: Point) => void): void {
-    const handlerWrapper = (e: MouseEvent): any => {
+  private trackClickHandlerWrapper(
+    handler: (point: Point) => void
+  ): (event: MouseEvent) => void {
+    return (e) => {
       const x = e.clientX - this.track.positionX
       const y = e.clientY - this.track.positionY
 
@@ -152,18 +154,29 @@ class View {
 
       if (correctTarget) handler({ x, y })
     }
-
-    // TODO: find the way to attach an event handler with Jquery
-    this.track.$elem[0].addEventListener('click', handlerWrapper)
   }
 
-  public handleDrag(handler: (point: Point) => void): void {
-    const mouseMoveHandler = (e: MouseEvent): void => {
+  public onTrackClick(handler: (point: Point) => void): void {
+    // TODO: find the way to attach an event handler with Jquery
+    this.track.$elem[0].addEventListener(
+      'click',
+      this.trackClickHandlerWrapper(handler)
+    )
+  }
+
+  private handleDragHandlerWrapper(
+    handler: (point: Point) => void
+  ): (event: MouseEvent) => void {
+    return (e) => {
       const x = e.clientX - this.track.positionX
       const y = e.clientY - this.track.positionY
 
       handler({ x, y })
     }
+  }
+
+  public onHandleDrag(handler: (point: Point) => void): void {
+    const handlerWrapper = this.handleDragHandlerWrapper(handler)
 
     const $root = $('html')
 
@@ -173,14 +186,14 @@ class View {
       // if target is one of the handles, attach mousemove event
       this.handles.forEach((handle) => {
         if (target === handle.$elem[0]) {
-          $root[0].addEventListener('mousemove', mouseMoveHandler)
+          $root[0].addEventListener('mousemove', handlerWrapper)
         }
       })
     })
 
     // when user releases the button in any place, remove event
     $root.mouseup(() => {
-      $root[0].removeEventListener('mousemove', mouseMoveHandler)
+      $root[0].removeEventListener('mousemove', handlerWrapper)
     })
   }
 }
