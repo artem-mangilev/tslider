@@ -1,10 +1,14 @@
 import { OneDimensionalSpacePoint, Ratio } from '../utils/aliases'
 import Point from '../utils/Point'
+import Handle from './Handle'
 
 class Track {
   maxMinDiff: number
   stepSegment: number
   passiveLineMiddle: number
+  handles: Handle[]
+
+  private activeHandle: Handle
 
   constructor(
     private numberOfSteps: number,
@@ -12,6 +16,7 @@ class Track {
     public height: number
   ) {
     this.stepSegment = this.width / this.numberOfSteps
+    this.activeHandle = null
   }
 
   private getNearStep(point: OneDimensionalSpacePoint) {
@@ -19,11 +24,25 @@ class Track {
   }
 
   private get leftBoundry(): number {
-    return 0
+    const lastHandleIndex = this.handles.length - 1
+
+    if (!this.activeHandle || this.activeHandle === this.handles[0]) {
+      return 0
+    } else if (this.activeHandle === this.handles[lastHandleIndex]) {
+      return this.handles[0].position.x
+    }
   }
 
   private get rightBoundry(): number {
-    return this.width
+    const lastHandleIndex = this.handles.length - 1
+    if (
+      !this.activeHandle ||
+      this.activeHandle === this.handles[lastHandleIndex]
+    ) {
+      return this.width
+    } else if (this.activeHandle === this.handles[0]) {
+      return this.handles[lastHandleIndex].position.x
+    }
   }
 
   private isPointInBoundries(point: OneDimensionalSpacePoint): boolean {
@@ -42,18 +61,18 @@ class Track {
   }
 
   public getAvailablePoint(
-    point: OneDimensionalSpacePoint
+    targetPoint: OneDimensionalSpacePoint
   ): OneDimensionalSpacePoint {
-    if (this.isPointInBoundries(point)) {
+    if (this.isPointInBoundries(targetPoint)) {
       const availablePointRatio: Ratio =
-        this.getNearStep(point) / this.numberOfSteps
+        this.getNearStep(targetPoint) / this.numberOfSteps
       const availablePoint: OneDimensionalSpacePoint =
         availablePointRatio * this.width
 
       return availablePoint
-    } else if (this.isPointBeforeLeftBoundry(point)) {
+    } else if (this.isPointBeforeLeftBoundry(targetPoint)) {
       return this.leftBoundry
-    } else if (this.isPointAfterRightBoundry(point)) {
+    } else if (this.isPointAfterRightBoundry(targetPoint)) {
       return this.rightBoundry
     }
   }
@@ -99,6 +118,14 @@ class Track {
 
   public pointToRatio(point: OneDimensionalSpacePoint): Ratio {
     return point / this.width
+  }
+
+  public registerHandles(handles: Handle[]) {
+    this.handles = handles
+  }
+
+  public setActiveHandle(handle: Handle | null) {
+    this.activeHandle = handle
   }
 }
 

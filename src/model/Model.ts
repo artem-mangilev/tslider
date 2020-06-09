@@ -91,6 +91,8 @@ class Model extends Subject {
       )
     })
 
+    this.track.registerHandles(this.handles)
+
     // this.range = new Range(
     //   this.track.width,
     //   this.track.height,
@@ -102,20 +104,33 @@ class Model extends Subject {
   }
 
   // TODO: create different name for this method
-  public moveHandle(targetPoint: Point): void {
-    // decide which handle should move to this point
-    const movablePointIndex = this.track.getClothestPointIndex(
-      targetPoint.x,
-      this.handles.map((handle) => handle.position.x)
-    )
+  public moveHandle(targetPoint: Point, handleIndex?: number): void {
+    if (handleIndex !== undefined) {
+      const activeHandle = this.handles[handleIndex]
 
-    const availablePoint = this.track.getAvailablePoint(targetPoint.x)
+      this.track.setActiveHandle(activeHandle)
 
-    this.handles[movablePointIndex].move(availablePoint)
+      const availablePoint = this.track.getAvailablePoint(targetPoint.x)
 
-    this.labels[movablePointIndex].move(availablePoint)
+      activeHandle.move(availablePoint)
 
-    // this.range.startPosition = { x: availablePoint, y: 0 }
+      this.labels[handleIndex].move(availablePoint)
+
+      // this.range.startPosition = { x: availablePoint, y: 0 }
+    } else {
+      this.track.setActiveHandle(null)
+      // decide which handle should move to this point
+      const movablePointIndex = this.track.getClothestPointIndex(
+        targetPoint.x,
+        this.handles.map((handle) => handle.position.x)
+      )
+
+      const availablePoint = this.track.getAvailablePoint(targetPoint.x)
+
+      this.handles[movablePointIndex].move(availablePoint)
+
+      this.labels[movablePointIndex].move(availablePoint)
+    }
 
     this.notify(ModelUpdateTypes.Slide)
   }
