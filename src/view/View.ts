@@ -165,18 +165,21 @@ class View {
   }
 
   private handleDragHandlerWrapper(
-    handler: (point: Point) => void
+    handler: (point: Point, handleIndex: number) => void,
+    handleIndex: number
   ): (event: MouseEvent) => void {
     return (e) => {
       const x = e.clientX - this.track.positionX
       const y = e.clientY - this.track.positionY
 
-      handler({ x, y })
+      handler({ x, y }, handleIndex)
     }
   }
 
-  public onHandleDrag(handler: (point: Point) => void): void {
-    const handlerWrapper = this.handleDragHandlerWrapper(handler)
+  public onHandleDrag(
+    handler: (point: Point, handleIndex: number) => void
+  ): void {
+    let dragHandler: (event: MouseEvent) => void
 
     const $root = $('html')
 
@@ -184,16 +187,18 @@ class View {
     // when user pushes left button
     $root.mousedown(({ target }) => {
       // if target is one of the handles, attach mousemove event
-      this.handles.forEach((handle) => {
+      this.handles.forEach((handle, i) => {
         if (target === handle.$elem[0]) {
-          $root[0].addEventListener('mousemove', handlerWrapper)
+          dragHandler = this.handleDragHandlerWrapper(handler, i)
+
+          $root[0].addEventListener('mousemove', dragHandler)
         }
       })
     })
 
     // when user releases the button in any place, remove event
     $root.mouseup(() => {
-      $root[0].removeEventListener('mousemove', handlerWrapper)
+      $root[0].removeEventListener('mousemove', dragHandler)
     })
   }
 }

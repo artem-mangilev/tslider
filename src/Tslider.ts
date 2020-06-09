@@ -69,7 +69,7 @@ class Tslider implements Observer {
     })
 
     // when the user dragged the handle, move it to apropriate position
-    this.view.onHandleDrag((point) => {
+    this.view.onHandleDrag((point, index) => {
       model.moveHandle(this.validatePoint(point))
     })
   }
