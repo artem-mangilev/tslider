@@ -1,4 +1,4 @@
-import { OneDimensionalSpacePoint, Orientation, Ratio } from '../utils/aliases'
+import { OneDimensionalSpacePoint, Ratio } from '../utils/aliases'
 import Point from '../utils/Point'
 import Subject from '../utils/Subject'
 import Data from './Data'
@@ -11,34 +11,14 @@ import Track from './Track'
 
 // TODO: simplify implementation of switching the orientation
 class Model extends Subject {
-  private options: ModelOptions
-  private orientation: Orientation
   private track: Track
   private data: Data
   private range: Range
-  private handles: Handle[]
-  private labels: Label[]
+  private handles: Handle[] = []
+  private labels: Label[] = []
 
-  constructor(options: ModelOptions) {
+  constructor(private options: ModelOptions) {
     super()
-
-    this.options = options
-    this.orientation = this.options.orientation
-
-    // initialize the data
-    this.data = new Data(
-      this.options.min,
-      this.options.max,
-      this.options.step,
-      this.orientation
-    )
-
-    // initialize track class
-    this.track = new Track(
-      this.data.numberOfSteps,
-      this.options.trackWidth,
-      this.options.trackHeight
-    )
   }
 
   public get trackWidth(): number {
@@ -69,12 +49,23 @@ class Model extends Subject {
     return this.range.startPosition
   }
 
-  public initSlider(fromData: number, toData: number): void {
-    const initialData: number[] = [fromData, toData]
-    this.handles = []
-    this.labels = []
+  public initSlider(handlesData: number[]): void {
+    // initialize the data
+    this.data = new Data(
+      this.options.min,
+      this.options.max,
+      this.options.step,
+      this.options.orientation
+    )
 
-    initialData.forEach((data) => {
+    // initialize track class
+    this.track = new Track(
+      this.data.numberOfSteps,
+      this.options.trackWidth,
+      this.options.trackHeight
+    )
+
+    handlesData.forEach((data) => {
       const dataRatio = this.data.getAmountAsRatio(data)
 
       const x: OneDimensionalSpacePoint = dataRatio * this.track.width
@@ -86,7 +77,7 @@ class Model extends Subject {
           this.options.labelWidth,
           this.options.labelHeight,
           { x, y: 0 },
-          this.orientation
+          this.options.orientation
         )
       )
     })

@@ -17,7 +17,7 @@ class Tslider implements Observer {
       orientation: options.orientation,
       labelMarginFromTrack: options.labelMarginFromTrack,
       // TODO: find more nice way to set this option
-      numberOfHandles: options.to ? 2 : 1,
+      numberOfHandles: options.to ? 2 :  1,
     }
 
     // initialize the View
@@ -42,7 +42,15 @@ class Tslider implements Observer {
     const model: Model = new Model(modelOptions)
     model.attach(this)
 
-    model.initSlider(options.from, options.to)
+    // 'from' is required parameter at this moment
+    const handlesData: number[] = [options.from]
+
+    // 'to' is optional
+    if (options.to !== undefined) {
+      handlesData.push(options.to)
+    }
+
+    model.initSlider(handlesData)
   }
 
   public update(updateType: ModelUpdateTypes, model: Model): void {
