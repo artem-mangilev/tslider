@@ -1,4 +1,4 @@
-import { OneDimensionalSpacePoint, Ratio } from '../utils/aliases'
+import { OneDimensionalSpacePoint, Ratio, Orientation } from '../utils/aliases'
 import Point from '../utils/Point'
 import Handle from './Handle'
 
@@ -14,6 +14,7 @@ class Track {
 
   constructor(
     private numberOfSteps: number,
+    private orientation: Orientation,
     public width: number,
     public height: number
   ) {
@@ -25,11 +26,11 @@ class Track {
     return Math.round(point / this.stepSegment)
   }
 
-  private get leftBoundry(): number {
+  public get leftBoundry(): number {
     if (!this.activeHandle || this.activeHandle === this.firstHandle) {
       return 0
     } else if (this.activeHandle === this.lastHandle) {
-      return this.handles[0].position.x
+      return this.firstHandle.position.x
     }
   }
 
@@ -114,6 +115,7 @@ class Track {
     return point / this.width
   }
 
+  // TODO: probably it's not a good idea to register handles in the track explicitly
   public registerHandles(handles: Handle[]) {
     this.handles = handles
     this.firstHandle = this.handles[0]
@@ -122,6 +124,29 @@ class Track {
 
   public setActiveHandle(handle: Handle | null) {
     this.activeHandle = handle
+  }
+
+  public get boundriesDistance(): number {
+    if (this.handles.length === 2) {
+      return this.lastHandle.position.x - this.firstHandle.position.x
+    } else if (this.handles.length === 1) {
+      return this.orientation === 'horizontal'
+        ? this.firstHandle.position.x
+        : this.width - this.firstHandle.position.x
+    }
+  }
+
+  public get rangeStartPosition(): Point {
+    switch (this.handles.length) {
+      case 1:
+        return {
+          x:
+            this.orientation === 'horizontal' ? 0 : this.firstHandle.position.x,
+          y: 0,
+        }
+      case 2:
+        return { x: this.firstHandle.position.x, y: 0 }
+    }
   }
 }
 

@@ -89,11 +89,11 @@ class Tslider implements Observer {
     )
 
     // TODO: find the way to hide this functionality back to slideTo
-    // this.view.updateRange(
-    //   model.rangeWidth,
-    //   model.rangeHeight,
-    //   this.validatePoint(model.rangeStartPosition)
-    // )
+    this.view.updateRange(
+      model.rangeWidth,
+      model.rangeHeight,
+      this.validatePoint(model.rangeStartPosition)
+    )
 
     this.view.updateLabels(
       model.labelPositions.map((position) => this.validatePoint(position)),

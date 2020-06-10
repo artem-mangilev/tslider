@@ -6,14 +6,12 @@ import Handle from './Handle'
 import Label from './Label'
 import ModelOptions from './ModelOptions'
 import { ModelUpdateTypes } from './ModelUpdateTypes'
-import Range from './Range'
 import Track from './Track'
 
 // TODO: simplify implementation of switching the orientation
 class Model extends Subject {
   private track: Track
   private data: Data
-  private range: Range
   private handles: Handle[] = []
   private labels: Label[] = []
 
@@ -30,11 +28,15 @@ class Model extends Subject {
   }
 
   public get rangeWidth(): number {
-    return this.range.width
+    return this.track.boundriesDistance
   }
 
   public get rangeHeight(): number {
-    return this.range.height
+    return this.track.height
+  }
+
+  public get rangeStartPosition(): Point {
+    return this.track.rangeStartPosition
   }
 
   public get handlePositions(): Point[] {
@@ -43,10 +45,6 @@ class Model extends Subject {
 
   public get labelPositions(): Point[] {
     return this.labels.map((label) => label.position)
-  }
-
-  public get rangeStartPosition(): Point {
-    return this.range.startPosition
   }
 
   public initSlider(handlesData: number[]): void {
@@ -61,6 +59,7 @@ class Model extends Subject {
     // initialize track class
     this.track = new Track(
       this.data.numberOfSteps,
+      this.options.orientation,
       this.options.trackWidth,
       this.options.trackHeight
     )
@@ -83,13 +82,6 @@ class Model extends Subject {
     })
 
     this.track.registerHandles(this.handles)
-
-    // this.range = new Range(
-    //   this.track.width,
-    //   this.track.height,
-    //   { x, y: 0 },
-    //   this.orientation
-    // )
 
     this.notify(ModelUpdateTypes.Initialization)
   }
@@ -114,8 +106,6 @@ class Model extends Subject {
     this.handles[activeHandleIndex].move(availablePoint)
 
     this.labels[activeHandleIndex].move(availablePoint)
-
-    // this.range.startPosition = { x: availablePoint, y: 0 }
 
     this.notify(ModelUpdateTypes.Slide)
   }

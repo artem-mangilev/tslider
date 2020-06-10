@@ -38,7 +38,7 @@ class View {
       'tslider__labels',
       this.orientation
     )
-    this.range = new Range('tslider__range', this.orientation)
+    this.range = new Range('tslider__range')
 
     // put it after the targetInput
     this.targetInput = new Input(this.options.targetInput)

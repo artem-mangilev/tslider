@@ -3,7 +3,7 @@ import Point from '../utils/Point'
 import ViewTreeNode from '../utils/ViewTreeNode'
 
 class Range extends ViewTreeNode {
-  constructor(className: string, private orientation: Orientation) {
+  constructor(className: string) {
     super('div', className)
   }
 
@@ -12,10 +12,6 @@ class Range extends ViewTreeNode {
       .css('width', `${width}px`)
       .css('height', `${height}px`)
       .css('transform', `translate(${position.x}px, ${position.y}px)`)
-
-    if (this.orientation === 'horizontal') {
-      this.$elem.css('transform', 'rotate(180deg)')
-    }
   }
 }
 
