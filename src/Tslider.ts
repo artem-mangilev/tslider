@@ -17,7 +17,7 @@ class Tslider implements Observer {
       orientation: options.orientation,
       labelMarginFromTrack: options.labelMarginFromTrack,
       // TODO: find more nice way to set this option
-      numberOfHandles: options.to ? 2 :  1,
+      numberOfHandles: options.to ? 2 : 1,
     }
 
     // initialize the View
@@ -89,6 +89,7 @@ class Tslider implements Observer {
     )
 
     // TODO: find the way to hide this functionality back to slideTo
+    // TODO: range didn't rendered in vertical orientation
     this.view.updateRange(
       model.rangeWidth,
       model.rangeHeight,
