@@ -29,7 +29,7 @@ class Track {
     if (!this.activeHandle || this.activeHandle === this.firstHandle) {
       return 0
     } else if (this.activeHandle === this.lastHandle) {
-      return this.firstHandle.position.x
+      return this.firstHandle.position
     }
   }
 
@@ -37,7 +37,7 @@ class Track {
     if (!this.activeHandle || this.activeHandle === this.lastHandle) {
       return this.width
     } else if (this.activeHandle === this.firstHandle) {
-      return this.lastHandle.position.x
+      return this.lastHandle.position
     }
   }
 
@@ -78,8 +78,8 @@ class Track {
     const firstPointIndex: number = 0
     const lastPointIndex: number = this.handles.length - 1
 
-    const firstPoint: number = this.firstHandle.position.x
-    const lastPoint: number = this.lastHandle.position.x
+    const firstPoint: number = this.firstHandle.position
+    const lastPoint: number = this.lastHandle.position
 
     const firstLastMiddle: number = (lastPoint + firstPoint) / 2
 
@@ -127,18 +127,18 @@ class Track {
 
   public get boundriesDistance(): number {
     if (this.handles.length === 2) {
-      return this.lastHandle.position.x - this.firstHandle.position.x
+      return this.lastHandle.position - this.firstHandle.position
     } else if (this.handles.length === 1) {
-      return this.firstHandle.position.x
+      return this.firstHandle.position
     }
   }
 
-  public get rangeStartPosition(): Point {
+  public get rangeStartPosition(): OneDimensionalSpacePoint {
     switch (this.handles.length) {
       case 1:
-        return { x: 0, y: 0 }
+        return 0
       case 2:
-        return { x: this.firstHandle.position.x, y: 0 }
+        return this.firstHandle.position
     }
   }
 }

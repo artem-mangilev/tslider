@@ -1,4 +1,4 @@
-import { Orientation } from '../utils/aliases'
+import { Orientation, OneDimensionalSpacePoint } from '../utils/aliases'
 import Point from '../utils/Point'
 import RatioPoint from '../utils/RatioPoint'
 import Container from './Container'
@@ -59,6 +59,14 @@ class View {
 
     // set margin from track
     this.labelsContainer.setMarginFromTrack(this.options.labelMarginFromTrack)
+
+    // set labels' position
+    this.labels.forEach((label) => {
+      label.move({
+        x: 0,
+        y: 0,
+      })
+    })
   }
 
   public get containerWidth(): number {
@@ -92,28 +100,28 @@ class View {
     this.track.height = height
   }
 
-  public slideTo(handlePositions: Point[]): void {
+  public slideTo(handlePositions: OneDimensionalSpacePoint[]): void {
     // move the handles
-    handlePositions.forEach((position, i) => {
-      this.handles[i].move(position)
+    this.handles.forEach((handle, i) => {
+      handle.move({
+        x: handlePositions[i],
+        y: this.track.height / 2,
+      })
     })
 
     // // update the target input's value
     // this.targetInput.setValue(data)
   }
 
-  public updateRange(
-    width: number,
-    height: number,
-    position: RatioPoint
-  ): void {
-    this.range.draw(width, height, position)
+  public updateRange(length: number, position: OneDimensionalSpacePoint): void {
+    this.range.draw(length, this.range.height, position)
   }
 
-  public updateLabels(positions: Point[], data: number[]) {
-    positions.forEach((position, i) => {
-      this.labels[i].move(position)
-      this.labels[i].updateData(data[i].toString())
+  public updateLabels(positions: OneDimensionalSpacePoint[], data: number[]) {
+    this.labels.forEach((label, i) => {
+      label.move({ x: positions[i], y: 0 })
+
+      label.updateData(data[i].toString())
     })
   }
 

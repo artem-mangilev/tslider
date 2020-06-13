@@ -79,18 +79,17 @@ class Tslider implements Observer {
 
   // TODO: hide implementation details of the Model
   private handleSlideAction(model: Model): void {
-    this.view.slideTo(model.handlePositions.map((position) => position))
+    this.view.slideTo(model.handlePositions)
 
     // TODO: find the way to hide this functionality back to slideTo
     // TODO: range didn't rendered in vertical orientation
     this.view.updateRange(
-      model.rangeWidth,
-      model.rangeHeight,
+      model.rangeLength,
       model.rangeStartPosition
     )
 
     this.view.updateLabels(
-      model.labelPositions.map((position) => position),
+      model.handlePositions,
       model.dataAmount
     )
   }

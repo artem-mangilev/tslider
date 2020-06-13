@@ -3,7 +3,6 @@ import Point from '../utils/Point'
 import Subject from '../utils/Subject'
 import Data from './Data'
 import Handle from './Handle'
-import Label from './Label'
 import ModelOptions from './ModelOptions'
 import { ModelUpdateTypes } from './ModelUpdateTypes'
 import Track from './Track'
@@ -13,7 +12,6 @@ class Model extends Subject {
   private track: Track
   private data: Data
   private handles: Handle[] = []
-  private labels: Label[] = []
 
   constructor(private options: ModelOptions) {
     super()
@@ -27,24 +25,16 @@ class Model extends Subject {
     return this.track.height
   }
 
-  public get rangeWidth(): number {
+  public get rangeLength(): number {
     return this.track.boundriesDistance
   }
 
-  public get rangeHeight(): number {
-    return this.track.height
-  }
-
-  public get rangeStartPosition(): Point {
+  public get rangeStartPosition(): OneDimensionalSpacePoint {
     return this.track.rangeStartPosition
   }
 
-  public get handlePositions(): Point[] {
+  public get handlePositions(): OneDimensionalSpacePoint[] {
     return this.handles.map((handle) => handle.position)
-  }
-
-  public get labelPositions(): Point[] {
-    return this.labels.map((label) => label.position)
   }
 
   public initSlider(handlesData: number[]): void {
@@ -61,16 +51,9 @@ class Model extends Subject {
     handlesData.forEach((data) => {
       const dataRatio = this.data.getAmountAsRatio(data)
 
-      const x: OneDimensionalSpacePoint = dataRatio * this.track.width
+      const coordinate: OneDimensionalSpacePoint = dataRatio * this.track.width
 
-      this.handles.push(new Handle({ x, y: this.track.height / 2 }))
-
-      this.labels.push(
-        new Label(this.options.labelWidth, this.options.labelHeight, {
-          x,
-          y: 0,
-        })
-      )
+      this.handles.push(new Handle(coordinate))
     })
 
     this.track.registerHandles(this.handles)
@@ -95,16 +78,14 @@ class Model extends Subject {
 
     const availablePoint = this.track.getAvailablePoint(targetPoint.x)
 
-    this.handles[activeHandleIndex].move(availablePoint)
-
-    this.labels[activeHandleIndex].move(availablePoint)
+    this.handles[activeHandleIndex].position = availablePoint
 
     this.notify(ModelUpdateTypes.Slide)
   }
 
   get dataAmount(): number[] {
     const handlePositionRatios: Ratio[] = this.handlePositions.map((position) =>
-      this.track.pointToRatio(position.x)
+      this.track.pointToRatio(position)
     )
 
     return handlePositionRatios.map((ratio) => this.data.getAmount(ratio))
