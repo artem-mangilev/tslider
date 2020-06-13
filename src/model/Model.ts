@@ -49,17 +49,11 @@ class Model extends Subject {
 
   public initSlider(handlesData: number[]): void {
     // initialize the data
-    this.data = new Data(
-      this.options.min,
-      this.options.max,
-      this.options.step,
-      this.options.orientation
-    )
+    this.data = new Data(this.options.min, this.options.max, this.options.step)
 
     // initialize track class
     this.track = new Track(
       this.data.numberOfSteps,
-      this.options.orientation,
       this.options.trackWidth,
       this.options.trackHeight
     )
@@ -72,12 +66,10 @@ class Model extends Subject {
       this.handles.push(new Handle({ x, y: this.track.height / 2 }))
 
       this.labels.push(
-        new Label(
-          this.options.labelWidth,
-          this.options.labelHeight,
-          { x, y: 0 },
-          this.options.orientation
-        )
+        new Label(this.options.labelWidth, this.options.labelHeight, {
+          x,
+          y: 0,
+        })
       )
     })
 

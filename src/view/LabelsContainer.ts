@@ -2,12 +2,8 @@ import { Orientation } from '../utils/aliases'
 import ViewTreeNode from '../utils/ViewTreeNode'
 
 class LabelsContainer extends ViewTreeNode {
-  orientation: Orientation
-
-  constructor(className: string, orientation: Orientation) {
+  constructor(className: string) {
     super('div', className)
-
-    this.orientation = orientation
   }
 
   get width(): number {
@@ -19,12 +15,7 @@ class LabelsContainer extends ViewTreeNode {
   }
 
   setMarginFromTrack(margin: number): void {
-    // in vertical orientation, labelsContainer should be placed above the track
-    if (this.orientation === 'horizontal') {
-      this.$elem.css('top', `${-this.height - margin}px`)
-    } else {
-      this.$elem.css('right', `${-this.width - margin}px`)
-    }
+    this.$elem.css('top', `${-this.height - margin}px`)
   }
 }
 

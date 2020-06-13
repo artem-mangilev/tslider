@@ -14,7 +14,6 @@ class Track {
 
   constructor(
     private numberOfSteps: number,
-    private orientation: Orientation,
     public width: number,
     public height: number
   ) {
@@ -130,20 +129,14 @@ class Track {
     if (this.handles.length === 2) {
       return this.lastHandle.position.x - this.firstHandle.position.x
     } else if (this.handles.length === 1) {
-      return this.orientation === 'horizontal'
-        ? this.firstHandle.position.x
-        : this.width - this.firstHandle.position.x
+      return this.firstHandle.position.x
     }
   }
 
   public get rangeStartPosition(): Point {
     switch (this.handles.length) {
       case 1:
-        return {
-          x:
-            this.orientation === 'horizontal' ? 0 : this.firstHandle.position.x,
-          y: 0,
-        }
+        return { x: 0, y: 0 }
       case 2:
         return { x: this.firstHandle.position.x, y: 0 }
     }

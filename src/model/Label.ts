@@ -8,13 +8,12 @@ class Label {
     public width: number,
     public height: number,
     initialPosition: Point,
-    private orientation: Orientation
   ) {
     this.move(initialPosition.x)
   }
 
   private get middle(): number {
-    return (this.orientation === 'horizontal' ? this.width : this.height) / 2
+    return this.width / 2
   }
 
   public move(whereTo: OneDimensionalSpacePoint): void {

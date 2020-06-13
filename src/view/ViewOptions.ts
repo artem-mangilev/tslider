@@ -4,7 +4,6 @@ import { Orientation } from '../utils/aliases'
 // TODO: find out how to avoid copy-pasting the fields
 export default interface ViewOptions {
   targetInput: HTMLInputElement
-  orientation: Orientation
   labelMarginFromTrack: number
   numberOfHandles: number
 }

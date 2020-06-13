@@ -14,15 +14,12 @@ class View {
   private track: Track
   private range: Range
   private targetInput: Input
-  private orientation: Orientation
   private container: Container
   private labelsContainer: LabelsContainer
   private handles: Handle[] = []
   private labels: Label[] = []
 
   constructor(private options: ViewOptions) {
-    this.orientation = options.orientation
-
     // TODO: probably tslider now doesn't make sense and creates unnesessary nesting, so it should be removed
     // create the following structure of slider
     // .tslider
@@ -34,10 +31,7 @@ class View {
 
     this.container = new Container('tslider')
     this.track = new Track('tslider__track')
-    this.labelsContainer = new LabelsContainer(
-      'tslider__labels',
-      this.orientation
-    )
+    this.labelsContainer = new LabelsContainer('tslider__labels')
     this.range = new Range('tslider__range')
 
     // put it after the targetInput
@@ -94,15 +88,8 @@ class View {
   }
 
   public drawTrack(width: number, height: number): void {
-    switch (this.orientation) {
-      case 'horizontal':
-        this.track.width = width
-        this.track.height = height
-        break
-      case 'vetical':
-        this.track.width = height
-        this.track.height = width
-    }
+    this.track.width = width
+    this.track.height = height
   }
 
   public slideTo(handlePositions: Point[]): void {
@@ -120,14 +107,7 @@ class View {
     height: number,
     position: RatioPoint
   ): void {
-    switch (this.orientation) {
-      case 'horizontal':
-        this.range.draw(width, height, position)
-        break
-      case 'vetical':
-        this.range.draw(height, width, position)
-        break
-    }
+    this.range.draw(width, height, position)
   }
 
   public updateLabels(positions: Point[], data: number[]) {

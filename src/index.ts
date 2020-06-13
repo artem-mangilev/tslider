@@ -11,7 +11,7 @@ $(document).ready(() => {
     step: 5,
     labelMarginFromTrack: 5,
     // TODO: fix flickering the handle, when moved in vertical orientation
-    orientation: 'vetical',
+    // orientation: 'vetical',
     targetInput: document.querySelector('.tsl-target'),
   }
 

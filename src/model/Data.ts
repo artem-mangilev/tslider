@@ -3,18 +3,12 @@ import { Orientation, Ratio } from '../utils/aliases'
 class Data {
   private maxMinDiff: number
 
-  constructor(
-    private min: number,
-    private max: number,
-    private step: number,
-    private orientation: Orientation
-  ) {
+  constructor(private min: number, private max: number, private step: number) {
     this.maxMinDiff = max - min
   }
 
   private validateRatio(ratio: Ratio): Ratio {
-    const totalRatio: Ratio = 1
-    return this.orientation === 'horizontal' ? ratio : totalRatio - ratio
+    return ratio
   }
 
   public getAmount(ratio: Ratio): number {
