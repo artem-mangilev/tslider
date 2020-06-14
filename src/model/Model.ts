@@ -17,14 +17,6 @@ class Model extends Subject {
     super()
   }
 
-  public get trackWidth(): number {
-    return this.track.width
-  }
-
-  public get trackHeight(): number {
-    return this.track.height
-  }
-
   public get rangeLength(): number {
     return this.track.boundriesDistance
   }
@@ -42,16 +34,12 @@ class Model extends Subject {
     this.data = new Data(this.options.min, this.options.max, this.options.step)
 
     // initialize track class
-    this.track = new Track(
-      this.data.numberOfSteps,
-      this.options.trackWidth,
-      this.options.trackHeight
-    )
+    this.track = new Track(this.data.numberOfSteps, this.options.trackLength)
 
     handlesData.forEach((data) => {
       const dataRatio = this.data.getAmountAsRatio(data)
 
-      const coordinate: OneDimensionalSpacePoint = dataRatio * this.track.width
+      const coordinate: OneDimensionalSpacePoint = dataRatio * this.track.length
       this.handles.push(new Handle(coordinate))
     })
 

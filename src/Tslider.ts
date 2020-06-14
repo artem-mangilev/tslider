@@ -27,10 +27,7 @@ class Tslider implements Observer {
       max: options.max,
       min: options.min,
       step: options.step,
-      trackWidth: this.view.containerWidth,
-      trackHeight: this.view.trackHeight,
-      labelWidth: this.view.labelWidth,
-      labelHeight: this.view.labelHeight,
+      trackLength: this.view.containerWidth,
     }
 
     // initialize the Model and attach this class to Model as observer of changes
@@ -63,9 +60,6 @@ class Tslider implements Observer {
   }
 
   private handleInitializationAction(model: Model): void {
-    // set correct orientation of the track
-    this.view.drawTrack(model.trackWidth, model.trackHeight)
-
     // when user clicks to some area of the track, move the handle at this position
     this.view.onTrackClick((point) => {
       model.moveHandle(point)
@@ -83,15 +77,9 @@ class Tslider implements Observer {
 
     // TODO: find the way to hide this functionality back to slideTo
     // TODO: range didn't rendered in vertical orientation
-    this.view.updateRange(
-      model.rangeLength,
-      model.rangeStartPosition
-    )
+    this.view.updateRange(model.rangeLength, model.rangeStartPosition)
 
-    this.view.updateLabels(
-      model.handlePositions,
-      model.dataAmount
-    )
+    this.view.updateLabels(model.handlePositions, model.dataAmount)
   }
 }
 

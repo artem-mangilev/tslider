@@ -1,24 +1,15 @@
-import { OneDimensionalSpacePoint, Ratio, Orientation } from '../utils/aliases'
-import Point from '../utils/Point'
+import { OneDimensionalSpacePoint, Ratio } from '../utils/aliases'
 import Handle from './Handle'
 
 class Track {
-  maxMinDiff: number
-  stepSegment: number
-  passiveLineMiddle: number
-  handles: Handle[]
-
+  private stepSegment: number
+  private handles: Handle[]
   private activeHandle: Handle
   private firstHandle: Handle
   private lastHandle: Handle
 
-  // TODO: track shouldn't know about width and height, only about length (which will be the width)
-  constructor(
-    private numberOfSteps: number,
-    public width: number,
-    public height: number
-  ) {
-    this.stepSegment = this.width / this.numberOfSteps
+  constructor(private numberOfSteps: number, public length: number) {
+    this.stepSegment = this.length / this.numberOfSteps
     this.activeHandle = null
   }
 
@@ -31,7 +22,7 @@ class Track {
   }
 
   private get rightBoundry(): number {
-    return this.width
+    return this.length
   }
 
   private get firstPointPosition(): OneDimensionalSpacePoint {
@@ -92,7 +83,7 @@ class Track {
     const availablePointRatio: Ratio =
       this.getNearStep(targetPoint) / this.numberOfSteps
     const availablePoint: OneDimensionalSpacePoint =
-      availablePointRatio * this.width
+      availablePointRatio * this.length
 
     return availablePoint
   }
@@ -139,7 +130,7 @@ class Track {
   }
 
   public pointToRatio(point: OneDimensionalSpacePoint): Ratio {
-    return point / this.width
+    return point / this.length
   }
 
   // TODO: probably it's not a good idea to register handles in the track explicitly

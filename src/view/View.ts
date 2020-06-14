@@ -95,11 +95,6 @@ class View {
     return this.labels[0].height
   }
 
-  public drawTrack(width: number, height: number): void {
-    this.track.width = width
-    this.track.height = height
-  }
-
   public slideTo(handlePositions: OneDimensionalSpacePoint[]): void {
     // move the handles
     this.handles.forEach((handle, i) => {
@@ -171,8 +166,6 @@ class View {
 
     const $root = $('html')
 
-    // TODO: when first handle meet other handle, other handle's position should be the max position of first handle
-    // when user pushes left button
     $root.mousedown(({ target }) => {
       // if target is one of the handles, attach mousemove event
       this.handles.forEach((handle, i) => {
