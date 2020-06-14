@@ -12,6 +12,7 @@ class Track {
   private firstHandle: Handle
   private lastHandle: Handle
 
+  // TODO: track shouldn't know about width and height, only about length (which will be the width)
   constructor(
     private numberOfSteps: number,
     public width: number,
@@ -26,26 +27,23 @@ class Track {
   }
 
   public get leftBoundry(): number {
-    if (!this.activeHandle || this.activeHandle === this.firstHandle) {
-      return 0
-    } else if (this.activeHandle === this.lastHandle) {
-      return this.firstHandle.position
-    }
+    return 0
   }
 
   private get rightBoundry(): number {
-    if (!this.activeHandle || this.activeHandle === this.lastHandle) {
-      return this.width
-    } else if (this.activeHandle === this.firstHandle) {
-      return this.lastHandle.position
-    }
+    return this.width
   }
 
-  private isPointInBoundries(point: OneDimensionalSpacePoint): boolean {
-    const isPointAfterLeftBoundry = point >= this.leftBoundry
-    const isPointBeforeRightBoundry = point <= this.rightBoundry
+  private get firstPointPosition(): OneDimensionalSpacePoint {
+    return this.firstHandle.position
+  }
 
-    return isPointAfterLeftBoundry && isPointBeforeRightBoundry
+  public get lastPointPosition(): OneDimensionalSpacePoint {
+    return this.lastHandle.position
+  }
+
+  private isPointBetweenPoints(point: OneDimensionalSpacePoint): boolean {
+    return point >= this.firstPointPosition && point <= this.lastPointPosition
   }
 
   private isPointBeforeLeftBoundry(point: OneDimensionalSpacePoint): boolean {
@@ -56,21 +54,51 @@ class Track {
     return point >= this.rightBoundry
   }
 
+  private isPointCollidesWithLastPoint(
+    point: OneDimensionalSpacePoint
+  ): boolean {
+    const isPointAfterLastPoint = point > this.lastHandle.position
+
+    return this.activeHandle === this.firstHandle && isPointAfterLastPoint
+  }
+
+  private isPointCollidesWithFirstPoint(
+    point: OneDimensionalSpacePoint
+  ): boolean {
+    const isPointBeforeFirstPoint = point < this.firstHandle.position
+
+    return this.activeHandle === this.lastHandle && isPointBeforeFirstPoint
+  }
+
   public getAvailablePoint(
     targetPoint: OneDimensionalSpacePoint
   ): OneDimensionalSpacePoint {
-    if (this.isPointInBoundries(targetPoint)) {
-      const availablePointRatio: Ratio =
-        this.getNearStep(targetPoint) / this.numberOfSteps
-      const availablePoint: OneDimensionalSpacePoint =
-        availablePointRatio * this.width
+    const isPointCollidesWithLastPoint =
+      this.isRangeMode() && this.isPointCollidesWithLastPoint(targetPoint)
 
-      return availablePoint
+    const isPointCollidesWithFirstPoint =
+      this.isRangeMode() && this.isPointCollidesWithFirstPoint(targetPoint)
+
+    if (isPointCollidesWithLastPoint) {
+      return this.lastPointPosition
+    } else if (isPointCollidesWithFirstPoint) {
+      return this.firstPointPosition
     } else if (this.isPointBeforeLeftBoundry(targetPoint)) {
       return this.leftBoundry
     } else if (this.isPointAfterRightBoundry(targetPoint)) {
       return this.rightBoundry
     }
+
+    const availablePointRatio: Ratio =
+      this.getNearStep(targetPoint) / this.numberOfSteps
+    const availablePoint: OneDimensionalSpacePoint =
+      availablePointRatio * this.width
+
+    return availablePoint
+  }
+
+  private isRangeMode(): boolean {
+    return this.handles.length === 2
   }
 
   // TODO: improve naming
@@ -87,7 +115,7 @@ class Track {
     const isTargetPointIsLastPoint: boolean = targetPoint === lastPoint
     const isTargetPointBeforeFirstPoint: boolean = targetPoint < firstPoint
     const isTargetPointAfterLastPoint: boolean = targetPoint > lastPoint
-    const isTargetPointBetweenPoints: boolean = this.isPointInBoundries(
+    const isTargetPointBetweenPoints: boolean = this.isPointBetweenPoints(
       targetPoint
     )
     const isTargetPointCloserToFirstPoint: boolean =
@@ -126,20 +154,13 @@ class Track {
   }
 
   public get boundriesDistance(): number {
-    if (this.handles.length === 2) {
-      return this.lastHandle.position - this.firstHandle.position
-    } else if (this.handles.length === 1) {
-      return this.firstHandle.position
-    }
+    return this.isRangeMode()
+      ? this.lastHandle.position - this.firstHandle.position
+      : this.firstHandle.position
   }
 
   public get rangeStartPosition(): OneDimensionalSpacePoint {
-    switch (this.handles.length) {
-      case 1:
-        return 0
-      case 2:
-        return this.firstHandle.position
-    }
+    return this.isRangeMode() ? this.firstHandle.position : this.leftBoundry
   }
 }
 

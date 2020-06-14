@@ -52,7 +52,6 @@ class Model extends Subject {
       const dataRatio = this.data.getAmountAsRatio(data)
 
       const coordinate: OneDimensionalSpacePoint = dataRatio * this.track.width
-
       this.handles.push(new Handle(coordinate))
     })
 
@@ -63,21 +62,16 @@ class Model extends Subject {
 
   // TODO: create different name for this method
   public moveHandle(targetPoint: Point, handleIndex?: number): void {
-    let activeHandleIndex
-    // these conditions help the Model to decide how to act when user drags particular handle
-    // or just click on some area of the track
-    if (handleIndex !== undefined) {
-      activeHandleIndex = handleIndex
+    // these condition help the Model to decide should it compute which handle should be used,
+    // or use a provided handleIndex
+    let activeHandleIndex =
+      handleIndex === undefined
+        ? this.track.getClothestPointIndex(targetPoint.x)
+        : handleIndex
 
-      this.track.setActiveHandle(this.handles[activeHandleIndex])
-    } else {
-      this.track.setActiveHandle(null)
-      // decide which handle should move to this point
-      activeHandleIndex = this.track.getClothestPointIndex(targetPoint.x)
-    }
+    this.track.setActiveHandle(this.handles[activeHandleIndex])
 
     const availablePoint = this.track.getAvailablePoint(targetPoint.x)
-
     this.handles[activeHandleIndex].position = availablePoint
 
     this.notify(ModelUpdateTypes.Slide)
