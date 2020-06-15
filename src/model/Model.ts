@@ -18,7 +18,7 @@ class Model extends Subject {
   }
 
   public get rangeLength(): number {
-    return this.track.boundriesDistance
+    return this.track.boundariesDistance
   }
 
   public get rangeStartPosition(): OneDimensionalSpacePoint {
@@ -54,7 +54,7 @@ class Model extends Subject {
     // or use a provided handleIndex
     let activeHandleIndex =
       handleIndex === undefined
-        ? this.track.getClothestPointIndex(targetPoint.x)
+        ? this.track.getNearestPointIndex(targetPoint.x)
         : handleIndex
 
     this.track.setActiveHandle(this.handles[activeHandleIndex])

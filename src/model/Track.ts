@@ -17,11 +17,11 @@ class Track {
     return Math.round(point / this.stepSegment)
   }
 
-  public get leftBoundry(): number {
+  public get leftBoundary(): number {
     return 0
   }
 
-  private get rightBoundry(): number {
+  private get rightBoundary(): number {
     return this.length
   }
 
@@ -37,12 +37,12 @@ class Track {
     return point >= this.firstPointPosition && point <= this.lastPointPosition
   }
 
-  private isPointBeforeLeftBoundry(point: OneDimensionalSpacePoint): boolean {
-    return point <= this.leftBoundry
+  private isPointBeforeLeftBoundary(point: OneDimensionalSpacePoint): boolean {
+    return point <= this.leftBoundary
   }
 
-  private isPointAfterRightBoundry(point: OneDimensionalSpacePoint): boolean {
-    return point >= this.rightBoundry
+  private isPointAfterRightBoundary(point: OneDimensionalSpacePoint): boolean {
+    return point >= this.rightBoundary
   }
 
   private isPointCollidesWithLastPoint(
@@ -74,10 +74,10 @@ class Track {
       return this.lastPointPosition
     } else if (isPointCollidesWithFirstPoint) {
       return this.firstPointPosition
-    } else if (this.isPointBeforeLeftBoundry(targetPoint)) {
-      return this.leftBoundry
-    } else if (this.isPointAfterRightBoundry(targetPoint)) {
-      return this.rightBoundry
+    } else if (this.isPointBeforeLeftBoundary(targetPoint)) {
+      return this.leftBoundary
+    } else if (this.isPointAfterRightBoundary(targetPoint)) {
+      return this.rightBoundary
     }
 
     const availablePointRatio: Ratio =
@@ -93,7 +93,7 @@ class Track {
   }
 
   // TODO: improve naming
-  public getClothestPointIndex(targetPoint: OneDimensionalSpacePoint): number {
+  public getNearestPointIndex(targetPoint: OneDimensionalSpacePoint): number {
     const firstPointIndex: number = 0
     const lastPointIndex: number = this.handles.length - 1
 
@@ -144,14 +144,14 @@ class Track {
     this.activeHandle = handle
   }
 
-  public get boundriesDistance(): number {
+  public get boundariesDistance(): number {
     return this.isRangeMode()
       ? this.lastHandle.position - this.firstHandle.position
       : this.firstHandle.position
   }
 
   public get rangeStartPosition(): OneDimensionalSpacePoint {
-    return this.isRangeMode() ? this.firstHandle.position : this.leftBoundry
+    return this.isRangeMode() ? this.firstHandle.position : this.leftBoundary
   }
 }
 
