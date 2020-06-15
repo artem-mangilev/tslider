@@ -5,7 +5,7 @@ import SliderOptions from './SliderOptions'
 import Observer from './utils/Observer'
 import View from './view/View'
 import ViewOptions from './view/ViewOptions'
-import { OrientationOptions, OrientationOption } from './OrientationOptions'
+import { OrientationOptions } from './OrientationOptions'
 
 class Tslider implements Observer {
   private view: View
@@ -31,35 +31,30 @@ class Tslider implements Observer {
     const orientationOptions: OrientationOptions = {
       horizontal: {
         longSide: 'width',
-        shortSide: 'height'
+        shortSide: 'height',
       },
       vetical: {
         longSide: 'height',
-        shortSide: 'width'
-      }
+        shortSide: 'width',
+      },
     }
 
+    const orientationOption = orientationOptions[orientation]
+    const numberOfHandles = handlesData.length
     // create view options
     const viewOptions: ViewOptions = {
-      targetInput,
       labelMarginFromTrack,
-      orientationOption: orientationOptions[orientation],
-      numberOfHandles: handlesData.length,
+      orientationOption,
+      numberOfHandles,
+      targetInput,
     }
 
     // initialize the View
     this.view = new View(viewOptions)
 
+    const trackLength = this.view.trackLength
     // the Model needs an additional data
-    const modelOptions: ModelOptions = {
-      max,
-      min,
-      step,
-      trackLength:
-        orientation === 'horizontal'
-          ? this.view.containerWidth
-          : this.view.containerHeight,
-    }
+    const modelOptions: ModelOptions = { max, min, step, trackLength }
 
     // initialize the Model and attach this class to Model as observer of changes
     const model: Model = new Model(modelOptions)

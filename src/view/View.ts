@@ -1,4 +1,4 @@
-import { Orientation, OneDimensionalSpacePoint } from '../utils/aliases'
+import { OneDimensionalSpacePoint } from '../utils/aliases'
 import Point from '../utils/Point'
 import Container from './Container'
 import Handle from './Handle'
@@ -77,12 +77,8 @@ class View {
     this.track[this.shortSide] = height
   }
 
-  public get containerWidth(): number {
-    return this.container.width
-  }
-
-  public get containerHeight(): number {
-    return this.container.height
+  public get trackLength(): number {
+    return this.track[this.longSide]
   }
 
   public slideTo(handlePositions: OneDimensionalSpacePoint[]): void {
