@@ -51,6 +51,7 @@ class Tslider implements Observer {
     model.initSlider(handlesData)
   }
 
+  // TODO: hide implementation details of the Model, for each action give the apropriate data, not the whole object
   public update(updateType: ModelUpdateTypes, model: Model): void {
     // this works a little big magical: when ModelUpdateTypes.Initialization occurs,
     // handleSlideAction is also evaluated for drawing the initial state of the model
@@ -66,26 +67,27 @@ class Tslider implements Observer {
   }
 
   private handleInitializationAction(model: Model): void {
+    // the arguments of view events maps to arguments of moveHandle, so
+    // we could just set move handle as a callback for view events
+    const move = model.moveHandle.bind(model)
     // when user clicks to some area of the track, move the handle at this position
-    this.view.onTrackClick((point) => {
-      model.moveHandle(point)
-    })
-
+    this.view.onTrackClick(move)
     // when the user dragged the handle, move it to apropriate position
-    this.view.onHandleDrag((point, index) => {
-      model.moveHandle(point, index)
-    })
+    this.view.onHandleDrag(move)
   }
 
-  // TODO: hide implementation details of the Model
-  private handleSlideAction(model: Model): void {
-    this.view.slideTo(model.handlePositions)
+  private handleSlideAction({
+    handlePositions,
+    rangeLength,
+    rangeStartPosition,
+    dataAmount,
+  }: Model): void {
+    this.view.slideTo(handlePositions)
 
     // TODO: find the way to hide this functionality back to slideTo
-    // TODO: range didn't rendered in vertical orientation
-    this.view.updateRange(model.rangeLength, model.rangeStartPosition)
+    this.view.updateRange(rangeLength, rangeStartPosition)
 
-    this.view.updateLabels(model.handlePositions, model.dataAmount)
+    this.view.updateLabels(handlePositions, dataAmount)
   }
 }
 
