@@ -8,6 +8,7 @@ import LabelsContainer from './LabelsContainer'
 import Range from './Range'
 import Track from './Track'
 import ViewOptions from './ViewOptions'
+import { Side } from '../OrientationOptions'
 
 class View {
   private track: Track
@@ -17,12 +18,17 @@ class View {
   private labelsContainer: LabelsContainer
   private handles: Handle[] = []
   private labels: Label[] = []
+  private shortSide: Side
+  private longSide: Side
 
   constructor({
     targetInput,
     numberOfHandles,
     labelMarginFromTrack,
+    orientationOption: { longSide, shortSide },
   }: ViewOptions) {
+    this.longSide = longSide
+    this.shortSide = shortSide
     // TODO: probably tslider now doesn't make sense and creates unnecessary nesting, so it should be removed
     // create the following structure of slider
     // .tslider
@@ -62,6 +68,12 @@ class View {
 
     // set margin from track
     this.labelsContainer.setMarginFromTrack(labelMarginFromTrack)
+
+    // cache the track height, in order to set it to the short side
+    const height = this.track.height
+    // draw the track according to orientation
+    this.track[this.longSide] = this.container[this.longSide]
+    this.track[this.shortSide] = height
   }
 
   public get containerWidth(): number {
@@ -77,7 +89,7 @@ class View {
     this.handles.forEach((handle, i) => {
       handle.move({
         x: handlePositions[i],
-        y: this.track.height / 2,
+        y: this.track[this.shortSide] / 2,
       })
     })
 
