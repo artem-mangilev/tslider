@@ -3,20 +3,34 @@ import ModelOptions from './model/ModelOptions'
 import { ModelUpdateTypes } from './model/ModelUpdateTypes'
 import SliderOptions from './SliderOptions'
 import Observer from './utils/Observer'
-import Point from './utils/Point'
 import View from './view/View'
 import ViewOptions from './view/ViewOptions'
 
 class Tslider implements Observer {
   private view: View
 
-  constructor(private options: SliderOptions) {
+  constructor({
+    targetInput,
+    labelMarginFromTrack,
+    from,
+    to,
+    max,
+    min,
+    step,
+  }: SliderOptions) {
+    // 'from' is required parameter at this moment
+    const handlesData: number[] = [from]
+
+    // 'to' is optional
+    if (to !== undefined) {
+      handlesData.push(to)
+    }
+
     // create view options
     const viewOptions: ViewOptions = {
-      targetInput: options.targetInput,
-      labelMarginFromTrack: options.labelMarginFromTrack,
-      // TODO: find more nice way to set this option
-      numberOfHandles: options.to ? 2 : 1,
+      targetInput,
+      labelMarginFromTrack,
+      numberOfHandles: handlesData.length,
     }
 
     // initialize the View
@@ -24,23 +38,15 @@ class Tslider implements Observer {
 
     // the Model needs an additional data
     const modelOptions: ModelOptions = {
-      max: options.max,
-      min: options.min,
-      step: options.step,
+      max,
+      min,
+      step,
       trackLength: this.view.containerWidth,
     }
 
     // initialize the Model and attach this class to Model as observer of changes
     const model: Model = new Model(modelOptions)
     model.attach(this)
-
-    // 'from' is required parameter at this moment
-    const handlesData: number[] = [options.from]
-
-    // 'to' is optional
-    if (options.to !== undefined) {
-      handlesData.push(options.to)
-    }
 
     model.initSlider(handlesData)
   }

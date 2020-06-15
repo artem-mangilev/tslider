@@ -1,6 +1,5 @@
 import { Orientation, OneDimensionalSpacePoint } from '../utils/aliases'
 import Point from '../utils/Point'
-import RatioPoint from '../utils/RatioPoint'
 import Container from './Container'
 import Handle from './Handle'
 import Input from './Input'
@@ -19,8 +18,12 @@ class View {
   private handles: Handle[] = []
   private labels: Label[] = []
 
-  constructor(private options: ViewOptions) {
-    // TODO: probably tslider now doesn't make sense and creates unnesessary nesting, so it should be removed
+  constructor({
+    targetInput,
+    numberOfHandles,
+    labelMarginFromTrack,
+  }: ViewOptions) {
+    // TODO: probably tslider now doesn't make sense and creates unnecessary nesting, so it should be removed
     // create the following structure of slider
     // .tslider
     //   .tslider__track
@@ -35,13 +38,13 @@ class View {
     this.range = new Range('tslider__range')
 
     // put it after the targetInput
-    this.targetInput = new Input(this.options.targetInput)
+    this.targetInput = new Input(targetInput)
     this.targetInput.$element.after(this.container.$elem)
 
     // this is the functional way to iterate when only finish number is given
     // for example, if length === 2, callback will be evaluated 2 times.
     // this code just generates labels and handles
-    Array.from({ length: options.numberOfHandles }, () => {
+    Array.from({ length: numberOfHandles }, () => {
       this.handles.push(new Handle('tslider__handle'))
       this.labels.push(new Label('tslider__label'))
     })
@@ -58,15 +61,7 @@ class View {
     )
 
     // set margin from track
-    this.labelsContainer.setMarginFromTrack(this.options.labelMarginFromTrack)
-
-    // set labels' position
-    this.labels.forEach((label) => {
-      label.move({
-        x: 0,
-        y: 0,
-      })
-    })
+    this.labelsContainer.setMarginFromTrack(labelMarginFromTrack)
   }
 
   public get containerWidth(): number {
@@ -75,24 +70,6 @@ class View {
 
   public get containerHeight(): number {
     return this.container.height
-  }
-
-  // These getters just duplicates the ones from the Track, so
-  // TODO: find the way to remove these getters
-  public get trackWidth() {
-    return this.track.width
-  }
-
-  public get trackHeight() {
-    return this.track.height
-  }
-
-  public get labelWidth() {
-    return this.labels[0].width
-  }
-
-  public get labelHeight() {
-    return this.labels[0].height
   }
 
   public slideTo(handlePositions: OneDimensionalSpacePoint[]): void {
