@@ -11,15 +11,28 @@ import ViewOptions from './ViewOptions'
 import { Side } from '../OrientationOptions'
 
 class View {
-  private track: Track
-  private range: Range
   private targetInput: Input
-  private container: Container
-  private labelsContainer: LabelsContainer
+
+  // TODO: probably tslider now doesn't make sense and creates unnecessary nesting, so it should be removed
+  // create the following structure of slider
+  // .tslider
+  //   .tslider__track
+  //     .tslider__labels
+  //       .tslider__label
+  //     .tslider__range
+  //     .tslider__handle
+
+  private container: Container = new Container('tslider')
+  private track: Track = new Track('tslider__track')
+  private range: Range = new Range('tslider__range')
+  private labelsContainer: LabelsContainer = new LabelsContainer(
+    'tslider__labels'
+  )
   private handles: Handle[] = []
   private labels: Label[] = []
-  private shortSide: Side
+
   private longSide: Side
+  private shortSide: Side
 
   constructor({
     targetInput,
@@ -27,22 +40,6 @@ class View {
     labelMarginFromTrack,
     orientationOption: { longSide, shortSide },
   }: ViewOptions) {
-    this.longSide = longSide
-    this.shortSide = shortSide
-    // TODO: probably tslider now doesn't make sense and creates unnecessary nesting, so it should be removed
-    // create the following structure of slider
-    // .tslider
-    //   .tslider__track
-    //     .tslider__labels
-    //       .tslider__label
-    //     .tslider__range
-    //     .tslider__handle
-
-    this.container = new Container('tslider')
-    this.track = new Track('tslider__track')
-    this.labelsContainer = new LabelsContainer('tslider__labels')
-    this.range = new Range('tslider__range')
-
     // put it after the targetInput
     this.targetInput = new Input(targetInput)
     this.targetInput.$element.after(this.container.$elem)
@@ -68,6 +65,10 @@ class View {
 
     // set margin from track
     this.labelsContainer.setMarginFromTrack(labelMarginFromTrack)
+
+    // make properties from sides in order to use outside the constructor
+    this.longSide = longSide
+    this.shortSide = shortSide
 
     // cache the track height, in order to set it to the short side
     const height = this.track.height
