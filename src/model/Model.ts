@@ -21,8 +21,8 @@ class Model extends Subject {
     return this.track.boundariesDistance
   }
 
-  public get rangeStartPosition(): OneDimensionalSpacePoint {
-    return this.track.rangeStartPosition
+  public get rangeEndPosition(): OneDimensionalSpacePoint {
+    return this.track.rangeEndPosition
   }
 
   public get handlePositions(): OneDimensionalSpacePoint[] {

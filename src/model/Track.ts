@@ -153,6 +153,12 @@ class Track {
   public get rangeStartPosition(): OneDimensionalSpacePoint {
     return this.isRangeMode() ? this.firstHandle.position : this.leftBoundary
   }
+
+  public get rangeEndPosition(): OneDimensionalSpacePoint {
+    return this.isRangeMode()
+      ? this.lastHandle.position
+      : this.firstHandle.position
+  }
 }
 
 export default Track

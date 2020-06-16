@@ -11,11 +11,16 @@ class Range extends ViewTreeNode {
     return this.$elem.height()
   }
 
-  draw(width: number, height: number, position: OneDimensionalSpacePoint): void {
-    this.$elem
-      .css('width', `${width}px`)
-      .css('height', `${height}px`)
-      .css('transform', `translate(${position}px, 0px)`)
+  public set width(newWidth: number) {
+    this.$elem.css('width', `${newWidth}px`)
+  }
+
+  public set height(newHeight: number) {
+    this.$elem.css('height', `${newHeight}px`)
+  }
+
+  public move(position: Point): void {
+    this.$elem.css('transform', `translate(${position.x}px, ${position.y}px)`)
   }
 }
 

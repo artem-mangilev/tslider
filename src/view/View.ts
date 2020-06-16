@@ -87,25 +87,30 @@ class View {
   }
 
   public slideTo(handlePositions: OneDimensionalSpacePoint[]): void {
-    // move the handles
-    this.handles.forEach((handle, i) => {
-      // @ts-ignore
-      const position = this.changeDirection({
-        [this.x]: handlePositions[i],
-        [this.y]: this.track[this.shortSide] / 2,
-      })
-
+    const newHandlePositions = handlePositions.map((position) =>
       // TODO: now I have no clue how type checking works for computed properties, so I just turn it off
       // @ts-ignore
-      handle.move(position)
-    })
+      this.changeDirection({
+        [this.x]: position,
+        [this.y]: this.track[this.shortSide] / 2,
+      })
+    )
+    // move the handles
+    newHandlePositions.forEach((position, i) => this.handles[i].move(position))
 
     // // update the target input's value
     // this.targetInput.setValue(data)
   }
 
   public updateRange(length: number, position: OneDimensionalSpacePoint): void {
-    this.range.draw(length, this.range.height, position)
+    this.range[this.longSide] = length
+    this.range[this.shortSide] = this.track[this.shortSide]
+
+    // @ts-ignore
+    this.range.move({
+      [this.x]: position,
+      [this.y]: 0,
+    })
   }
 
   public updateLabels(positions: OneDimensionalSpacePoint[], data: number[]) {
