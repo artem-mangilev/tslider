@@ -32,10 +32,14 @@ class Tslider implements Observer {
       horizontal: {
         longSide: 'width',
         shortSide: 'height',
+        activeAxis: 'x',
+        passiveAxis: 'y'
       },
       vetical: {
         longSide: 'height',
         shortSide: 'width',
+        activeAxis: 'y',
+        passiveAxis: 'x'
       },
     }
 

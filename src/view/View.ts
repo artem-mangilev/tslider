@@ -8,7 +8,7 @@ import LabelsContainer from './LabelsContainer'
 import Range from './Range'
 import Track from './Track'
 import ViewOptions from './ViewOptions'
-import { Side } from '../OrientationOptions'
+import { Side, Axis } from '../OrientationOptions'
 
 class View {
   private targetInput: Input
@@ -33,12 +33,14 @@ class View {
 
   private longSide: Side
   private shortSide: Side
+  private activeAxis: Axis
+  private passiveAxis: Axis
 
   constructor({
     targetInput,
     numberOfHandles,
     labelMarginFromTrack,
-    orientationOption: { longSide, shortSide },
+    orientationOption: { longSide, shortSide, activeAxis, passiveAxis },
   }: ViewOptions) {
     // put it after the targetInput
     this.targetInput = new Input(targetInput)
@@ -75,6 +77,9 @@ class View {
     // draw the track according to orientation
     this.track[this.longSide] = this.container[this.longSide]
     this.track[this.shortSide] = height
+
+    this.activeAxis = activeAxis
+    this.passiveAxis = passiveAxis
   }
 
   public get trackLength(): number {
@@ -84,10 +89,14 @@ class View {
   public slideTo(handlePositions: OneDimensionalSpacePoint[]): void {
     // move the handles
     this.handles.forEach((handle, i) => {
-      handle.move({
-        x: handlePositions[i],
-        y: this.track[this.shortSide] / 2,
-      })
+      const newPosition = {
+        [this.activeAxis]: handlePositions[i],
+        [this.passiveAxis]: this.track[this.shortSide] / 2,
+      }
+
+      // TODO: now I have no clue how type checking works for computed properties, so I just turn it off
+      // @ts-ignore
+      handle.move(newPosition)
     })
 
     // // update the target input's value
@@ -107,25 +116,29 @@ class View {
   }
 
   private trackClickHandlerWrapper(
-    handler: (point: Point) => void
+    handler: (point: OneDimensionalSpacePoint) => void
   ): (event: MouseEvent) => void {
     return (e) => {
-      const x = e.clientX - this.track.positionX
-      const y = e.clientY - this.track.positionY
+      const position: Point = {
+        x: e.clientX - this.track.positionX,
+        y: e.clientY - this.track.positionY,
+      }
 
       // filter out negative values of x
-      if (x < 0) return
+      if (position[this.activeAxis] < 0) return
 
       // call handler only if click occurs on track or range
       const isTrack = e.target === this.track.$elem[0]
       const isRange = e.target === this.range.$elem[0]
       const correctTarget = isTrack || isRange
 
-      if (correctTarget) handler({ x, y })
+      if (correctTarget) handler(position[this.activeAxis])
     }
   }
 
-  public onTrackClick(handler: (point: Point) => void): void {
+  public onTrackClick(
+    handler: (point: OneDimensionalSpacePoint) => void
+  ): void {
     // TODO: find the way to attach an event handler with Jquery
     this.track.$elem[0].addEventListener(
       'click',
@@ -134,19 +147,21 @@ class View {
   }
 
   private handleDragHandlerWrapper(
-    handler: (point: Point, handleIndex: number) => void,
+    handler: (point: OneDimensionalSpacePoint, handleIndex: number) => void,
     handleIndex: number
   ): (event: MouseEvent) => void {
     return (e) => {
-      const x = e.clientX - this.track.positionX
-      const y = e.clientY - this.track.positionY
+      const position: Point = {
+        x: e.clientX - this.track.positionX,
+        y: e.clientY - this.track.positionY,
+      }
 
-      handler({ x, y }, handleIndex)
+      handler(position[this.activeAxis], handleIndex)
     }
   }
 
   public onHandleDrag(
-    handler: (point: Point, handleIndex: number) => void
+    handler: (point: OneDimensionalSpacePoint, handleIndex: number) => void
   ): void {
     let dragHandler: (event: MouseEvent) => void
 

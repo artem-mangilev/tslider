@@ -49,17 +49,20 @@ class Model extends Subject {
   }
 
   // TODO: create different name for this method
-  public moveHandle(targetPoint: Point, handleIndex?: number): void {
+  public moveHandle(
+    targetPoint: OneDimensionalSpacePoint,
+    handleIndex?: number
+  ): void {
     // these condition help the Model to decide should it compute which handle should be used,
     // or use a provided handleIndex
     let activeHandleIndex =
       handleIndex === undefined
-        ? this.track.getNearestPointIndex(targetPoint.x)
+        ? this.track.getNearestPointIndex(targetPoint)
         : handleIndex
 
     this.track.setActiveHandle(this.handles[activeHandleIndex])
 
-    const availablePoint = this.track.getAvailablePoint(targetPoint.x)
+    const availablePoint = this.track.getAvailablePoint(targetPoint)
     this.handles[activeHandleIndex].position = availablePoint
 
     this.notify(ModelUpdateTypes.Slide)
