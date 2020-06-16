@@ -13,10 +13,6 @@ class LabelsContainer extends ViewTreeNode {
   get height(): number {
     return this.$elem.height()
   }
-
-  setMarginFromTrack(margin: number): void {
-    this.$elem.css('top', `${-this.height - margin}px`)
-  }
 }
 
 export default LabelsContainer

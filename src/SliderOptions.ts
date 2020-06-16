@@ -6,7 +6,6 @@ export default interface SliderOptions {
   from: number
   to?: number
   step: number
-  labelMarginFromTrack: number
   targetInput: HTMLInputElement
   orientation: Orientation
 }

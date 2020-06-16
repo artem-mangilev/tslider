@@ -27,7 +27,7 @@ class Label extends ViewTreeNode {
   public move(position: Point): void {
     this.$elem.css(
       'transform',
-      `translate(${position.x - this.width / 2}px, ${position.y}px)`
+      `translate(${position.x}px, ${position.y}px)`
     )
   }
 

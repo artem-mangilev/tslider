@@ -25,9 +25,7 @@ class View {
   private container: Container = new Container('tslider')
   private track: Track = new Track('tslider__track')
   private range: Range = new Range('tslider__range')
-  private labelsContainer: LabelsContainer = new LabelsContainer(
-    'tslider__labels'
-  )
+  private labelsContainer: LabelsContainer
   private handles: Handle[] = []
   private labels: Label[] = []
 
@@ -40,9 +38,11 @@ class View {
   constructor({
     targetInput,
     numberOfHandles,
-    labelMarginFromTrack,
-    orientationOption: { longSide, shortSide, x, y, direction },
+    orientationOption: { orientation, longSide, shortSide, x, y, direction },
   }: ViewOptions) {
+    const labelsContainerClasses = `tslider__labels tslider__labels_${orientation}`
+    this.labelsContainer = new LabelsContainer(labelsContainerClasses)
+
     // put it after the targetInput
     this.targetInput = new Input(targetInput)
     this.targetInput.$element.after(this.container.$elem)
@@ -65,9 +65,6 @@ class View {
         ...this.handles
       )
     )
-
-    // set margin from track
-    this.labelsContainer.setMarginFromTrack(labelMarginFromTrack)
 
     // make properties from sides in order to use outside the constructor
     this.longSide = longSide
@@ -113,8 +110,17 @@ class View {
 
   public updateLabels(positions: OneDimensionalSpacePoint[], data: number[]) {
     this.labels.forEach((label, i) => {
-      label.move({ x: positions[i], y: 0 })
+      // @ts-ignore
+      const position = this.changeDirection({
+        [this.x]: positions[i],
+        [this.y]: 0,
+      })
 
+      // label should be placed in the middle of handle
+      const middle = label[this.longSide] / 2
+      position[this.x] -= middle
+
+      label.move(position)
       label.updateData(data[i].toString())
     })
   }

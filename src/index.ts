@@ -9,9 +9,7 @@ $(document).ready(() => {
     from: 150,
     to: 170,
     step: 5,
-    labelMarginFromTrack: 5,
-    // TODO: fix flickering the handle, when moved in vertical orientation
-    orientation: 'vetical',
+    orientation: 'horizontal',
     targetInput: document.querySelector('.tsl-target'),
   }
 

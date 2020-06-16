@@ -12,7 +12,6 @@ class Tslider implements Observer {
 
   constructor({
     targetInput,
-    labelMarginFromTrack,
     from,
     to,
     max,
@@ -30,13 +29,15 @@ class Tslider implements Observer {
 
     const orientationOptions: OrientationOptions = {
       horizontal: {
+        orientation: 'horizontal',
         longSide: 'width',
         shortSide: 'height',
         x: 'x',
         y: 'y',
         direction: 'left-to-right',
       },
-      vetical: {
+      vertical: {
+        orientation: 'vertical',
         longSide: 'height',
         shortSide: 'width',
         x: 'y',
@@ -49,7 +50,6 @@ class Tslider implements Observer {
     const numberOfHandles = handlesData.length
     // create view options
     const viewOptions: ViewOptions = {
-      labelMarginFromTrack,
       orientationOption,
       numberOfHandles,
       targetInput,

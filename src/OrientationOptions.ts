@@ -5,6 +5,7 @@ export type OrientationOptions = {
 }
 
 export type OrientationOption = {
+  orientation: Orientation
   longSide: Side
   shortSide: Side
   x: Axis
