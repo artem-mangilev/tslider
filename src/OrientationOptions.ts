@@ -7,10 +7,13 @@ export type OrientationOptions = {
 export type OrientationOption = {
   longSide: Side
   shortSide: Side
-  activeAxis: Axis
-  passiveAxis: Axis
+  x: Axis
+  y: Axis
+  direction: Direction
 }
 
 export type Side = 'width' | 'height'
 
 export type Axis = 'x' | 'y'
+
+export type Direction = 'left-to-right' | 'bottom-to-top'

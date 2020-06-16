@@ -8,7 +8,7 @@ import LabelsContainer from './LabelsContainer'
 import Range from './Range'
 import Track from './Track'
 import ViewOptions from './ViewOptions'
-import { Side, Axis } from '../OrientationOptions'
+import { Side, Axis, Direction } from '../OrientationOptions'
 
 class View {
   private targetInput: Input
@@ -33,14 +33,15 @@ class View {
 
   private longSide: Side
   private shortSide: Side
-  private activeAxis: Axis
-  private passiveAxis: Axis
+  private x: Axis
+  private y: Axis
+  private direction: Direction
 
   constructor({
     targetInput,
     numberOfHandles,
     labelMarginFromTrack,
-    orientationOption: { longSide, shortSide, activeAxis, passiveAxis },
+    orientationOption: { longSide, shortSide, x, y, direction },
   }: ViewOptions) {
     // put it after the targetInput
     this.targetInput = new Input(targetInput)
@@ -78,8 +79,10 @@ class View {
     this.track[this.longSide] = this.container[this.longSide]
     this.track[this.shortSide] = height
 
-    this.activeAxis = activeAxis
-    this.passiveAxis = passiveAxis
+    this.x = x
+    this.y = y
+
+    this.direction = direction
   }
 
   public get trackLength(): number {
@@ -89,14 +92,15 @@ class View {
   public slideTo(handlePositions: OneDimensionalSpacePoint[]): void {
     // move the handles
     this.handles.forEach((handle, i) => {
-      const newPosition = {
-        [this.activeAxis]: handlePositions[i],
-        [this.passiveAxis]: this.track[this.shortSide] / 2,
-      }
+      // @ts-ignore
+      const position = this.changeDirection({
+        [this.x]: handlePositions[i],
+        [this.y]: this.track[this.shortSide] / 2,
+      })
 
       // TODO: now I have no clue how type checking works for computed properties, so I just turn it off
       // @ts-ignore
-      handle.move(newPosition)
+      handle.move(position)
     })
 
     // // update the target input's value
@@ -119,20 +123,33 @@ class View {
     handler: (point: OneDimensionalSpacePoint) => void
   ): (event: MouseEvent) => void {
     return (e) => {
-      const position: Point = {
+      const position = this.changeDirection({
         x: e.clientX - this.track.positionX,
         y: e.clientY - this.track.positionY,
-      }
+      })
 
       // filter out negative values of x
-      if (position[this.activeAxis] < 0) return
+      if (position[this.x] < 0) return
 
       // call handler only if click occurs on track or range
       const isTrack = e.target === this.track.$elem[0]
       const isRange = e.target === this.range.$elem[0]
       const correctTarget = isTrack || isRange
 
-      if (correctTarget) handler(position[this.activeAxis])
+      if (correctTarget) handler(position[this.x])
+    }
+  }
+
+  private changeDirection(point: Point): Point {
+    switch (this.direction) {
+      case 'left-to-right':
+        return point
+      case 'bottom-to-top':
+        // @ts-ignore
+        return {
+          [this.x]: this.track[this.longSide] - point[this.x],
+          [this.y]: point[this.y],
+        }
     }
   }
 
@@ -151,12 +168,12 @@ class View {
     handleIndex: number
   ): (event: MouseEvent) => void {
     return (e) => {
-      const position: Point = {
+      const position: Point = this.changeDirection({
         x: e.clientX - this.track.positionX,
         y: e.clientY - this.track.positionY,
-      }
+      })
 
-      handler(position[this.activeAxis], handleIndex)
+      handler(position[this.x], handleIndex)
     }
   }
 
