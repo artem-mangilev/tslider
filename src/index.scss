@@ -7,6 +7,8 @@ $label-height: 20px;
 $label-margin-from-track: 5px;
 
 .tslider {
+  // TODO: slider should respect the size of the containing element (labels should not cross the boundaries, etc)
+
   &__track {
     position: relative;
     height: $track-height;
@@ -71,6 +73,7 @@ $label-margin-from-track: 5px;
     color: #fff;
     border-radius: 3px;
     font-family: sans-serif;
+    user-select: none;
   }
 }
 

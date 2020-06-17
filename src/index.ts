@@ -9,7 +9,7 @@ $(document).ready(() => {
       max: 200,
       from: 150,
       to: 170,
-      step: 5,
+      // step: 5,
       orientation: 'horizontal',
       targetInput: <HTMLInputElement>elem,
     }
