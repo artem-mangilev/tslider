@@ -14,7 +14,7 @@ class Data {
   public getAmount(ratio: Ratio): number {
     const dataAmountRatio = this.validateRatio(ratio)
 
-    return dataAmountRatio * this.maxMinDiff + this.min
+    return Math.round(dataAmountRatio * this.maxMinDiff + this.min)
   }
 
   public getAmountAsRatio(dataAmount: number): Ratio {
