@@ -9,7 +9,7 @@ $(document).ready(() => {
     from: 150,
     to: 170,
     step: 5,
-    orientation: 'vertical',
+    orientation: 'horizontal',
     targetInput: document.querySelector('.tsl-target'),
   }
 

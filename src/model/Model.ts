@@ -60,12 +60,19 @@ class Model extends Subject {
         ? this.track.getNearestPointIndex(targetPoint)
         : handleIndex
 
-    this.track.setActiveHandle(this.handles[activeHandleIndex])
+    const activeHandle = this.handles[activeHandleIndex]
+
+    this.track.setActiveHandle(activeHandle)
 
     const availablePoint = this.track.getAvailablePoint(targetPoint)
-    this.handles[activeHandleIndex].position = availablePoint
 
-    this.notify(ModelUpdateTypes.Slide)
+    // this is just an optimisation to avoid dummy renders 
+    // (when nothing actually changes in the screen) in view 
+    if (availablePoint !== activeHandle.position) {
+      activeHandle.position = availablePoint
+
+      this.notify(ModelUpdateTypes.Slide)
+    }
   }
 
   get dataAmount(): number[] {
