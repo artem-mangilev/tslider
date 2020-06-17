@@ -96,7 +96,7 @@ class Tslider implements Observer {
 
   private handleSlideAction({
     handlePositions,
-    rangeLength,
+    rangeStartPosition,
     rangeEndPosition,
     dataAmount,
   }: Model): void {
@@ -104,7 +104,7 @@ class Tslider implements Observer {
 
     // TODO: draw the range with start & end positions
     // TODO: find the way to hide this functionality back to slideTo
-    this.view.updateRange(rangeLength, rangeEndPosition)
+    this.view.updateRange([rangeStartPosition, rangeEndPosition])
 
     this.view.updateLabels(handlePositions, dataAmount)
   }

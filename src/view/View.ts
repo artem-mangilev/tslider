@@ -102,15 +102,24 @@ class View {
     // this.targetInput.setValue(data)
   }
 
-  public updateRange(length: number, position: OneDimensionalSpacePoint): void {
+  public updateRange(positions: OneDimensionalSpacePoint[]): void {
+    const [startPosition, endPosition] = positions
+
+    const length = endPosition - startPosition
+
     this.range[this.longSide] = length
     this.range[this.shortSide] = this.track[this.shortSide]
 
-    // @ts-ignore
-    this.range.move({
-      [this.x]: position,
-      [this.y]: 0,
-    })
+    const [validStartPosition] = positions
+      // we need to figure out the positions of the range point according to orientation
+      .map((position) =>
+        // @ts-ignore
+        this.changeDirection({ [this.x]: position, [this.y]: 0 })
+      )
+      // then decide what is actual start position 
+      .sort((a, b) => a[this.x] - b[this.x])
+
+    this.range.move(validStartPosition)
   }
 
   public updateLabels(positions: OneDimensionalSpacePoint[], data: number[]) {
@@ -154,7 +163,11 @@ class View {
   private changeDirection(point: Point): Point {
     switch (this.direction) {
       case 'left-to-right':
-        return point
+        // @ts-ignore
+        return {
+          [this.x]: point[this.x],
+          [this.y]: point[this.y],
+        }
       case 'bottom-to-top':
         // @ts-ignore
         return {
