@@ -144,12 +144,6 @@ class Track {
     this.activeHandle = handle
   }
 
-  public get boundariesDistance(): number {
-    return this.isRangeMode()
-      ? this.lastHandle.position - this.firstHandle.position
-      : this.firstHandle.position
-  }
-
   public get rangeStartPosition(): OneDimensionalSpacePoint {
     return this.isRangeMode() ? this.firstHandle.position : this.leftBoundary
   }
