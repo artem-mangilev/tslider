@@ -69,11 +69,13 @@ class View {
     // make properties from sides in order to use outside the constructor
     this.longSide = longSide
     this.shortSide = shortSide
-
+    // TODO: there are a lot of containers, resolve naming
+    // get the element which holds the slider
+    const sliderContainer = this.container.$elem.parent()
     // cache the track height, in order to set it to the short side
     const height = this.track.height
     // draw the track according to orientation
-    this.track[this.longSide] = this.container[this.longSide]
+    this.track[this.longSide] = sliderContainer[this.longSide]()
     this.track[this.shortSide] = height
 
     this.x = x
@@ -116,7 +118,7 @@ class View {
         // @ts-ignore
         this.changeDirection({ [this.x]: position, [this.y]: 0 })
       )
-      // then decide what is actual start position 
+      // then decide what is actual start position
       .sort((a, b) => a[this.x] - b[this.x])
 
     this.range.move(validStartPosition)
