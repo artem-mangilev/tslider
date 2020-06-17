@@ -10,6 +10,9 @@ $(document).ready(() => {
       from: 50,
       to: 100,
       step: 5,
+      // TODO: implement this option
+      // handleMotion: 'smooth' | 'discrete'
+      // labelVisibility: 'visible' | 'hidden' | 'appears-on-hover'
       orientation: 'horizontal',
       targetInput: <HTMLInputElement>elem,
     }

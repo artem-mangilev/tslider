@@ -125,6 +125,8 @@ class View {
     this.range.move(validStartPosition)
   }
 
+  // TODO: this method should detect label collision, if it's detected, there should be 1 label 
+  // in the middle between handles which shows both values 
   public updateLabels(positions: OneDimensionalSpacePoint[], data: number[]) {
     this.labels.forEach((label, i) => {
       // @ts-ignore
