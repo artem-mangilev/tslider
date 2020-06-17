@@ -88,6 +88,7 @@ class View {
     return this.track[this.longSide]
   }
 
+  // TODO: if both handles at max point, drag doesn't work
   public slideTo(handlePositions: OneDimensionalSpacePoint[]): void {
     const newHandlePositions = handlePositions.map((position) =>
       // TODO: now I have no clue how type checking works for computed properties, so I just turn it off
@@ -132,12 +133,14 @@ class View {
         [this.y]: 0,
       })
 
+      // TODO: combine updateData with move, because these methods depends on each other (this should be placed BEFORE move)
+      label.updateData(data[i].toString())
+
       // label should be placed in the middle of handle
       const middle = label[this.longSide] / 2
       position[this.x] -= middle
 
       label.move(position)
-      label.updateData(data[i].toString())
     })
   }
 

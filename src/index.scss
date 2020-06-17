@@ -47,8 +47,8 @@ $label-margin-from-track: 5px;
   &__labels {
     position: absolute;
 
-    width: $label-width;
-    height: $label-height;
+    // width: $label-width;
+    // height: $label-height;
 
     &_horizontal {
       top: -$label-height - $track-border - $label-margin-from-track;
@@ -67,8 +67,11 @@ $label-margin-from-track: 5px;
 
     position: absolute;
 
-    width: $label-width;
-    height: $label-height;
+    // TODO: if padding is used, labels is not centered
+    // padding: 3px;
+
+    // width: $label-width;
+    // height: $label-height;
     background: linear-gradient(180deg, #bc9cff 0%, #8ba4f9 100%);
     color: #fff;
     border-radius: 3px;
