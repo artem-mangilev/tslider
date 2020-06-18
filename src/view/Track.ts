@@ -1,4 +1,5 @@
 import ViewTreeNode from '../utils/ViewTreeNode'
+import Point from '../utils/Point'
 
 class Track extends ViewTreeNode {
   constructor(className: string) {
@@ -21,18 +22,10 @@ class Track extends ViewTreeNode {
     this.$elem.css('height', `${newHeight}px`)
   }
 
-  public get positionX(): number {
-    // this is the x position of first point of the track,
-    // relative to the viewport
-    const x = this.$elem[0].getBoundingClientRect().x
-    return Math.floor(x)
-  }
+  public get position(): Point {
+    const { x, y } = this.$elem[0].getBoundingClientRect()
 
-  public get positionY(): number {
-    // this is the y position of first point of the track,
-    // relative to the viewport
-    const y = this.$elem[0].getBoundingClientRect().y
-    return Math.floor(y)
+    return { x: Math.floor(x), y: Math.floor(y) }
   }
 }
 

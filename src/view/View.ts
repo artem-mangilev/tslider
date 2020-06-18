@@ -124,9 +124,6 @@ class View {
 
     this.range.move(validStartPosition)
   }
-
-  // TODO: this method should detect label collision, if it's detected, there should be 1 label 
-  // in the middle between handles which shows both values 
   public updateLabels(positions: OneDimensionalSpacePoint[], data: number[]) {
     this.labels.forEach((label, i) => {
       // @ts-ignore
@@ -144,6 +141,54 @@ class View {
 
       label.move(position)
     })
+
+    const firstLabel = this.labels[0]
+    const lastLabel = this.labels[this.labels.length - 1]
+    if (this.doLabelsCollide(this.labels)) {
+      // there should be 1 label
+      lastLabel.$elem.hide()
+
+      // the fist label should show the data of both labels
+      firstLabel.updateData(`${firstLabel.data} - ${lastLabel.data}`)
+
+      const rangePosition =
+        this.range.position[this.x] - this.track.position[this.x]
+      // single label should be placed at the middle of the range
+      const rangeMiddlePosition: number =
+        rangePosition + this.range[this.longSide] / 2
+
+      const labelMiddle = firstLabel[this.longSide] / 2
+      const labelPosition = rangeMiddlePosition - labelMiddle
+
+      // @ts-ignore
+      firstLabel.move({
+        [this.x]: labelPosition,
+        [this.y]: 0,
+      })
+    } else {
+      lastLabel.$elem.show()
+    }
+  }
+
+  private doLabelsCollide(labels: Label[]): boolean {
+    // they don't collide if there is 1 label
+    if (labels.length === 1) {
+      return false
+    }
+
+    const [firstLabel, lastLabel] = labels
+
+    const firstLabelX = firstLabel.position[this.x]
+    const lastLabelX = lastLabel.position[this.x]
+
+    const firstLabelWidth = firstLabel[this.longSide]
+    const lastLabelWidth = lastLabel[this.longSide]
+
+    const isCollisionDetected =
+      firstLabelX < lastLabelX + lastLabelWidth &&
+      firstLabelX + firstLabelWidth > lastLabelX
+
+    return isCollisionDetected
   }
 
   private trackClickHandlerWrapper(
@@ -151,8 +196,8 @@ class View {
   ): (event: MouseEvent) => void {
     return (e) => {
       const position = this.changeDirection({
-        x: e.clientX - this.track.positionX,
-        y: e.clientY - this.track.positionY,
+        x: e.clientX - this.track.position.x,
+        y: e.clientY - this.track.position.y,
       })
 
       // filter out negative values of x
@@ -200,8 +245,8 @@ class View {
   ): (event: MouseEvent) => void {
     return (e) => {
       const position: Point = this.changeDirection({
-        x: e.clientX - this.track.positionX,
-        y: e.clientY - this.track.positionY,
+        x: e.clientX - this.track.position.x,
+        y: e.clientY - this.track.position.y,
       })
 
       handler(position[this.x], handleIndex)

@@ -7,7 +7,13 @@ class Range extends ViewTreeNode {
     super('div', className)
   }
 
-  public get height() {
+  
+  public get width() : number {
+    return this.$elem.width()
+  }
+  
+  
+  public get height(): number {
     return this.$elem.height()
   }
 
@@ -17,6 +23,12 @@ class Range extends ViewTreeNode {
 
   public set height(newHeight: number) {
     this.$elem.css('height', `${newHeight}px`)
+  }
+
+  public get position(): Point {
+    const { x, y } = this.$elem[0].getBoundingClientRect()
+
+    return { x, y }
   }
 
   public move(position: Point): void {

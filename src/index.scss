@@ -70,6 +70,7 @@ $label-margin-from-track: 5px;
     // TODO: if padding is used, labels is not centered
     // padding: 3px;
 
+    width: max-content;
     // width: $label-width;
     // height: $label-height;
     background: linear-gradient(180deg, #bc9cff 0%, #8ba4f9 100%);
