@@ -70,18 +70,14 @@ class Tslider implements Observer {
     model.initSlider(handlesData)
   }
 
-  // TODO: hide implementation details of the Model, for each action give the apropriate data, not the whole object
-  public update(updateType: ModelUpdateTypes, model: Model): void {
-    // this works a little big magical: when ModelUpdateTypes.Initialization occurs,
-    // handleSlideAction is also evaluated for drawing the initial state of the model
-    // (this is the reason to omit break statement)
-    // in the following cases only handleSlideAction is evaluated
+  public update(updateType: ModelUpdateTypes, state: Model): void {
     switch (updateType) {
       case ModelUpdateTypes.Initialization:
-        this.handleInitializationAction(model)
-
+        this.handleInitializationAction(state)
+        break
       case ModelUpdateTypes.Slide:
-        this.handleSlideAction(model)
+        this.handleSlideAction(state)
+        break
     }
   }
 
@@ -100,7 +96,7 @@ class Tslider implements Observer {
     rangeStartPosition,
     rangeEndPosition,
     dataAmount,
-  }: Model): void {
+  }: any): void {
     this.view.slideTo(handlePositions)
 
     // TODO: find the way to hide this functionality back to slideTo

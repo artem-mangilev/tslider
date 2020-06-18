@@ -21,9 +21,12 @@ class Subject {
     this.observers.splice(observerIndex, 1)
   }
 
-  public notify(updateType: number): void {
+  public notify(
+    updateType: number,
+    getState: (updateType: number) => any
+  ): void {
     for (const observer of this.observers) {
-      observer.update(updateType, this)
+      observer.update(updateType, getState(updateType))
     }
   }
 }

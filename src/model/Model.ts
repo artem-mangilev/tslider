@@ -17,18 +17,6 @@ class Model extends Subject {
     super()
   }
 
-  public get rangeStartPosition(): OneDimensionalSpacePoint {
-    return this.track.rangeStartPosition
-  }
-
-  public get rangeEndPosition(): OneDimensionalSpacePoint {
-    return this.track.rangeEndPosition
-  }
-
-  public get handlePositions(): OneDimensionalSpacePoint[] {
-    return this.handles.map((handle) => handle.position)
-  }
-
   public initSlider(handlesData: number[]): void {
     // initialize the data
     this.data = new Data(this.options.min, this.options.max, this.options.step)
@@ -45,7 +33,11 @@ class Model extends Subject {
 
     this.track.registerHandles(this.handles)
 
-    this.notify(ModelUpdateTypes.Initialization)
+    this.notify(ModelUpdateTypes.Initialization, this.getState)
+    // make the initial draw of the slider
+    // TODO: by this call, model could assume that the view couldn't draw the slider in initialization step,
+    // so find the better way to make iniital draw
+    this.notify(ModelUpdateTypes.Slide, this.getState)
   }
 
   // TODO: create different name for this method
@@ -66,21 +58,49 @@ class Model extends Subject {
 
     const availablePoint = this.track.getAvailablePoint(targetPoint)
 
-    // this is just an optimisation to avoid dummy renders 
-    // (when nothing actually changes in the screen) in view 
+    // this is just an optimisation to avoid dummy renders
+    // (when nothing actually changes in the screen) in view
     if (availablePoint !== activeHandle.position) {
       activeHandle.position = availablePoint
 
-      this.notify(ModelUpdateTypes.Slide)
+      this.notify(ModelUpdateTypes.Slide, this.getState)
     }
   }
 
-  get dataAmount(): number[] {
+  private get rangeStartPosition(): OneDimensionalSpacePoint {
+    return this.track.rangeStartPosition
+  }
+
+  private get rangeEndPosition(): OneDimensionalSpacePoint {
+    return this.track.rangeEndPosition
+  }
+
+  private get handlePositions(): OneDimensionalSpacePoint[] {
+    return this.handles.map((handle) => handle.position)
+  }
+
+  private get dataAmount(): number[] {
     const handlePositionRatios: Ratio[] = this.handlePositions.map((position) =>
       this.track.pointToRatio(position)
     )
 
     return handlePositionRatios.map((ratio) => this.data.getAmount(ratio))
+  }
+
+  // TODO: state should be covered with types
+  // TODO: Subject should require the presence of this method in Model 
+  private getState = (updateType: number): any => {
+    switch (updateType) {
+      case ModelUpdateTypes.Initialization:
+        return this
+      case ModelUpdateTypes.Slide:
+        return {
+          handlePositions: this.handlePositions,
+          dataAmount: this.dataAmount,
+          rangeStartPosition: this.rangeStartPosition,
+          rangeEndPosition: this.rangeEndPosition,
+        }
+    }
   }
 }
 
