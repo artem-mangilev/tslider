@@ -170,6 +170,7 @@ class View {
     }
   }
 
+  // TODO: maybe this method could be more general
   private doLabelsCollide(labels: Label[]): boolean {
     // they don't collide if there is 1 label
     if (labels.length === 1) {

@@ -10,10 +10,10 @@ $(document).ready(() => {
       from: 50,
       to: 100,
       step: 5,
-      // TODO: implement this option
+      // TODO: implement these options
       // handleMotion: 'smooth' | 'discrete'
       // labelVisibility: 'visible' | 'hidden' | 'appears-on-hover'
-      orientation: 'horizontal',
+      orientation: 'vertical',
       targetInput: <HTMLInputElement>elem,
     }
 

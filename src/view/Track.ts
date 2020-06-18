@@ -22,10 +22,11 @@ class Track extends ViewTreeNode {
     this.$elem.css('height', `${newHeight}px`)
   }
 
+  // TODO: this methods (and others) repeats in several views
   public get position(): Point {
     const { x, y } = this.$elem[0].getBoundingClientRect()
 
-    return { x: Math.floor(x), y: Math.floor(y) }
+    return { x, y }
   }
 }
 
