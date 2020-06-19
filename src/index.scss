@@ -29,6 +29,10 @@ $label-margin-from-track: 5px;
       grid-row: 2 / 3;
       grid-column: 1;
     }
+
+    & .tslider__labels {
+      margin-bottom: $label-margin-from-track;
+    }
   }
 
   &_vertical {
@@ -54,6 +58,8 @@ $label-margin-from-track: 5px;
     & .tslider__labels {
       grid-row: 1;
       grid-column: 3 / 4;
+
+      margin-left: $label-margin-from-track;
     }
   }
 
