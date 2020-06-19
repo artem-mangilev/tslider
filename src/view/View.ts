@@ -14,15 +14,6 @@ import HandlesContainer from './HandlesContainer'
 class View {
   private targetInput: Input
 
-  // TODO: probably tslider now doesn't make sense and creates unnecessary nesting, so it should be removed
-  // create the following structure of slider
-  // .tslider
-  //   .tslider__track
-  //     .tslider__labels
-  //       .tslider__label
-  //     .tslider__range
-  //     .tslider__handle
-
   private container: Container
   private track: Track = new Track('tslider__track')
   private range: Range = new Range('tslider__range')
@@ -76,14 +67,6 @@ class View {
     // make properties from sides in order to use outside the constructor
     this.longSide = longSide
     this.shortSide = shortSide
-    // TODO: there are a lot of containers, resolve naming
-    // get the element which holds the slider
-    const sliderContainer = this.container.$elem.parent()
-    // cache the track height, in order to set it to the short side
-    // const height = this.track.height
-    // // draw the track according to orientation
-    // this.track[this.longSide] = sliderContainer[this.longSide]()
-    // this.track[this.shortSide] = height
 
     this.x = x
     this.y = y
@@ -199,7 +182,7 @@ class View {
     return isCollisionDetected
   }
 
-  private trackClickHandlerWrapper(
+  private createTrackClickHandler(
     handler: (point: OneDimensionalSpacePoint) => void
   ): (event: MouseEvent) => void {
     return (e) => {
@@ -214,7 +197,8 @@ class View {
       // call handler only if click occurs on track or range
       const isTrack = e.target === this.track.$elem[0]
       const isRange = e.target === this.range.$elem[0]
-      const correctTarget = isTrack || isRange
+      const isHandles = e.target === this.handlesContainer.$elem[0]
+      const correctTarget = isTrack || isRange || isHandles
 
       if (correctTarget) handler(position[this.x])
     }
@@ -241,13 +225,13 @@ class View {
     handler: (point: OneDimensionalSpacePoint) => void
   ): void {
     // TODO: find the way to attach an event handler with Jquery
-    this.track.$elem[0].addEventListener(
+    this.container.$elem[0].addEventListener(
       'click',
-      this.trackClickHandlerWrapper(handler)
+      this.createTrackClickHandler(handler)
     )
   }
 
-  private handleDragHandlerWrapper(
+  private createHandleDragHandler(
     handler: (point: OneDimensionalSpacePoint, handleIndex: number) => void,
     handleIndex: number
   ): (event: MouseEvent) => void {
@@ -272,7 +256,7 @@ class View {
       // if target is one of the handles, attach mousemove event
       this.handles.forEach((handle, i) => {
         if (target === handle.$elem[0]) {
-          dragHandler = this.handleDragHandlerWrapper(handler, i)
+          dragHandler = this.createHandleDragHandler(handler, i)
 
           $root[0].addEventListener('mousemove', dragHandler)
         }
