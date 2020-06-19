@@ -66,8 +66,8 @@ class View {
         ...this.labels
       ),
       this.track.add(
-        this.range
       ),
+      this.range,
       this.handlesContainer.add(
         ...this.handles
       )
