@@ -7,11 +7,11 @@ class Track extends ViewTreeNode {
   }
 
   public get width() {
-    return this.$elem.width()
+    return this.$elem.outerWidth()
   }
 
   public get height() {
-    return this.$elem.height()
+    return this.$elem.outerHeight()
   }
 
   public set width(newWidth: number) {

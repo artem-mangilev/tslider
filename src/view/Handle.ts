@@ -7,8 +7,8 @@ class Handle extends ViewTreeNode {
   }
 
   get size(): number {
-    const width = this.$elem.width()
-    const height = this.$elem.height()
+    const width = this.$elem.outerWidth()
+    const height = this.$elem.outerHeight()
 
     if (width === height) {
       return width

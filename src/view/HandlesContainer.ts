@@ -1,17 +1,17 @@
 import ViewTreeNode from '../utils/ViewTreeNode'
 
-class LabelsContainer extends ViewTreeNode {
+class HandlesContainer extends ViewTreeNode {
   constructor(className: string) {
     super('div', className)
   }
 
   get width(): number {
-    return this.$elem.width()
+    return this.$elem.outerWidth()
   }
 
   get height(): number {
-    return this.$elem.height()
+    return this.$elem.outerHeight()
   }
 }
 
-export default LabelsContainer
+export default HandlesContainer

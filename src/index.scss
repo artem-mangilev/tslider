@@ -10,27 +10,66 @@ $label-margin-from-track: 5px;
 .tslider {
   // TODO: slider should respect the size of the containing element (labels should not cross the boundaries, etc)
 
-  display: flex;
+  display: grid;
 
   &_horizontal {
-    flex-flow: column;
+    grid-template-columns: 100%;
+    grid-template-rows: repeat(3, max-content);
+
+    & .tslider__track {
+      height: $track-height;
+
+      grid-row: 2 / 3;
+      grid-column: 1;
+    }
+
+    & .tslider__handles {
+      height: $track-height;
+
+      grid-row: 2 / 3;
+      grid-column: 1;
+    }
   }
 
   &_vertical {
+    height: 100%;
+
+    grid-template-columns: repeat(3, max-content);
+    grid-template-rows: 100%;
+
+    & .tslider__track {
+      width: $track-height;
+
+      grid-row: 1;
+      grid-column: 2 / 3;
+    }
+
+    & .tslider__handles {
+      width: $track-height;
+
+      grid-row: 1;
+      grid-column: 2 / 3;
+    }
+
     & .tslider__labels {
-      order: 1;
+      grid-row: 1;
+      grid-column: 3 / 4;
     }
   }
 
   &__track {
     position: relative;
-    height: $track-height;
     border: $track-border solid rgba(31, 32, 65, 0.25);
     border-radius: 3px;
   }
 
+  &__handles {
+    display: grid;
+  }
+
   &__handle {
-    position: absolute;
+    grid-column: 1;
+    grid-row: 1;
 
     width: $handle-size;
     height: $handle-size;
@@ -70,7 +109,6 @@ $label-margin-from-track: 5px;
     justify-content: center;
     align-items: center;
 
-    // TODO: if padding is used, labels is not centered
     padding: $label-padding;
 
     width: max-content;

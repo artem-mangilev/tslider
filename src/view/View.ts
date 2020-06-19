@@ -9,6 +9,7 @@ import Range from './Range'
 import Track from './Track'
 import ViewOptions from './ViewOptions'
 import { Side, Axis, Direction } from '../OrientationOptions'
+import HandlesContainer from './HandlesContainer'
 
 class View {
   private targetInput: Input
@@ -27,6 +28,9 @@ class View {
   private range: Range = new Range('tslider__range')
   private labelsContainer: LabelsContainer = new LabelsContainer(
     'tslider__labels'
+  )
+  private handlesContainer: HandlesContainer = new HandlesContainer(
+    'tslider__handles'
   )
   private handles: Handle[] = []
   private labels: Label[] = []
@@ -62,7 +66,9 @@ class View {
         ...this.labels
       ),
       this.track.add(
-        this.range,
+        this.range
+      ),
+      this.handlesContainer.add(
         ...this.handles
       )
     )
@@ -74,10 +80,10 @@ class View {
     // get the element which holds the slider
     const sliderContainer = this.container.$elem.parent()
     // cache the track height, in order to set it to the short side
-    const height = this.track.height
-    // draw the track according to orientation
-    this.track[this.longSide] = sliderContainer[this.longSide]()
-    this.track[this.shortSide] = height
+    // const height = this.track.height
+    // // draw the track according to orientation
+    // this.track[this.longSide] = sliderContainer[this.longSide]()
+    // this.track[this.shortSide] = height
 
     this.x = x
     this.y = y
