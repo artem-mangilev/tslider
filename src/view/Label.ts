@@ -9,11 +9,11 @@ class Label extends ViewTreeNode {
   }
 
   get width(): number {
-    return this.$elem.width()
+    return this.$elem.outerWidth()
   }
 
   get height(): number {
-    return this.$elem.height()
+    return this.$elem.outerHeight()
   }
 
   set width(newWidth: number) {

@@ -4,10 +4,23 @@ $track-height: 5px;
 $handle-size: 10px;
 $label-width: 30px;
 $label-height: 20px;
+$label-padding: 3px;
 $label-margin-from-track: 5px;
 
 .tslider {
   // TODO: slider should respect the size of the containing element (labels should not cross the boundaries, etc)
+
+  display: flex;
+
+  &_horizontal {
+    flex-flow: column;
+  }
+
+  &_vertical {
+    & .tslider__labels {
+      order: 1;
+    }
+  }
 
   &__track {
     position: relative;
@@ -45,34 +58,23 @@ $label-margin-from-track: 5px;
   }
 
   &__labels {
-    position: absolute;
-
-    // width: $label-width;
-    // height: $label-height;
-
-    &_horizontal {
-      top: -$label-height - $track-border - $label-margin-from-track;
-    }
-
-    &_vertical {
-      left: $track-height + $track-border + $label-margin-from-track;
-    }
+    display: grid;
   }
 
   &__label {
+    grid-column: 1;
+    grid-row: 1;
+
     box-sizing: border-box;
     display: flex;
     justify-content: center;
     align-items: center;
 
-    position: absolute;
-
     // TODO: if padding is used, labels is not centered
-    // padding: 3px;
+    padding: $label-padding;
 
     width: max-content;
-    // width: $label-width;
-    // height: $label-height;
+    height: max-content;
     background: linear-gradient(180deg, #bc9cff 0%, #8ba4f9 100%);
     color: #fff;
     border-radius: 3px;
@@ -88,4 +90,5 @@ $label-margin-from-track: 5px;
 
 body {
   margin: 50px;
+  display: flex;
 }

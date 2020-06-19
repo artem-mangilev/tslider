@@ -22,10 +22,12 @@ class View {
   //     .tslider__range
   //     .tslider__handle
 
-  private container: Container = new Container('tslider')
+  private container: Container
   private track: Track = new Track('tslider__track')
   private range: Range = new Range('tslider__range')
-  private labelsContainer: LabelsContainer
+  private labelsContainer: LabelsContainer = new LabelsContainer(
+    'tslider__labels'
+  )
   private handles: Handle[] = []
   private labels: Label[] = []
 
@@ -40,8 +42,7 @@ class View {
     numberOfHandles,
     orientationOption: { orientation, longSide, shortSide, x, y, direction },
   }: ViewOptions) {
-    const labelsContainerClasses = `tslider__labels tslider__labels_${orientation}`
-    this.labelsContainer = new LabelsContainer(labelsContainerClasses)
+    this.container = new Container(`tslider tslider_${orientation}`)
 
     // put it after the targetInput
     this.targetInput = new Input(targetInput)
@@ -57,10 +58,10 @@ class View {
 
     // prettier-ignore
     this.container.add(
+      this.labelsContainer.add(
+        ...this.labels
+      ),
       this.track.add(
-        this.labelsContainer.add(
-          ...this.labels
-        ),
         this.range,
         ...this.handles
       )
