@@ -12,7 +12,7 @@ $(document).ready(() => {
       max: 100,
       from: 50,
       to: 100,
-      step: 5,
+      step: 1,
       // TODO: implement these options
       // handleMotion: 'smooth' | 'discrete'
       // labelVisibility: 'visible' | 'hidden' | 'appears-on-hover'

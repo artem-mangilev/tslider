@@ -73,9 +73,8 @@ $label-margin-from-track: 5px;
 
     user-select: none;
     border-radius: 50%;
-
-    // TODO: if border applied, handle displayed incorrectly
-    // border: 2px solid #fff;
+    
+    border: 2px solid #fff;
 
     background: linear-gradient(180deg, #bc9cff 0%, #8ba4f9 100%);
   }

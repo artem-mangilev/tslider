@@ -8,30 +8,8 @@ class Label extends ViewTreeNode {
     super('div', className)
   }
 
-  get width(): number {
-    return this.$elem.outerWidth()
-  }
-
-  get height(): number {
-    return this.$elem.outerHeight()
-  }
-
-  set width(newWidth: number) {
-    this.$elem.css('width', `${newWidth}px`)
-  }
-
-  set height(newHeight: number) {
-    this.$elem.css('height', `${newHeight}px`)
-  }
-
   public move(position: Point): void {
     this.$elem.css('transform', `translate(${position.x}px, ${position.y}px)`)
-  }
-
-  public get position(): Point {
-    const { x, y } = this.$elem[0].getBoundingClientRect()
-
-    return { x, y }
   }
 
   public updateData(newData: string): void {
