@@ -1,26 +1,25 @@
 import { OneDimensionalSpacePoint } from '../utils/aliases'
 import Point from '../utils/Point'
-import Container from './Container'
 import Handle from './Handle'
 import Input from './Input'
 import Label from './Label'
-import LabelsContainer from './LabelsContainer'
 import Range from './Range'
-import Track from './Track'
 import ViewOptions from './ViewOptions'
 import { Side, Axis, Direction } from '../OrientationOptions'
-import HandlesContainer from './HandlesContainer'
+import ViewTreeNode from '../utils/ViewTreeNode'
 
 class View {
   private targetInput: Input
 
-  private container: Container
-  private track: Track = new Track('tslider__track')
+  private sliderRoot: ViewTreeNode
+  private track: ViewTreeNode = new ViewTreeNode('div', 'tslider__track')
   private range: Range = new Range('tslider__range')
-  private labelsContainer: LabelsContainer = new LabelsContainer(
+  private labelsContainer: ViewTreeNode = new ViewTreeNode(
+    'div',
     'tslider__labels'
   )
-  private handlesContainer: HandlesContainer = new HandlesContainer(
+  private handlesContainer: ViewTreeNode = new ViewTreeNode(
+    'div',
     'tslider__handles'
   )
   private handles: Handle[] = []
@@ -37,11 +36,11 @@ class View {
     numberOfHandles,
     orientationOption: { orientation, longSide, shortSide, x, y, direction },
   }: ViewOptions) {
-    this.container = new Container(`tslider tslider_${orientation}`)
+    this.sliderRoot = new ViewTreeNode('div', `tslider tslider_${orientation}`)
 
     // put it after the targetInput
     this.targetInput = new Input(targetInput)
-    this.targetInput.$element.after(this.container.$elem)
+    this.targetInput.$element.after(this.sliderRoot.$elem)
 
     // this is the functional way to iterate when only finish number is given
     // for example, if length === 2, callback will be evaluated 2 times.
@@ -52,7 +51,7 @@ class View {
     })
 
     // prettier-ignore
-    this.container.add(
+    this.sliderRoot.add(
       this.labelsContainer.add(
         ...this.labels
       ),
@@ -226,7 +225,7 @@ class View {
     handler: (point: OneDimensionalSpacePoint) => void
   ): void {
     // TODO: find the way to attach an event handler with Jquery
-    this.container.$elem[0].addEventListener(
+    this.sliderRoot.$elem[0].addEventListener(
       'click',
       this.createTrackClickHandler(handler)
     )
