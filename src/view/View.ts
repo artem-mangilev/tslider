@@ -24,6 +24,7 @@ class View {
   )
   private handles: Handle[] = []
   private labels: Label[] = []
+  private tempLabel: Label
 
   private longSide: Side
   private shortSide: Side
@@ -50,10 +51,14 @@ class View {
       this.labels.push(new Label('tslider__label'))
     })
 
+    this.tempLabel = new Label('tslider__label')
+    this.tempLabel.$elem.css('visibility', 'hidden')
+
     // prettier-ignore
     this.sliderRoot.add(
       this.labelsContainer.add(
-        ...this.labels
+        ...this.labels,
+        this.tempLabel
       ),
       this.track.add(
       ),
@@ -133,12 +138,17 @@ class View {
 
     const firstLabel = this.labels[0]
     const lastLabel = this.labels[this.labels.length - 1]
-    if (this.doLabelsCollide(this.labels)) {
-      // there should be 1 label
-      lastLabel.$elem.hide()
 
-      // the fist label should show the data of both labels
-      firstLabel.updateData(`${firstLabel.data} - ${lastLabel.data}`)
+    const isHandlesHaveSamePosition =
+      firstLabel.position[this.x] === lastLabel.position[this.x]
+
+    if (this.doLabelsCollide(this.labels) && !isHandlesHaveSamePosition) {
+      firstLabel.$elem.css('visibility', 'hidden')
+      lastLabel.$elem.css('visibility', 'hidden')
+
+      // the temp label should show the data of both labels
+      this.tempLabel.updateData(`${firstLabel.data} - ${lastLabel.data}`)
+      this.tempLabel.$elem.css('visibility', 'visible')
 
       const rangePosition =
         this.range.position[this.x] - this.track.position[this.x]
@@ -146,20 +156,22 @@ class View {
       const rangeMiddlePosition: number =
         rangePosition + this.range[this.longSide] / 2
 
-      const labelMiddle = firstLabel[this.longSide] / 2
+      const labelMiddle = this.tempLabel[this.longSide] / 2
       const labelPosition = rangeMiddlePosition - labelMiddle
 
       // @ts-ignore
-      firstLabel.move({
+      this.tempLabel.move({
         [this.x]: labelPosition,
         [this.y]: 0,
       })
     } else {
-      lastLabel.$elem.show()
+      firstLabel.$elem.css('visibility', 'visible')
+      lastLabel.$elem.css('visibility', 'visible')
+
+      this.tempLabel.$elem.css('visibility', 'hidden')
     }
   }
 
-  // TODO: collition detection works incorrectly
   // TODO: maybe this method could be more general
   private doLabelsCollide(labels: Label[]): boolean {
     // they don't collide if there is 1 label
