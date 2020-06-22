@@ -52,7 +52,6 @@ class View {
     })
 
     this.tempLabel = new Label('tslider__label')
-    this.tempLabel.$elem.css('visibility', 'hidden')
 
     // prettier-ignore
     this.sliderRoot.add(
