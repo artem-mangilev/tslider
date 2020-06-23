@@ -6,6 +6,7 @@ import Handle from './Handle'
 import ModelOptions from './ModelOptions'
 import { ModelUpdateTypes } from './ModelUpdateTypes'
 import Track from './Track'
+import RulerSegment from '../RulerSegment'
 
 // TODO: simplify implementation of switching the orientation
 class Model extends Subject {
@@ -87,8 +88,30 @@ class Model extends Subject {
     return handlePositionRatios.map((ratio) => this.data.getAmount(ratio))
   }
 
+  public get ruler(): RulerSegment[] {
+    const trackStep: number = this.options.trackLength / this.options.rulerSteps
+
+    const _ruler = []
+
+    let currentTrackStep: number = 0
+
+    for (let i = 0; i <= this.options.rulerSteps; i++) {
+      const currentTrackStepRatio = this.track.pointToRatio(currentTrackStep)
+      const currentData = this.data.getAmount(currentTrackStepRatio)
+
+      _ruler.push({
+        point: currentTrackStep,
+        value: currentData,
+      })
+
+      currentTrackStep += trackStep
+    }
+
+    return _ruler
+  }
+
   // TODO: state should be covered with types
-  // TODO: Subject should require the presence of this method in Model 
+  // TODO: Subject should require the presence of this method in Model
   private getState = (updateType: number): any => {
     switch (updateType) {
       case ModelUpdateTypes.Initialization:

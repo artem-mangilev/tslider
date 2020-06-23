@@ -9,6 +9,7 @@ import { OrientationOptions } from './OrientationOptions'
 
 class Tslider implements Observer {
   private view: View
+  private rulerFlag: boolean
 
   constructor({
     targetInput,
@@ -18,7 +19,11 @@ class Tslider implements Observer {
     min,
     step,
     orientation,
+    ruler = false,
+    rulerSteps = 4
   }: SliderOptions) {
+    this.rulerFlag = ruler
+
     // 'from' is required parameter at this moment, to is optional
     const handlesData: number[] = [from, ...(to !== undefined ? [to] : [])]
 
@@ -61,7 +66,7 @@ class Tslider implements Observer {
     }
 
     // the Model needs an additional data
-    const modelOptions: ModelOptions = { max, min, step, trackLength }
+    const modelOptions: ModelOptions = { max, min, step, trackLength, rulerSteps }
 
     // initialize the Model and attach this class to Model as observer of changes
     const model: Model = new Model(modelOptions)
@@ -89,6 +94,10 @@ class Tslider implements Observer {
     this.view.onTrackClick(move)
     // when the user dragged the handle, move it to apropriate position
     this.view.onHandleDrag(move)
+
+    if (this.rulerFlag) {
+      this.view.renderRuler(model.ruler)
+    }    
   }
 
   private handleSlideAction({

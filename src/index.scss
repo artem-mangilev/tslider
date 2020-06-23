@@ -27,6 +27,10 @@ $label-margin-from-track: 5px;
     & .tslider__labels {
       margin-bottom: $label-margin-from-track;
     }
+
+    & .tslider__ruler {
+      margin-top: $label-margin-from-track;
+    }
   }
 
   &_vertical {
@@ -49,6 +53,11 @@ $label-margin-from-track: 5px;
 
       margin-left: $label-margin-from-track;
     }
+
+    & .tslider__ruler {
+
+      margin-right: $label-margin-from-track;
+    }
   }
 
   &__track {
@@ -57,14 +66,28 @@ $label-margin-from-track: 5px;
   }
 
   &__handles,
-  &__labels {
+  &__labels,
+  &__ruler {
     display: grid;
   }
 
   &__handle,
-  &__label {
+  &__label,
+  &__ruler-node {
     grid-column: 1;
     grid-row: 1;
+  }
+
+  &__ruler {
+    font-family: sans-serif;
+    font-size: 8px;
+    color: gray;
+    user-select: none;
+  }
+
+  &__ruler-node {
+    width: max-content;
+    height: max-content;
   }
 
   &__handle {

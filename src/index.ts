@@ -13,6 +13,8 @@ $(document).ready(() => {
       from: 50,
       to: 100,
       step: 1,
+      ruler: true,
+      rulerSteps: 7,
       // TODO: implement these options
       // handleMotion: 'smooth' | 'discrete'
       // labelVisibility: 'visible' | 'hidden' | 'appears-on-hover'

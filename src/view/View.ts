@@ -7,6 +7,8 @@ import Range from './Range'
 import ViewOptions from './ViewOptions'
 import { Side, Axis, Direction } from '../OrientationOptions'
 import ViewTreeNode from '../utils/ViewTreeNode'
+import RulerSegment from '../RulerSegment'
+import RulerNode from './RulerNode'
 
 class View {
   private targetInput: Input
@@ -22,6 +24,8 @@ class View {
     'div',
     'tslider__handles'
   )
+  private ruler: ViewTreeNode = new ViewTreeNode('div', 'tslider__ruler')
+  private rulerNodes: RulerNode[] = []
   private handles: Handle[] = []
   private labels: Label[] = []
   private tempLabel: Label
@@ -191,6 +195,44 @@ class View {
       firstLabelX + firstLabelWidth > lastLabelX
 
     return isCollisionDetected
+  }
+
+  public renderRuler(ruler: RulerSegment[]): void {
+    ruler.forEach((segment) => {
+      const node = new RulerNode('tslider__ruler-node')
+
+      node.value(segment.value.toString())
+
+      // @ts-ignore
+      node.move({
+        [this.x]: segment.point,
+        [this.y]: 0,
+      })
+
+      this.rulerNodes.push(node)
+    })
+
+    // prettier-ignore
+    this.sliderRoot.add(
+      this.ruler.add(
+        ...this.rulerNodes
+      )
+    )
+
+    ruler.forEach((segment, i) => {
+      const node = this.rulerNodes[i]
+
+      // @ts-ignore
+      const position = this.changeDirection({
+        [this.x]: segment.point,
+        [this.y]: 0,
+      })
+
+      const middle = node[this.longSide] / 2
+      position[this.x] -= middle
+
+      this.rulerNodes[i].move(position)
+    })
   }
 
   private createTrackClickHandler(
