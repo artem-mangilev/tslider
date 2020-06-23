@@ -55,7 +55,7 @@ $label-margin-from-track: 5px;
     }
 
     & .tslider__ruler {
-
+      justify-items: end;
       margin-right: $label-margin-from-track;
     }
   }
