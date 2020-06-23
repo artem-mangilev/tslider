@@ -10,7 +10,11 @@ class RulerNode extends ViewTreeNode {
     this.$elem.css('transform', `translate(${position.x}px, ${position.y}px)`)
   }
 
-  public value(value: string): void {
+  public get value(): string {
+    return this.$elem.html()
+  }
+
+  public set value(value: string) {
     this.$elem.html(value)
   }
 }

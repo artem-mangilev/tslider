@@ -68,6 +68,23 @@ class Model extends Subject {
     }
   }
 
+  public moveByValue(value: number): void {
+    const valueRatio = this.data.getAmountAsRatio(value)
+    const trackPoint = this.track.ratioToPoint(valueRatio)
+
+    const activeHandleIndex = this.track.getNearestPointIndex(trackPoint)
+
+    const activeHandle = this.handles[activeHandleIndex]
+
+    this.track.setActiveHandle(activeHandle)
+
+    const availablePoint = this.track.getAvailablePoint(trackPoint)
+
+    activeHandle.position = availablePoint
+
+    this.notify(ModelUpdateTypes.Slide, this.getState)
+  }
+
   private get rangeStartPosition(): OneDimensionalSpacePoint {
     return this.track.rangeStartPosition
   }

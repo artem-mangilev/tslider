@@ -10,6 +10,7 @@ import { OrientationOptions } from './OrientationOptions'
 class Tslider implements Observer {
   private view: View
   private rulerFlag: boolean
+  private rulerActiveFlag: boolean
 
   constructor({
     targetInput,
@@ -20,9 +21,11 @@ class Tslider implements Observer {
     step,
     orientation,
     ruler = false,
-    rulerSteps = 4
+    rulerSteps = 4,
+    rulerActive = true,
   }: SliderOptions) {
     this.rulerFlag = ruler
+    this.rulerActiveFlag = rulerActive
 
     // 'from' is required parameter at this moment, to is optional
     const handlesData: number[] = [from, ...(to !== undefined ? [to] : [])]
@@ -66,7 +69,13 @@ class Tslider implements Observer {
     }
 
     // the Model needs an additional data
-    const modelOptions: ModelOptions = { max, min, step, trackLength, rulerSteps }
+    const modelOptions: ModelOptions = {
+      max,
+      min,
+      step,
+      trackLength,
+      rulerSteps,
+    }
 
     // initialize the Model and attach this class to Model as observer of changes
     const model: Model = new Model(modelOptions)
@@ -97,7 +106,12 @@ class Tslider implements Observer {
 
     if (this.rulerFlag) {
       this.view.renderRuler(model.ruler)
-    }    
+    }
+
+    if (this.rulerActiveFlag) {
+      const moveByValue = model.moveByValue.bind(model)
+      this.view.onRulerClick(moveByValue)
+    }
   }
 
   private handleSlideAction({

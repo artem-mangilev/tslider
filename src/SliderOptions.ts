@@ -8,6 +8,7 @@ export default interface SliderOptions {
   step?: number
   ruler?: boolean
   rulerSteps?: number
+  rulerActive?: boolean
   targetInput: HTMLInputElement
   orientation: Orientation
 }

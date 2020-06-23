@@ -201,7 +201,7 @@ class View {
     ruler.forEach((segment) => {
       const node = new RulerNode('tslider__ruler-node')
 
-      node.value(segment.value.toString())
+      node.value = segment.value.toString()
 
       // @ts-ignore
       node.move({
@@ -281,6 +281,29 @@ class View {
     this.sliderRoot.$elem[0].addEventListener(
       'click',
       this.createTrackClickHandler(handler)
+    )
+  }
+
+  private createRulerClickHandler(
+    handler: (point: OneDimensionalSpacePoint) => void
+  ): (event: MouseEvent) => void {
+    return (e) => {
+      const targetRulerNode = this.rulerNodes.find(
+        (node) => node.$elem[0] === e.target
+      )
+
+      if (targetRulerNode) {
+        handler(Number(targetRulerNode.value))
+      }
+    }
+  }
+
+  public onRulerClick(
+    handler: (point: OneDimensionalSpacePoint) => void
+  ): void {
+    this.ruler.$elem[0].addEventListener(
+      'click',
+      this.createRulerClickHandler(handler)
     )
   }
 

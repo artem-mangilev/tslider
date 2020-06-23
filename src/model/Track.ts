@@ -133,6 +133,10 @@ class Track {
     return point / this.length
   }
 
+  public ratioToPoint(ratio: Ratio): OneDimensionalSpacePoint {
+    return ratio * this.length
+  }
+
   // TODO: probably it's not a good idea to register handles in the track explicitly
   public registerHandles(handles: Handle[]) {
     this.handles = handles

@@ -14,7 +14,8 @@ $(document).ready(() => {
       to: 100,
       step: 1,
       ruler: true,
-      rulerSteps: 7,
+      rulerSteps: 4,
+      rulerActive: true,
       // TODO: implement these options
       // handleMotion: 'smooth' | 'discrete'
       // labelVisibility: 'visible' | 'hidden' | 'appears-on-hover'
