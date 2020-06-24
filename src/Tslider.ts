@@ -104,6 +104,9 @@ class Tslider implements Observer {
     // when the user dragged the handle, move it to apropriate position
     this.view.onHandleDrag(move)
 
+    const resizeSlider = model.resizeSlider.bind(model)
+    this.view.onTrackLengthChanged(resizeSlider)
+
     if (this.rulerFlag) {
       this.view.renderRuler(model.ruler)
     }
@@ -119,6 +122,7 @@ class Tslider implements Observer {
     rangeStartPosition,
     rangeEndPosition,
     dataAmount,
+    ruler
   }: any): void {
     this.view.slideTo(handlePositions)
 
@@ -126,6 +130,10 @@ class Tslider implements Observer {
     this.view.updateRange([rangeStartPosition, rangeEndPosition])
 
     this.view.updateLabels(handlePositions, dataAmount)
+
+    if (this.rulerFlag) {
+      this.view.updateRuler(ruler)
+    }
   }
 }
 

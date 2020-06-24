@@ -235,6 +235,23 @@ class View {
     })
   }
 
+  public updateRuler(ruler: RulerSegment[]): void {
+    ruler.forEach((segment, i) => {
+      const node = this.rulerNodes[i]
+
+      // @ts-ignore
+      const position = this.changeDirection({
+        [this.x]: segment.point,
+        [this.y]: 0,
+      })
+
+      const middle = node[this.longSide] / 2
+      position[this.x] -= middle
+
+      this.rulerNodes[i].move(position)
+    })
+  }
+
   private createTrackClickHandler(
     handler: (point: OneDimensionalSpacePoint) => void
   ): (event: MouseEvent) => void {
@@ -343,6 +360,18 @@ class View {
     $root.mouseup(() => {
       $root[0].removeEventListener('mousemove', dragHandler)
     })
+  }
+
+  public onTrackLengthChanged(handler: (length: number) => void): void {
+    const ro = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        handler(entry.contentRect[this.longSide])
+      }
+    })
+
+    // at this moment this API didn't allow to get border-box size of element
+    // so I decide to track the roor of slider, which length is same as track's border-box length 
+    ro.observe(this.sliderRoot.$elem[0])
   }
 }
 

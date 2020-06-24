@@ -8,7 +8,6 @@ import { ModelUpdateTypes } from './ModelUpdateTypes'
 import Track from './Track'
 import RulerSegment from '../RulerSegment'
 
-// TODO: simplify implementation of switching the orientation
 class Model extends Subject {
   private track: Track
   private data: Data
@@ -85,6 +84,20 @@ class Model extends Subject {
     this.notify(ModelUpdateTypes.Slide, this.getState)
   }
 
+  public resizeSlider(trackLength: number): void {
+    this.dataAmount.forEach((value, i) => {
+      const dataRatio = this.data.getAmountAsRatio(value)
+
+      const coordinate: OneDimensionalSpacePoint = dataRatio * trackLength
+
+      this.handles[i].position = coordinate
+    })
+    
+    this.track.length = trackLength
+
+    this.notify(ModelUpdateTypes.Slide, this.getState)
+  }
+
   private get rangeStartPosition(): OneDimensionalSpacePoint {
     return this.track.rangeStartPosition
   }
@@ -106,7 +119,7 @@ class Model extends Subject {
   }
 
   public get ruler(): RulerSegment[] {
-    const trackStep: number = this.options.trackLength / this.options.rulerSteps
+    const trackStep: number = this.track.length / this.options.rulerSteps
 
     const _ruler = []
 
@@ -139,6 +152,7 @@ class Model extends Subject {
           dataAmount: this.dataAmount,
           rangeStartPosition: this.rangeStartPosition,
           rangeEndPosition: this.rangeEndPosition,
+          ruler: this.ruler
         }
     }
   }

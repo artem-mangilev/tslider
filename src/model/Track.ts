@@ -2,15 +2,17 @@ import { OneDimensionalSpacePoint, Ratio } from '../utils/aliases'
 import Handle from './Handle'
 
 class Track {
-  private stepSegment: number
   private handles: Handle[]
   private activeHandle: Handle
   private firstHandle: Handle
   private lastHandle: Handle
 
   constructor(private numberOfSteps: number, public length: number) {
-    this.stepSegment = this.length / this.numberOfSteps
     this.activeHandle = null
+  }
+
+  private get stepSegment(): number {
+    return this.length / this.numberOfSteps
   }
 
   private getNearStep(point: OneDimensionalSpacePoint) {
