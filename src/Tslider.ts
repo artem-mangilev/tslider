@@ -11,6 +11,7 @@ class Tslider implements Observer {
   private view: View
   private rulerFlag: boolean
   private rulerActiveFlag: boolean
+  private inputValuesSeparator: string
 
   constructor({
     targetInput,
@@ -24,9 +25,12 @@ class Tslider implements Observer {
     rulerSteps = 4,
     rulerActive = true,
     label = true,
+    hideInput = true,
+    inputValuesSeparator = ',',
   }: SliderOptions) {
     this.rulerFlag = ruler
     this.rulerActiveFlag = rulerActive
+    this.inputValuesSeparator = inputValuesSeparator
 
     // 'from' is required parameter at this moment, to is optional
     const handlesData: number[] = [from, ...(to !== undefined ? [to] : [])]
@@ -58,6 +62,8 @@ class Tslider implements Observer {
       numberOfHandles,
       targetInput,
       label,
+      hideInput,
+      inputValuesSeparator,
     }
 
     // initialize the View
@@ -109,12 +115,19 @@ class Tslider implements Observer {
     const resizeSlider = model.resizeSlider.bind(model)
     this.view.onTrackLengthChanged(resizeSlider)
 
+    const moveByValue = model.moveByValue.bind(model)
+
+    this.view.onInputUpdate((values) => {
+      values.forEach((value) => {
+        moveByValue(value)
+      })
+    })
+
     if (this.rulerFlag) {
       this.view.renderRuler(model.ruler)
     }
 
     if (this.rulerActiveFlag) {
-      const moveByValue = model.moveByValue.bind(model)
       this.view.onRulerClick(moveByValue)
     }
   }
@@ -136,6 +149,8 @@ class Tslider implements Observer {
     if (this.rulerFlag) {
       this.view.updateRuler(ruler)
     }
+
+    this.view.updateInput(dataAmount.join(this.inputValuesSeparator))
   }
 }
 

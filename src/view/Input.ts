@@ -2,13 +2,11 @@ class Input {
   input: HTMLInputElement
   $element: JQuery<HTMLInputElement>
 
-  constructor(input: HTMLInputElement) {
+  constructor(input: HTMLInputElement, hide: boolean) {
     this.input = input
     this.$element = $(this.input)
 
-    // TODO: probably i should add this flag to global parameters
-    // the input should be hidden
-    this.input.hidden = true
+    this.input.hidden = hide
   }
 
   public setValue(value: string): void {

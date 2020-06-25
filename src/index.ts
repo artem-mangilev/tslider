@@ -17,6 +17,8 @@ $(document).ready(() => {
       rulerSteps: 4,
       rulerActive: true,
       label: false,
+      hideInput: false,
+      inputValuesSeparator: ', ',
       // TODO: implement these options
       // handleMotion: 'smooth' | 'discrete'
       // labelVisibility: 'visible' | 'hidden' | 'appears-on-hover'

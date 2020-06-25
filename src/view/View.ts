@@ -37,17 +37,20 @@ class View {
   private direction: Direction
 
   private labelFlag: boolean
+  private inputValuesSeparator: string
 
   constructor({
     targetInput,
     numberOfHandles,
     orientationOption: { orientation, longSide, shortSide, x, y, direction },
     label,
+    hideInput,
+    inputValuesSeparator,
   }: ViewOptions) {
     this.sliderRoot = new ViewTreeNode('div', `tslider tslider_${orientation}`)
 
     // put it after the targetInput
-    this.targetInput = new Input(targetInput)
+    this.targetInput = new Input(targetInput, hideInput)
     this.targetInput.$element.after(this.sliderRoot.$elem)
 
     // this is the functional way to iterate when only finish number is given
@@ -82,6 +85,7 @@ class View {
     this.direction = direction
 
     this.labelFlag = label
+    this.inputValuesSeparator = inputValuesSeparator
   }
 
   public get trackLength(): number {
@@ -103,6 +107,10 @@ class View {
 
     // // update the target input's value
     // this.targetInput.setValue(data)
+  }
+
+  public updateInput(data: string): void {
+    this.targetInput.setValue(data)
   }
 
   public updateRange(positions: OneDimensionalSpacePoint[]): void {
@@ -380,6 +388,22 @@ class View {
     // at this moment this API didn't allow to get border-box size of element
     // so I decide to track the roor of slider, which length is same as track's border-box length
     ro.observe(this.sliderRoot.$elem[0])
+  }
+
+  public onInputUpdate(handler: (values: string[]) => void): void {
+    const input = this.targetInput.$element[0]
+
+    input.addEventListener('focusout', () => {
+      const values = input.value.split(this.inputValuesSeparator)
+
+      for (const value of values) {
+        if (isNaN(Number(value))) {
+          return
+        }
+      }
+
+      handler(values)
+    })
   }
 }
 

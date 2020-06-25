@@ -7,4 +7,6 @@ export default interface ViewOptions {
   numberOfHandles: number
   orientationOption: OrientationOption
   label: boolean
+  hideInput: boolean
+  inputValuesSeparator: string
 }
