@@ -84,6 +84,19 @@ class Model extends Subject {
     this.notify(ModelUpdateTypes.Slide, this.getState)
   }
 
+  public moveByValues(values: number[]): void {
+    values.forEach((value, i) => {
+      const valueRatio = this.data.getAmountAsRatio(value)
+      const trackPoint = this.track.ratioToPoint(valueRatio)
+  
+      const availablePoint = this.track.getAvailablePoint(trackPoint)
+  
+      this.handles[i].position = availablePoint
+    })
+
+    this.notify(ModelUpdateTypes.Slide, this.getState)
+  }
+
   public resizeSlider(trackLength: number): void {
     this.dataAmount.forEach((value, i) => {
       const dataRatio = this.data.getAmountAsRatio(value)

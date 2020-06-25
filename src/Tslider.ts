@@ -115,19 +115,15 @@ class Tslider implements Observer {
     const resizeSlider = model.resizeSlider.bind(model)
     this.view.onTrackLengthChanged(resizeSlider)
 
-    const moveByValue = model.moveByValue.bind(model)
-
-    this.view.onInputUpdate((values) => {
-      values.forEach((value) => {
-        moveByValue(value)
-      })
-    })
+    const moveByValues = model.moveByValues.bind(model)
+    this.view.onInputUpdate(moveByValues)
 
     if (this.rulerFlag) {
       this.view.renderRuler(model.ruler)
     }
 
     if (this.rulerActiveFlag) {
+      const moveByValue = model.moveByValue.bind(model)
       this.view.onRulerClick(moveByValue)
     }
   }
