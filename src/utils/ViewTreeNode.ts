@@ -1,4 +1,4 @@
-import Point from "./Point"
+import Point from './Point'
 
 export default class ViewTreeNode {
   $elem: JQuery<HTMLElement>
@@ -32,7 +32,11 @@ export default class ViewTreeNode {
   }
 
   public add(...nodes: ViewTreeNode[]): ViewTreeNode {
-    nodes.forEach((node) => this.$elem.append(node.$elem))
+    nodes.forEach((node) => {
+      if (node) {
+        this.$elem.append(node.$elem)
+      }
+    })
 
     return this
   }

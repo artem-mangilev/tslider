@@ -36,10 +36,13 @@ class View {
   private y: Axis
   private direction: Direction
 
+  private labelFlag: boolean
+
   constructor({
     targetInput,
     numberOfHandles,
     orientationOption: { orientation, longSide, shortSide, x, y, direction },
+    label,
   }: ViewOptions) {
     this.sliderRoot = new ViewTreeNode('div', `tslider tslider_${orientation}`)
 
@@ -59,7 +62,7 @@ class View {
 
     // prettier-ignore
     this.sliderRoot.add(
-      this.labelsContainer.add(
+      label && this.labelsContainer.add(
         ...this.labels,
         this.tempLabel
       ),
@@ -74,11 +77,11 @@ class View {
     // make properties from sides in order to use outside the constructor
     this.longSide = longSide
     this.shortSide = shortSide
-
     this.x = x
     this.y = y
-
     this.direction = direction
+
+    this.labelFlag = label
   }
 
   public get trackLength(): number {
@@ -121,7 +124,12 @@ class View {
 
     this.range.move(validStartPosition)
   }
+
   public updateLabels(positions: OneDimensionalSpacePoint[], data: number[]) {
+    if (!this.labelFlag) {
+      return
+    }
+
     this.labels.forEach((label, i) => {
       // @ts-ignore
       const position = this.changeDirection({
@@ -370,7 +378,7 @@ class View {
     })
 
     // at this moment this API didn't allow to get border-box size of element
-    // so I decide to track the roor of slider, which length is same as track's border-box length 
+    // so I decide to track the roor of slider, which length is same as track's border-box length
     ro.observe(this.sliderRoot.$elem[0])
   }
 }

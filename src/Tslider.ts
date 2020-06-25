@@ -23,6 +23,7 @@ class Tslider implements Observer {
     ruler = false,
     rulerSteps = 4,
     rulerActive = true,
+    label = true,
   }: SliderOptions) {
     this.rulerFlag = ruler
     this.rulerActiveFlag = rulerActive
@@ -56,6 +57,7 @@ class Tslider implements Observer {
       orientationOption,
       numberOfHandles,
       targetInput,
+      label,
     }
 
     // initialize the View
@@ -122,7 +124,7 @@ class Tslider implements Observer {
     rangeStartPosition,
     rangeEndPosition,
     dataAmount,
-    ruler
+    ruler,
   }: any): void {
     this.view.slideTo(handlePositions)
 
