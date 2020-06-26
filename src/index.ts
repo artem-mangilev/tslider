@@ -16,7 +16,7 @@ $(document).ready(() => {
       ruler: true,
       rulerSteps: 4,
       rulerActive: true,
-      label: false,
+      label: true,
       hideInput: false,
       inputValuesSeparator: ', ',
       // TODO: implement these options
@@ -26,6 +26,6 @@ $(document).ready(() => {
       targetInput: <HTMLInputElement>elem,
     }
 
-    new Tslider(options)
+    new Tslider(options).updateHandles(70)
   })
 })

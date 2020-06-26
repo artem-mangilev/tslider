@@ -12,6 +12,7 @@ class Tslider implements Observer {
   private rulerFlag: boolean
   private rulerActiveFlag: boolean
   private inputValuesSeparator: string
+  private model: Model
 
   constructor({
     targetInput,
@@ -86,12 +87,15 @@ class Tslider implements Observer {
     }
 
     // initialize the Model and attach this class to Model as observer of changes
-    const model: Model = new Model(modelOptions)
-    model.attach(this)
+    // TODO: in this class the model is presented as class field and an argument of handleInitializationAction
+    this.model = new Model(modelOptions)
+    this.model.attach(this)
 
-    model.initSlider(handlesData)
+    this.model.initSlider(handlesData)
   }
 
+  // TODO: this method should not be public
+  // TODO: ths name should be used for API method which updates the handles
   public update(updateType: ModelUpdateTypes, state: Model): void {
     switch (updateType) {
       case ModelUpdateTypes.Initialization:
@@ -147,6 +151,14 @@ class Tslider implements Observer {
     }
 
     this.view.updateInput(dataAmount.join(this.inputValuesSeparator))
+  }
+
+  public updateHandles(from: number, to?: number): void {
+    if (to === undefined) {
+      this.model.moveByValue(from)
+    } else {
+      this.model.moveByValues([from, to])
+    }
   }
 }
 
