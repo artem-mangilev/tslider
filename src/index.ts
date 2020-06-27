@@ -26,6 +26,6 @@ $(document).ready(() => {
       targetInput: <HTMLInputElement>elem,
     }
 
-    new Tslider(options).updateHandles(70)
+    new Tslider(options)
   })
 })
