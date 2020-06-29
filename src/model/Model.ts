@@ -32,7 +32,7 @@ class Model extends Subject {
 
     this.track.registerHandles(this.handles)
 
-    // Optionally observer could be attached with class constructor 
+    // Optionally observer could be attached with class constructor
     if (observer) {
       this.attach(observer)
 
@@ -70,33 +70,35 @@ class Model extends Subject {
     }
   }
 
-  // TODO: 2 methods below have simular functionality
-  public updateValue(value: number): void {
-    const valueRatio = this.data.getAmountAsRatio(value)
-    const trackPoint = this.track.ratioToPoint(valueRatio)
+  public updateValues(...values: number[]): void {
+    switch (values.length) {
+      case 1:
+        const [from] = values
 
-    const activeHandleIndex = this.track.getNearestPointIndex(trackPoint)
+        const valueRatio = this.data.getAmountAsRatio(from)
+        const trackPoint = this.track.ratioToPoint(valueRatio)
 
-    const activeHandle = this.handles[activeHandleIndex]
+        const activeHandleIndex = this.track.getNearestPointIndex(trackPoint)
+        const activeHandle = this.handles[activeHandleIndex]
+        this.track.setActiveHandle(activeHandle)
 
-    this.track.setActiveHandle(activeHandle)
+        const availablePoint = this.track.getAvailablePoint(trackPoint)
 
-    const availablePoint = this.track.getAvailablePoint(trackPoint)
+        activeHandle.position = availablePoint
 
-    activeHandle.position = availablePoint
+        break
+      case 2:
+        values.forEach((value, i) => {
+          const valueRatio = this.data.getAmountAsRatio(value)
+          const trackPoint = this.track.ratioToPoint(valueRatio)
 
-    this.notify(ModelUpdateTypes.Slide, this.getState)
-  }
+          const availablePoint = this.track.getAvailablePoint(trackPoint)
 
-  public updateValues(values: number[]): void {
-    values.forEach((value, i) => {
-      const valueRatio = this.data.getAmountAsRatio(value)
-      const trackPoint = this.track.ratioToPoint(valueRatio)
+          this.handles[i].position = availablePoint
+        })
 
-      const availablePoint = this.track.getAvailablePoint(trackPoint)
-
-      this.handles[i].position = availablePoint
-    })
+        break
+    }
 
     this.notify(ModelUpdateTypes.Slide, this.getState)
   }

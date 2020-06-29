@@ -104,9 +104,6 @@ class View {
     )
     // move the handles
     newHandlePositions.forEach((position, i) => this.handles[i].move(position))
-
-    // // update the target input's value
-    // this.targetInput.setValue(data)
   }
 
   public updateInput(data: string): void {
@@ -268,6 +265,23 @@ class View {
     })
   }
 
+  private changeDirection(point: Point): Point {
+    switch (this.direction) {
+      case 'left-to-right':
+        // @ts-ignore
+        return {
+          [this.x]: point[this.x],
+          [this.y]: point[this.y],
+        }
+      case 'bottom-to-top':
+        // @ts-ignore
+        return {
+          [this.x]: this.track[this.longSide] - point[this.x],
+          [this.y]: point[this.y],
+        }
+    }
+  }
+
   private createTrackClickHandler(
     handler: (point: OneDimensionalSpacePoint) => void
   ): (event: MouseEvent) => void {
@@ -287,23 +301,6 @@ class View {
       const correctTarget = isTrack || isRange || isHandles
 
       if (correctTarget) handler(position[this.x])
-    }
-  }
-
-  private changeDirection(point: Point): Point {
-    switch (this.direction) {
-      case 'left-to-right':
-        // @ts-ignore
-        return {
-          [this.x]: point[this.x],
-          [this.y]: point[this.y],
-        }
-      case 'bottom-to-top':
-        // @ts-ignore
-        return {
-          [this.x]: this.track[this.longSide] - point[this.x],
-          [this.y]: point[this.y],
-        }
     }
   }
 
