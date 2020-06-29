@@ -34,7 +34,7 @@ class Tslider implements Observer {
     this.inputValuesSeparator = inputValuesSeparator
 
     // 'from' is required parameter at this moment, to is optional
-    const handlesData: number[] = [from, ...(to !== undefined ? [to] : [])]
+    const rangeValues: number[] = [from, ...(to !== undefined ? [to] : [])]
 
     const orientationOptions: OrientationOptions = {
       horizontal: {
@@ -56,7 +56,7 @@ class Tslider implements Observer {
     }
 
     const orientationOption = orientationOptions[orientation]
-    const numberOfHandles = handlesData.length
+    const numberOfHandles = rangeValues.length
     // create view options
     const viewOptions: ViewOptions = {
       orientationOption,
@@ -84,14 +84,12 @@ class Tslider implements Observer {
       step,
       trackLength,
       rulerSteps,
+      values: rangeValues,
     }
 
     // initialize the Model and attach this class to Model as observer of changes
     // TODO: in this class the model is presented as class field and an argument of handleInitializationAction
-    this.model = new Model(modelOptions)
-    this.model.attach(this)
-
-    this.model.initSlider(handlesData)
+    this.model = new Model(modelOptions, this)
   }
 
   // TODO: this method should not be public

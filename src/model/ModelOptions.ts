@@ -4,4 +4,5 @@ export default interface ModelOptions {
   min: number
   trackLength: number
   rulerSteps: number
+  values: number[]
 }

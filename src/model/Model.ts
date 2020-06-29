@@ -7,24 +7,23 @@ import ModelOptions from './ModelOptions'
 import { ModelUpdateTypes } from './ModelUpdateTypes'
 import Track from './Track'
 import RulerSegment from '../RulerSegment'
+import Observer from '../utils/Observer'
 
 class Model extends Subject {
   private track: Track
   private data: Data
   private handles: Handle[] = []
 
-  constructor(private options: ModelOptions) {
+  constructor(private options: ModelOptions, observer?: Observer) {
     super()
-  }
 
-  public initSlider(handlesData: number[]): void {
     // initialize the data
-    this.data = new Data(this.options.min, this.options.max, this.options.step)
+    this.data = new Data(options.min, options.max, options.step)
 
     // initialize track class
-    this.track = new Track(this.data.numberOfSteps, this.options.trackLength)
+    this.track = new Track(this.data.numberOfSteps, options.trackLength)
 
-    handlesData.forEach((data) => {
+    options.values.forEach((data) => {
       const dataRatio = this.data.getAmountAsRatio(data)
 
       const coordinate: OneDimensionalSpacePoint = dataRatio * this.track.length
@@ -33,11 +32,16 @@ class Model extends Subject {
 
     this.track.registerHandles(this.handles)
 
-    this.notify(ModelUpdateTypes.Initialization, this.getState)
-    // make the initial draw of the slider
-    // TODO: by this call, model could assume that the view couldn't draw the slider in initialization step,
-    // so find the better way to make iniital draw
-    this.notify(ModelUpdateTypes.Slide, this.getState)
+    // Optionally observer could be attached with class constructor 
+    if (observer) {
+      this.attach(observer)
+
+      this.notify(ModelUpdateTypes.Initialization, this.getState)
+      // make the initial draw of the slider
+      // TODO: by this call, model could assume that the view couldn't draw the slider in initialization step,
+      // so find the better way to make iniital draw
+      this.notify(ModelUpdateTypes.Slide, this.getState)
+    }
   }
 
   // TODO: create different name for this method
@@ -88,9 +92,9 @@ class Model extends Subject {
     values.forEach((value, i) => {
       const valueRatio = this.data.getAmountAsRatio(value)
       const trackPoint = this.track.ratioToPoint(valueRatio)
-  
+
       const availablePoint = this.track.getAvailablePoint(trackPoint)
-  
+
       this.handles[i].position = availablePoint
     })
 
@@ -105,7 +109,7 @@ class Model extends Subject {
 
       this.handles[i].position = coordinate
     })
-    
+
     this.track.length = trackLength
 
     this.notify(ModelUpdateTypes.Slide, this.getState)
@@ -165,7 +169,7 @@ class Model extends Subject {
           dataAmount: this.dataAmount,
           rangeStartPosition: this.rangeStartPosition,
           rangeEndPosition: this.rangeEndPosition,
-          ruler: this.ruler
+          ruler: this.ruler,
         }
     }
   }
