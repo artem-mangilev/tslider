@@ -44,8 +44,7 @@ class Model extends Subject {
     }
   }
 
-  // TODO: create different name for this method
-  public moveHandle(
+  public updatePoint(
     targetPoint: OneDimensionalSpacePoint,
     handleIndex?: number
   ): void {
@@ -71,7 +70,8 @@ class Model extends Subject {
     }
   }
 
-  public moveByValue(value: number): void {
+  // TODO: 2 methods below have simular functionality
+  public updateValue(value: number): void {
     const valueRatio = this.data.getAmountAsRatio(value)
     const trackPoint = this.track.ratioToPoint(valueRatio)
 
@@ -88,7 +88,7 @@ class Model extends Subject {
     this.notify(ModelUpdateTypes.Slide, this.getState)
   }
 
-  public moveByValues(values: number[]): void {
+  public updateValues(values: number[]): void {
     values.forEach((value, i) => {
       const valueRatio = this.data.getAmountAsRatio(value)
       const trackPoint = this.track.ratioToPoint(valueRatio)
@@ -101,16 +101,17 @@ class Model extends Subject {
     this.notify(ModelUpdateTypes.Slide, this.getState)
   }
 
-  public resizeSlider(trackLength: number): void {
+  // TODO: bad method name, model shouldn't know about slider resizing
+  public updateLine(lineLength: number): void {
     this.dataAmount.forEach((value, i) => {
       const dataRatio = this.data.getAmountAsRatio(value)
 
-      const coordinate: OneDimensionalSpacePoint = dataRatio * trackLength
+      const coordinate: OneDimensionalSpacePoint = dataRatio * lineLength
 
       this.handles[i].position = coordinate
     })
 
-    this.track.length = trackLength
+    this.track.length = lineLength
 
     this.notify(ModelUpdateTypes.Slide, this.getState)
   }

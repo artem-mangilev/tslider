@@ -108,25 +108,25 @@ class Tslider implements Observer {
   private handleInitializationAction(model: Model): void {
     // the arguments of view events maps to arguments of moveHandle, so
     // we could just set move handle as a callback for view events
-    const move = model.moveHandle.bind(model)
+    const updatePoint = model.updatePoint.bind(model)
     // when user clicks to some area of the track, move the handle at this position
-    this.view.onTrackClick(move)
+    this.view.onTrackClick(updatePoint)
     // when the user dragged the handle, move it to apropriate position
-    this.view.onHandleDrag(move)
+    this.view.onHandleDrag(updatePoint)
 
-    const resizeSlider = model.resizeSlider.bind(model)
-    this.view.onTrackLengthChanged(resizeSlider)
+    const updateLine = model.updateLine.bind(model)
+    this.view.onTrackLengthChanged(updateLine)
 
-    const moveByValues = model.moveByValues.bind(model)
-    this.view.onInputUpdate(moveByValues)
+    const updateValues = model.updateValues.bind(model)
+    this.view.onInputUpdate(updateValues)
 
     if (this.rulerFlag) {
       this.view.renderRuler(model.ruler)
     }
 
     if (this.rulerActiveFlag) {
-      const moveByValue = model.moveByValue.bind(model)
-      this.view.onRulerClick(moveByValue)
+      const updateValue = model.updateValue.bind(model)
+      this.view.onRulerClick(updateValue)
     }
   }
 
@@ -153,9 +153,9 @@ class Tslider implements Observer {
 
   public updateHandles(from: number, to?: number): void {
     if (to === undefined) {
-      this.model.moveByValue(from)
+      this.model.updateValue(from)
     } else {
-      this.model.moveByValues([from, to])
+      this.model.updateValues([from, to])
     }
   }
 }
