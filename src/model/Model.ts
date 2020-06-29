@@ -106,7 +106,7 @@ class Model extends Subject {
 
   // TODO: bad method name, model shouldn't know about slider resizing
   public updateLine(lineLength: number): void {
-    this.dataAmount.forEach((value, i) => {
+    this.values.forEach((value, i) => {
       const dataRatio = this.data.getAmountAsRatio(value)
 
       const coordinate: OneDimensionalSpacePoint = dataRatio * lineLength
@@ -132,7 +132,7 @@ class Model extends Subject {
     return this.handles.map((handle) => handle.position)
   }
 
-  private get dataAmount(): number[] {
+  private get values(): number[] {
     const handlePositionRatios: Ratio[] = this.handlePositions.map((position) =>
       this.track.pointToRatio(position)
     )
@@ -171,7 +171,7 @@ class Model extends Subject {
       case ModelUpdateTypes.Slide:
         return {
           handlePositions: this.handlePositions,
-          dataAmount: this.dataAmount,
+          values: this.values,
           rangeStartPosition: this.rangeStartPosition,
           rangeEndPosition: this.rangeEndPosition,
           ruler: this.ruler,

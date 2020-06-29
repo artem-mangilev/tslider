@@ -133,7 +133,7 @@ class Tslider implements Observer {
     handlePositions,
     rangeStartPosition,
     rangeEndPosition,
-    dataAmount,
+    values,
     ruler,
   }: any): void {
     this.view.slideTo(handlePositions)
@@ -141,13 +141,13 @@ class Tslider implements Observer {
     // TODO: find the way to hide this functionality back to slideTo
     this.view.updateRange([rangeStartPosition, rangeEndPosition])
 
-    this.view.updateLabels(handlePositions, dataAmount)
+    this.view.updateLabels(handlePositions, values)
 
     if (this.rulerFlag) {
       this.view.updateRuler(ruler)
     }
 
-    this.view.updateInput(dataAmount.join(this.inputValuesSeparator))
+    this.view.updateInput(values.join(this.inputValuesSeparator))
   }
 
   public updateHandles(from: number, to?: number): void {
