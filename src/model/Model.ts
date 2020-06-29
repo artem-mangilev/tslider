@@ -71,6 +71,7 @@ class Model extends Subject {
   }
 
   public updateValues(...values: number[]): void {
+    // TODO: remove duplicated code
     switch (values.length) {
       case 1:
         const [from] = values
@@ -115,6 +116,7 @@ class Model extends Subject {
 
     this.track.length = lineLength
 
+    // TODO: current method needs another update type
     this.notify(ModelUpdateTypes.Slide, this.getState)
   }
 
