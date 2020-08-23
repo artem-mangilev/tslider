@@ -1,4 +1,4 @@
-import { OneDimensionalSpacePoint, Ratio } from '../utils/aliases'
+import { Ratio } from '../utils/aliases'
 import Handle from './Handle'
 
 class Track {
@@ -17,33 +17,29 @@ class Track {
     this.lastHandle = this.handles[this.handles.length - 1]
   }
 
-  private getNearStep(point: OneDimensionalSpacePoint): number {
+  private getNearStep(point: number): number {
     return Math.round(point / this.stepSegment)
   }
 
-  private isPointBetweenPoints(point: OneDimensionalSpacePoint): boolean {
+  private isPointBetweenPoints(point: number): boolean {
     return point >= this.firstPointPosition && point <= this.lastPointPosition
   }
 
-  private isPointBeforeLeftBoundary(point: OneDimensionalSpacePoint): boolean {
+  private isPointBeforeLeftBoundary(point: number): boolean {
     return point <= this.leftBoundary
   }
 
-  private isPointAfterRightBoundary(point: OneDimensionalSpacePoint): boolean {
+  private isPointAfterRightBoundary(point: number): boolean {
     return point >= this.rightBoundary
   }
 
-  private isPointCollidesWithLastPoint(
-    point: OneDimensionalSpacePoint
-  ): boolean {
+  private isPointCollidesWithLastPoint(point: number): boolean {
     const isPointAfterLastPoint = point > this.lastHandle.position
 
     return this.activeHandle === this.firstHandle && isPointAfterLastPoint
   }
 
-  private isPointCollidesWithFirstPoint(
-    point: OneDimensionalSpacePoint
-  ): boolean {
+  private isPointCollidesWithFirstPoint(point: number): boolean {
     const isPointBeforeFirstPoint = point < this.firstHandle.position
 
     return this.activeHandle === this.lastHandle && isPointBeforeFirstPoint
@@ -65,17 +61,15 @@ class Track {
     return this.length
   }
 
-  private get firstPointPosition(): OneDimensionalSpacePoint {
+  private get firstPointPosition(): number {
     return this.firstHandle.position
   }
 
-  private get lastPointPosition(): OneDimensionalSpacePoint {
+  private get lastPointPosition(): number {
     return this.lastHandle.position
   }
 
-  getAvailablePoint(
-    targetPoint: OneDimensionalSpacePoint
-  ): OneDimensionalSpacePoint {
+  getAvailablePoint(targetPoint: number): number {
     const isPointCollidesWithLastPoint =
       this.isRangeMode() && this.isPointCollidesWithLastPoint(targetPoint)
 
@@ -100,7 +94,7 @@ class Track {
   }
 
   // TODO: improve naming
-  getNearestPointIndex(targetPoint: OneDimensionalSpacePoint): number {
+  getNearestPointIndex(targetPoint: number): number {
     const firstPointIndex = 0
     const lastPointIndex = this.handles.length - 1
 
@@ -134,11 +128,11 @@ class Track {
     }
   }
 
-  pointToRatio(point: OneDimensionalSpacePoint): Ratio {
+  pointToRatio(point: number): Ratio {
     return point / this.length
   }
 
-  ratioToPoint(ratio: Ratio): OneDimensionalSpacePoint {
+  ratioToPoint(ratio: Ratio): number {
     return ratio * this.length
   }
 
@@ -146,11 +140,11 @@ class Track {
     this.activeHandle = handle
   }
 
-  get rangeStartPosition(): OneDimensionalSpacePoint {
+  get rangeStartPosition(): number {
     return this.isRangeMode() ? this.firstHandle.position : this.leftBoundary
   }
 
-  get rangeEndPosition(): OneDimensionalSpacePoint {
+  get rangeEndPosition(): number {
     return this.isRangeMode()
       ? this.lastHandle.position
       : this.firstHandle.position
