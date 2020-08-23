@@ -15,7 +15,7 @@ class Track {
     return this.length / this.numberOfSteps
   }
 
-  private getNearStep(point: OneDimensionalSpacePoint) {
+  private getNearStep(point: OneDimensionalSpacePoint): number {
     return Math.round(point / this.stepSegment)
   }
 
@@ -82,10 +82,9 @@ class Track {
       return this.rightBoundary
     }
 
-    const availablePointRatio: Ratio =
+    const availablePointRatio =
       this.getNearStep(targetPoint) / this.numberOfSteps
-    const availablePoint: OneDimensionalSpacePoint =
-      availablePointRatio * this.length
+    const availablePoint = availablePointRatio * this.length
 
     return availablePoint
   }
@@ -96,24 +95,22 @@ class Track {
 
   // TODO: improve naming
   public getNearestPointIndex(targetPoint: OneDimensionalSpacePoint): number {
-    const firstPointIndex: number = 0
-    const lastPointIndex: number = this.handles.length - 1
+    const firstPointIndex = 0
+    const lastPointIndex = this.handles.length - 1
 
-    const firstPoint: number = this.firstHandle.position
-    const lastPoint: number = this.lastHandle.position
+    const firstPoint = this.firstHandle.position
+    const lastPoint = this.lastHandle.position
 
-    const firstLastMiddle: number = (lastPoint + firstPoint) / 2
+    const firstLastMiddle = (lastPoint + firstPoint) / 2
 
-    const isTargetPointIsFirstPoint: boolean = targetPoint === firstPoint
-    const isTargetPointIsLastPoint: boolean = targetPoint === lastPoint
-    const isTargetPointBeforeFirstPoint: boolean = targetPoint < firstPoint
-    const isTargetPointAfterLastPoint: boolean = targetPoint > lastPoint
-    const isTargetPointBetweenPoints: boolean = this.isPointBetweenPoints(
-      targetPoint
-    )
-    const isTargetPointCloserToFirstPoint: boolean =
+    const isTargetPointIsFirstPoint = targetPoint === firstPoint
+    const isTargetPointIsLastPoint = targetPoint === lastPoint
+    const isTargetPointBeforeFirstPoint = targetPoint < firstPoint
+    const isTargetPointAfterLastPoint = targetPoint > lastPoint
+    const isTargetPointBetweenPoints = this.isPointBetweenPoints(targetPoint)
+    const isTargetPointCloserToFirstPoint =
       isTargetPointBetweenPoints && targetPoint <= firstLastMiddle
-    const isTargetPointCloserToLastPoint: boolean =
+    const isTargetPointCloserToLastPoint =
       isTargetPointBetweenPoints && targetPoint > firstLastMiddle
 
     if (
@@ -140,13 +137,13 @@ class Track {
   }
 
   // TODO: probably it's not a good idea to register handles in the track explicitly
-  public registerHandles(handles: Handle[]) {
+  public registerHandles(handles: Handle[]): void {
     this.handles = handles
     this.firstHandle = this.handles[0]
     this.lastHandle = this.handles[this.handles.length - 1]
   }
 
-  public setActiveHandle(handle: Handle | null) {
+  public setActiveHandle(handle: Handle | null): void {
     this.activeHandle = handle
   }
 
