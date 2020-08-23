@@ -17,28 +17,8 @@ class Track {
     this.lastHandle = this.handles[this.handles.length - 1]
   }
 
-  private get stepSegment(): number {
-    return this.length / this.numberOfSteps
-  }
-
   private getNearStep(point: OneDimensionalSpacePoint): number {
     return Math.round(point / this.stepSegment)
-  }
-
-  public get leftBoundary(): number {
-    return 0
-  }
-
-  private get rightBoundary(): number {
-    return this.length
-  }
-
-  private get firstPointPosition(): OneDimensionalSpacePoint {
-    return this.firstHandle.position
-  }
-
-  public get lastPointPosition(): OneDimensionalSpacePoint {
-    return this.lastHandle.position
   }
 
   private isPointBetweenPoints(point: OneDimensionalSpacePoint): boolean {
@@ -69,7 +49,31 @@ class Track {
     return this.activeHandle === this.lastHandle && isPointBeforeFirstPoint
   }
 
-  public getAvailablePoint(
+  private isRangeMode(): boolean {
+    return this.handles.length === 2
+  }
+
+  private get stepSegment(): number {
+    return this.length / this.numberOfSteps
+  }
+
+  private get leftBoundary(): number {
+    return 0
+  }
+
+  private get rightBoundary(): number {
+    return this.length
+  }
+
+  private get firstPointPosition(): OneDimensionalSpacePoint {
+    return this.firstHandle.position
+  }
+
+  private get lastPointPosition(): OneDimensionalSpacePoint {
+    return this.lastHandle.position
+  }
+
+  getAvailablePoint(
     targetPoint: OneDimensionalSpacePoint
   ): OneDimensionalSpacePoint {
     const isPointCollidesWithLastPoint =
@@ -95,12 +99,8 @@ class Track {
     return availablePoint
   }
 
-  private isRangeMode(): boolean {
-    return this.handles.length === 2
-  }
-
   // TODO: improve naming
-  public getNearestPointIndex(targetPoint: OneDimensionalSpacePoint): number {
+  getNearestPointIndex(targetPoint: OneDimensionalSpacePoint): number {
     const firstPointIndex = 0
     const lastPointIndex = this.handles.length - 1
 
@@ -134,23 +134,23 @@ class Track {
     }
   }
 
-  public pointToRatio(point: OneDimensionalSpacePoint): Ratio {
+  pointToRatio(point: OneDimensionalSpacePoint): Ratio {
     return point / this.length
   }
 
-  public ratioToPoint(ratio: Ratio): OneDimensionalSpacePoint {
+  ratioToPoint(ratio: Ratio): OneDimensionalSpacePoint {
     return ratio * this.length
   }
 
-  public setActiveHandle(handle: Handle | null): void {
+  setActiveHandle(handle: Handle | null): void {
     this.activeHandle = handle
   }
 
-  public get rangeStartPosition(): OneDimensionalSpacePoint {
+  get rangeStartPosition(): OneDimensionalSpacePoint {
     return this.isRangeMode() ? this.firstHandle.position : this.leftBoundary
   }
 
-  public get rangeEndPosition(): OneDimensionalSpacePoint {
+  get rangeEndPosition(): OneDimensionalSpacePoint {
     return this.isRangeMode()
       ? this.lastHandle.position
       : this.firstHandle.position
