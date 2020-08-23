@@ -20,17 +20,20 @@ class Model extends Subject {
     // initialize the data
     this.data = new Data(options.min, options.max, options.step)
 
-    // initialize track class
-    this.track = new Track(this.data.numberOfSteps, options.trackLength)
-
     options.values.forEach((data) => {
       const dataRatio = this.data.getAmountAsRatio(data)
 
-      const coordinate: OneDimensionalSpacePoint = dataRatio * this.track.length
+      const coordinate: OneDimensionalSpacePoint =
+        dataRatio * this.options.trackLength
       this.handles.push(new Handle(coordinate))
     })
 
-    this.track.registerHandles(this.handles)
+    // initialize track class
+    this.track = new Track(
+      this.data.numberOfSteps,
+      options.trackLength,
+      this.handles
+    )
 
     // Optionally observer could be attached with class constructor
     if (observer) {

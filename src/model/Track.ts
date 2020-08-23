@@ -2,13 +2,19 @@ import { OneDimensionalSpacePoint, Ratio } from '../utils/aliases'
 import Handle from './Handle'
 
 class Track {
-  private handles: Handle[]
-  private activeHandle: Handle
+  private activeHandle: Handle | null
   private firstHandle: Handle
   private lastHandle: Handle
 
-  constructor(private numberOfSteps: number, public length: number) {
+  constructor(
+    private numberOfSteps: number,
+    public length: number,
+    private handles: Handle[]
+  ) {
     this.activeHandle = null
+    this.handles = handles
+    this.firstHandle = this.handles[0]
+    this.lastHandle = this.handles[this.handles.length - 1]
   }
 
   private get stepSegment(): number {
@@ -134,13 +140,6 @@ class Track {
 
   public ratioToPoint(ratio: Ratio): OneDimensionalSpacePoint {
     return ratio * this.length
-  }
-
-  // TODO: probably it's not a good idea to register handles in the track explicitly
-  public registerHandles(handles: Handle[]): void {
-    this.handles = handles
-    this.firstHandle = this.handles[0]
-    this.lastHandle = this.handles[this.handles.length - 1]
   }
 
   public setActiveHandle(handle: Handle | null): void {
