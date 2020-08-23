@@ -69,25 +69,24 @@ class Track {
     return this.lastHandle.position
   }
 
-  getAvailablePoint(targetPoint: number): number {
+  validatePoint(point: number): number {
     const isPointCollidesWithLastPoint =
-      this.isRangeMode() && this.isPointCollidesWithLastPoint(targetPoint)
+      this.isRangeMode() && this.isPointCollidesWithLastPoint(point)
 
     const isPointCollidesWithFirstPoint =
-      this.isRangeMode() && this.isPointCollidesWithFirstPoint(targetPoint)
+      this.isRangeMode() && this.isPointCollidesWithFirstPoint(point)
 
     if (isPointCollidesWithLastPoint) {
       return this.lastPointPosition
     } else if (isPointCollidesWithFirstPoint) {
       return this.firstPointPosition
-    } else if (this.isPointBeforeLeftBoundary(targetPoint)) {
+    } else if (this.isPointBeforeLeftBoundary(point)) {
       return this.leftBoundary
-    } else if (this.isPointAfterRightBoundary(targetPoint)) {
+    } else if (this.isPointAfterRightBoundary(point)) {
       return this.rightBoundary
     }
 
-    const availablePointRatio =
-      this.getNearStep(targetPoint) / this.numberOfSteps
+    const availablePointRatio = this.getNearStep(point) / this.numberOfSteps
     const availablePoint = availablePointRatio * this.length
 
     return availablePoint

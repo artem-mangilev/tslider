@@ -62,7 +62,7 @@ class Model extends Subject {
 
     this.track.setActiveHandle(activeHandle)
 
-    const availablePoint = this.track.getAvailablePoint(targetPoint)
+    const availablePoint = this.track.validatePoint(targetPoint)
 
     // this is just an optimisation to avoid dummy renders
     // (when nothing actually changes in the screen) in view
@@ -86,7 +86,7 @@ class Model extends Subject {
         const activeHandle = this.handles[activeHandleIndex]
         this.track.setActiveHandle(activeHandle)
 
-        const availablePoint = this.track.getAvailablePoint(trackPoint)
+        const availablePoint = this.track.validatePoint(trackPoint)
 
         activeHandle.position = availablePoint
 
@@ -96,7 +96,7 @@ class Model extends Subject {
           const valueRatio = this.data.getAmountAsRatio(value)
           const trackPoint = this.track.ratioToPoint(valueRatio)
 
-          const availablePoint = this.track.getAvailablePoint(trackPoint)
+          const availablePoint = this.track.validatePoint(trackPoint)
 
           this.handles[i].position = availablePoint
         })
