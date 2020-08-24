@@ -17,8 +17,12 @@ class Track {
     this.lastHandle = this.handles[this.handles.length - 1]
   }
 
-  private getNearStep(point: number): number {
-    return Math.round(point / this.stepSegment)
+  private getNearPoint(point: number): number {
+    const quotient = Math.floor(point / this.stepSegment)
+    const low = this.stepSegment * quotient
+    const high = this.stepSegment * (quotient + 1)
+
+    return Math.abs(point - low) < Math.abs(point - high) ? low : high
   }
 
   private isPointBetweenPoints(point: number): boolean {
@@ -86,10 +90,7 @@ class Track {
       return this.rightBoundary
     }
 
-    const availablePointRatio = this.getNearStep(point) / this.numberOfSteps
-    const availablePoint = availablePointRatio * this.length
-
-    return availablePoint
+    return this.getNearPoint(point)
   }
 
   // TODO: improve naming
