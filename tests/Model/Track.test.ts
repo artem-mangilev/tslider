@@ -43,14 +43,14 @@ describe('Track', () => {
       const point = track.validatePoint(-5)
 
       const validPoint = 0
-      expect(point).to.equal(validPoint) 
+      expect(point).to.equal(validPoint)
     })
 
     it('should return track length if point is higher than length', () => {
       const point = track.validatePoint(track.length + 10)
 
       const validPoint = track.length
-      expect(point).to.equal(validPoint) 
+      expect(point).to.equal(validPoint)
     })
 
     it('should return a point that equal to first handle position if last handle is active and number that lower than first handle position is passed', () => {
@@ -67,6 +67,37 @@ describe('Track', () => {
       const point = track.validatePoint(35)
 
       expect(point).to.equal(lastHandle.position)
+    })
+  })
+
+  describe('getNearestPointIndex', () => {
+    let steps,
+      length,
+      firstHandle: Handle,
+      lastHandle: Handle,
+      handles: Handle[],
+      track: Track
+
+    beforeEach(() => {
+      steps = 10
+      length = 100
+      firstHandle = new Handle(10)
+      lastHandle = new Handle(30)
+      handles = [firstHandle, lastHandle]
+
+      track = new Track(steps, length, handles)
+    })
+
+    it('should return index of first handle if input point is closer to it than to the second handle', () => {
+      const index = track.getNearestPointIndex(13)
+
+      expect(handles[index]).to.equal(firstHandle)
+    })
+
+    it('should return index of last handle if input point is closer to it than to the first handle', () => {
+      const index = track.getNearestPointIndex(25)
+
+      expect(handles[index]).to.equal(lastHandle)
     })
   })
 })

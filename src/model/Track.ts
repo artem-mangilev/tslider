@@ -17,16 +17,18 @@ class Track {
     this.lastHandle = this.handles[this.handles.length - 1]
   }
 
+  private getNearPointFromGroup(point: number, pointsGroup: number[]): number {
+    return pointsGroup.reduce((prev, curr) =>
+      Math.abs(curr - point) < Math.abs(prev - point) ? curr : prev
+    )
+  }
+
   private getNearPoint(point: number): number {
     const quotient = Math.floor(point / this.stepSegment)
     const low = this.stepSegment * quotient
     const high = this.stepSegment * (quotient + 1)
 
     return Math.abs(point - low) < Math.abs(point - high) ? low : high
-  }
-
-  private isPointBetweenPoints(point: number): boolean {
-    return point >= this.firstPointPosition && point <= this.lastPointPosition
   }
 
   private isPointBeforeLeftBoundary(point: number): boolean {
@@ -87,39 +89,11 @@ class Track {
     return this.getNearPoint(point)
   }
 
-  // TODO: improve naming
   getNearestPointIndex(targetPoint: number): number {
-    const firstPointIndex = 0
-    const lastPointIndex = this.handles.length - 1
+    const points = this.handles.map((handle) => handle.position)
+    const nearest = this.getNearPointFromGroup(targetPoint, points)
 
-    const firstPoint = this.firstHandle.position
-    const lastPoint = this.lastHandle.position
-
-    const firstLastMiddle = (lastPoint + firstPoint) / 2
-
-    const isTargetPointIsFirstPoint = targetPoint === firstPoint
-    const isTargetPointIsLastPoint = targetPoint === lastPoint
-    const isTargetPointBeforeFirstPoint = targetPoint < firstPoint
-    const isTargetPointAfterLastPoint = targetPoint > lastPoint
-    const isTargetPointBetweenPoints = this.isPointBetweenPoints(targetPoint)
-    const isTargetPointCloserToFirstPoint =
-      isTargetPointBetweenPoints && targetPoint <= firstLastMiddle
-    const isTargetPointCloserToLastPoint =
-      isTargetPointBetweenPoints && targetPoint > firstLastMiddle
-
-    if (
-      isTargetPointIsFirstPoint ||
-      isTargetPointBeforeFirstPoint ||
-      isTargetPointCloserToFirstPoint
-    ) {
-      return firstPointIndex
-    } else if (
-      isTargetPointIsLastPoint ||
-      isTargetPointAfterLastPoint ||
-      isTargetPointCloserToLastPoint
-    ) {
-      return lastPointIndex
-    }
+    return points.findIndex((point) => point === nearest)
   }
 
   pointToRatio(point: number): Ratio {
