@@ -17,10 +17,12 @@ class Track {
     this.lastHandle = this.handles[this.handles.length - 1]
   }
 
+  private getNear(n1: number, n2: number, testingPoint: number): number {
+    return Math.abs(testingPoint - n1) < Math.abs(testingPoint - n2) ? n1 : n2
+  }
+
   private getNearPointFromGroup(point: number, pointsGroup: number[]): number {
-    return pointsGroup.reduce((prev, curr) =>
-      Math.abs(curr - point) < Math.abs(prev - point) ? curr : prev
-    )
+    return pointsGroup.reduce((prev, curr) => this.getNear(prev, curr, point))
   }
 
   private getNearPoint(point: number): number {
@@ -28,7 +30,7 @@ class Track {
     const low = this.stepSegment * quotient
     const high = this.stepSegment * (quotient + 1)
 
-    return Math.abs(point - low) < Math.abs(point - high) ? low : high
+    return this.getNear(low, high, point)
   }
 
   private isPointBeforeLeftBoundary(point: number): boolean {
