@@ -74,15 +74,9 @@ class Track {
   }
 
   validatePoint(point: number): number {
-    const isPointCollidesWithLastPoint =
-      this.isRangeMode() && this.isPointCollidesWithLastPoint(point)
-
-    const isPointCollidesWithFirstPoint =
-      this.isRangeMode() && this.isPointCollidesWithFirstPoint(point)
-
-    if (isPointCollidesWithLastPoint) {
+    if (this.isPointCollidesWithLastPoint(point)) {
       return this.lastPointPosition
-    } else if (isPointCollidesWithFirstPoint) {
+    } else if (this.isPointCollidesWithFirstPoint(point)) {
       return this.firstPointPosition
     } else if (this.isPointBeforeLeftBoundary(point)) {
       return this.leftBoundary
