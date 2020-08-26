@@ -152,9 +152,9 @@ class Tslider implements Observer {
 
   public updateHandles(from: number, to?: number): void {
     if (to === undefined) {
-      this.model.updateValues(from)
+      this.model.updateValues([from])
     } else {
-      this.model.updateValues(from, to)
+      this.model.updateValues([from, to])
     }
   }
 }

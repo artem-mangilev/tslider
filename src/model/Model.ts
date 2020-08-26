@@ -73,7 +73,7 @@ class Model extends Subject {
     }
   }
 
-  public updateValues(...values: number[]): void {
+  public updateValues(values: number[]): void {
     // TODO: remove duplicated code
     switch (values.length) {
       case 1:
