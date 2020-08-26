@@ -7,17 +7,17 @@ import { ModelUpdateTypes } from './ModelUpdateTypes'
 import Track from './Track'
 import RulerSegment from '../RulerSegment'
 import Observer from '../utils/Observer'
-import ValuesToTrackLengthConverter from './ValuesRangeTrackConverter'
+import ValuesToTrackPointConverter from './ValuesToTrackPointConverter'
 
 class Model extends Subject {
   private track: Track
   private handles: Handle[] = []
-  private converter: ValuesToTrackLengthConverter
+  private converter: ValuesToTrackPointConverter
 
   constructor(private options: ModelOptions, observer?: Observer) {
     super()
 
-    this.converter = new ValuesToTrackLengthConverter(
+    this.converter = new ValuesToTrackPointConverter(
       options.min,
       options.max,
       options.step

@@ -1,4 +1,4 @@
-class ValuesToTrackLengthConverter {
+class ValuesToTrackPointConverter {
   constructor(
     private min: number,
     private max: number,
@@ -29,4 +29,4 @@ class ValuesToTrackLengthConverter {
   }
 }
 
-export default ValuesToTrackLengthConverter
+export default ValuesToTrackPointConverter
