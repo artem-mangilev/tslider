@@ -1,4 +1,3 @@
-import { Ratio } from '../utils/aliases'
 import Handle from './Handle'
 
 class Track {
@@ -96,14 +95,6 @@ class Track {
     const nearest = this.getNearPointFromGroup(targetPoint, points)
 
     return points.findIndex((point) => point === nearest)
-  }
-
-  pointToRatio(point: number): Ratio {
-    return point / this.length
-  }
-
-  ratioToPoint(ratio: Ratio): number {
-    return ratio * this.length
   }
 
   setActiveHandle(handle: Handle | null): void {
