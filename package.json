@@ -7,7 +7,9 @@
     "dev": "webpack-dev-server --config ./webpack/webpack.dev.config.js",
     "dev:open": "webpack-dev-server --open --config ./webpack/webpack.dev.config.js",
     "build": "webpack --config ./webpack/webpack.build.config.js",
-    "test": "cross-env TS_NODE_COMPILER_OPTIONS='{\\\"module\\\":\\\"commonjs\\\"}' mocha -r ts-node/register tests/**/*.test.ts"
+    "test": "cross-env TS_NODE_COMPILER_OPTIONS='{\\\"module\\\":\\\"commonjs\\\"}' mocha -r ts-node/register tests/**/*.test.ts",
+    "eslint": "eslint --cache --ext .js,.jsx,.ts,.tsx src",
+    "eslint:dump": "eslint --print-config ./.eslintrc.json"
   },
   "author": "Artem Mangilev",
   "license": "MIT",
