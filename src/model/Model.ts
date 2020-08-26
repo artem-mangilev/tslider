@@ -8,11 +8,13 @@ import Track from './Track'
 import RulerSegment from '../RulerSegment'
 import Observer from '../utils/Observer'
 import ValuesToTrackPointConverter from './ValuesToTrackPointConverter'
+import Ruler from './Ruler'
 
 class Model extends Subject {
   private track: Track
   private handles: Handle[] = []
   private converter: ValuesToTrackPointConverter
+  private _ruler: Ruler
 
   constructor(private options: ModelOptions, observer?: Observer) {
     super()
@@ -33,6 +35,8 @@ class Model extends Subject {
       options.trackLength,
       this.handles
     )
+
+    this._ruler = new Ruler(this.track, this.converter)
 
     if (observer) {
       this.attach(observer)
@@ -135,25 +139,8 @@ class Model extends Subject {
     )
   }
 
-  public get ruler(): RulerSegment[] {
-    const trackStep: number = this.track.length / this.options.rulerSteps
-
-    const _ruler = []
-
-    let currentTrackStep: number = 0
-
-    for (let i = 0; i <= this.options.rulerSteps; i++) {
-      const value = this.converter.toValue(currentTrackStep, this.track.length)
-
-      _ruler.push({
-        point: currentTrackStep,
-        value,
-      })
-
-      currentTrackStep += trackStep
-    }
-
-    return _ruler
+  get ruler(): RulerSegment[] {
+    return this._ruler.getSegments(this.options.rulerSteps)
   }
 
   // TODO: state should be covered with types
