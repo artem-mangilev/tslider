@@ -71,8 +71,8 @@ describe('Track', () => {
   })
 
   describe('getNearestPointIndex', () => {
-    let steps,
-      length,
+    let steps: number,
+      length: number,
       firstHandle: Handle,
       lastHandle: Handle,
       handles: Handle[],
@@ -98,6 +98,16 @@ describe('Track', () => {
       const index = track.getNearestPointIndex(25)
 
       expect(handles[index]).to.equal(lastHandle)
+    })
+
+    it('should return index of single handle if there is one handle', () => {
+      handles = [new Handle(10)]
+      track = new Track(steps, length, handles)
+
+      const index = track.getNearestPointIndex(50)
+
+
+      expect(handles[index]).to.equal(handles[0])
     })
   })
 })
