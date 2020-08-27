@@ -117,7 +117,7 @@ class Tslider implements Observer {
     const updateLine = model.updateLine.bind(model)
     this.view.onTrackLengthChanged(updateLine)
 
-    const updateValues = model.updateValues.bind(model)
+    const updateValues = model.updateHandlesByValues.bind(model)
     this.view.onInputUpdate(updateValues)
 
     if (this.rulerFlag) {
@@ -152,9 +152,9 @@ class Tslider implements Observer {
 
   public updateHandles(from: number, to?: number): void {
     if (to === undefined) {
-      this.model.updateValues([from])
+      this.model.updateHandlesByValues([from])
     } else {
-      this.model.updateValues([from, to])
+      this.model.updateHandlesByValues([from, to])
     }
   }
 }

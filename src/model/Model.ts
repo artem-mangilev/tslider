@@ -75,34 +75,16 @@ class Model extends Subject {
     }
   }
 
-  public updateValues(values: number[]): void {
-    // TODO: remove duplicated code
-    switch (values.length) {
-      case 1:
-        const [from] = values
-
-        const point = this.converter.toTrackPoint(from, this.track.length)
-
-        const activeHandleIndex = this.track.getNearestPointIndex(point)
-        const activeHandle = this.handles[activeHandleIndex]
-        this.track.setActiveHandle(activeHandle)
+  public updateHandlesByValues(values: number[]): void {
+    this.handles.forEach((handle, i) => {
+      if (values[i] !== undefined) {
+        const point = this.converter.toTrackPoint(values[i], this.track.length)
 
         const availablePoint = this.track.validatePoint(point)
 
-        activeHandle.position = availablePoint
-
-        break
-      case 2:
-        values.forEach((value, i) => {
-          const point = this.converter.toTrackPoint(value, this.track.length)
-
-          const availablePoint = this.track.validatePoint(point)
-
-          this.handles[i].position = availablePoint
-        })
-
-        break
-    }
+        handle.position = availablePoint
+      }
+    })
 
     this.notify(ModelUpdateTypes.Slide, this.getState)
   }
@@ -129,7 +111,7 @@ class Model extends Subject {
     return this.track.rangeEndPosition
   }
 
-  private get handlePositions(): OneDimensionalSpacePoint[] {
+  get handlePositions(): OneDimensionalSpacePoint[] {
     return this.handles.map((handle) => handle.position)
   }
 
