@@ -43,13 +43,21 @@ class Track {
   private isPointCollidesWithLastPoint(point: number): boolean {
     const isPointAfterLastPoint = point > this.lastHandle.position
 
-    return this.activeHandle === this.firstHandle && isPointAfterLastPoint
+    return (
+      this.isRangeMode() &&
+      this.activeHandle === this.firstHandle &&
+      isPointAfterLastPoint
+    )
   }
 
   private isPointCollidesWithFirstPoint(point: number): boolean {
     const isPointBeforeFirstPoint = point < this.firstHandle.position
 
-    return this.activeHandle === this.lastHandle && isPointBeforeFirstPoint
+    return (
+      this.isRangeMode() &&
+      this.activeHandle === this.lastHandle &&
+      isPointBeforeFirstPoint
+    )
   }
 
   private isRangeMode(): boolean {

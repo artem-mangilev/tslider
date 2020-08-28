@@ -4,7 +4,7 @@ import Track from '../../src/model/Track'
 import Handle from '../../src/model/Handle'
 
 describe('Track', () => {
-  describe('validatePoint', () => {
+  describe('validatePoint in range mode', () => {
     let steps, length, firstHandle: Handle, lastHandle: Handle, track: Track
 
     beforeEach(() => {
@@ -67,6 +67,42 @@ describe('Track', () => {
       const point = track.validatePoint(35)
 
       expect(point).to.equal(lastHandle.position)
+    })
+  })
+
+  describe('validatePoint in pick single value mode', () => {
+    let steps, length, firstHandle: Handle, track: Track
+
+    beforeEach(() => {
+      steps = 10
+      length = 100
+      firstHandle = new Handle(10)
+      track = new Track(steps, length, [firstHandle])
+    })
+
+    it('should return a higher valid point', () => {
+      const pointThatCloseToHigherValidPoint = 18
+      const point = track.validatePoint(pointThatCloseToHigherValidPoint)
+
+      const validPoint = 20
+      expect(point).to.equal(validPoint)
+    })
+
+    it('should return a lower valid point', () => {
+      const pointThatCloseToLowerValidPoint = 13
+      const point = track.validatePoint(pointThatCloseToLowerValidPoint)
+
+      const validPoint = 10
+      expect(point).to.equal(validPoint)
+    })
+
+    it('should return a valid point if active handle selected', () => {
+      track.setActiveHandle(firstHandle)
+      const pointThatCloseToHigherValidPoint = 18
+      const point = track.validatePoint(pointThatCloseToHigherValidPoint)
+
+      const validPoint = 20
+      expect(point).to.equal(validPoint)
     })
   })
 
