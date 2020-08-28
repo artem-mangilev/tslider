@@ -108,11 +108,12 @@ class Tslider implements Observer {
   private handleInitializationAction(model: Model): void {
     // the arguments of view events maps to arguments of moveHandle, so
     // we could just set move handle as a callback for view events
-    const updatePoint = model.updatePoint.bind(model)
+    const updateHandle = model.updateHandle.bind(model)
     // when user clicks to some area of the track, move the handle at this position
-    this.view.onTrackClick(updatePoint)
+    this.view.onTrackClick(updateHandle)
+    const updateHandlesByIndex = model.updateHandleByIndex.bind(model)
     // when the user dragged the handle, move it to apropriate position
-    this.view.onHandleDrag(updatePoint)
+    this.view.onHandleDrag(updateHandlesByIndex)
 
     const updateLine = model.updateLine.bind(model)
     this.view.onTrackLengthChanged(updateLine)

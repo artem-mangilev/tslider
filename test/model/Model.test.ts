@@ -67,4 +67,61 @@ describe('Model', () => {
       expect(model.handlePositions[2]).to.be.undefined
     })
   })
+
+  describe('updateHandle', () => {
+    let model: Model
+
+    beforeEach(() => {
+      model = new Model({
+        min: 0,
+        max: 10,
+        step: 1,
+        trackLength: 100,
+        rulerSteps: 1,
+        values: [5, 7],
+      })
+    })
+
+    it('should set handle with smallest position (from two) to new position', () => {
+      model.updateHandle(57)
+
+      expect(model.handlePositions[0]).to.equal(60)
+      expect(model.handlePositions[1]).to.equal(70)
+    })
+
+    it('should set handle with biggest position (from two) to new position', () => {
+      model.updateHandle(63)
+
+      expect(model.handlePositions[0]).to.equal(50)
+      expect(model.handlePositions[1]).to.equal(60)
+    })
+  })
+
+  describe('updateHandleByIndex', () => {
+    let model: Model
+
+    beforeEach(() => {
+      model = new Model({
+        min: 0,
+        max: 10,
+        step: 1,
+        trackLength: 100,
+        rulerSteps: 1,
+        values: [5, 7],
+      })
+    })
+
+    it('should set handle with specifit index to new position', () => {
+      model.updateHandleByIndex(63, 0)
+
+      expect(model.handlePositions[0]).to.equal(60)
+      expect(model.handlePositions[1]).to.equal(70)
+    })
+
+    it('should ignore invalid indexes', () => {
+      model.updateHandleByIndex(63, 5)
+
+      expect(model.handlePositions[5]).to.be.undefined
+    })
+  })
 })

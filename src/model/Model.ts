@@ -49,27 +49,27 @@ class Model extends Subject {
     }
   }
 
-  public updatePoint(
-    targetPoint: OneDimensionalSpacePoint,
-    handleIndex?: number
-  ): void {
-    // these condition help the Model to decide should it compute which handle should be used,
-    // or use a provided handleIndex
-    let activeHandleIndex =
-      handleIndex === undefined
-        ? this.track.getNearestPointIndex(targetPoint)
-        : handleIndex
+  updateHandle(point: number): void {
+    const handle = this.handles[this.track.getNearestPointIndex(point)]
+    this.track.setActiveHandle(handle)
+    const availablePoint = this.track.validatePoint(point)
 
-    const activeHandle = this.handles[activeHandleIndex]
+    if (availablePoint !== handle.position) {
+      handle.position = availablePoint
 
-    this.track.setActiveHandle(activeHandle)
+      this.notify(ModelUpdateTypes.Slide, this.getState)
+    }
+  }
 
-    const availablePoint = this.track.validatePoint(targetPoint)
+  updateHandleByIndex(point: number, index: number): void {
+    if (!this.handles[index]) return
 
-    // this is just an optimisation to avoid dummy renders
-    // (when nothing actually changes in the screen) in view
-    if (availablePoint !== activeHandle.position) {
-      activeHandle.position = availablePoint
+    const handle = this.handles[index]
+    this.track.setActiveHandle(handle)
+    const availablePoint = this.track.validatePoint(point)
+
+    if (availablePoint !== handle.position) {
+      handle.position = availablePoint
 
       this.notify(ModelUpdateTypes.Slide, this.getState)
     }
