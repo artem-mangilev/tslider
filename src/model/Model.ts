@@ -1,5 +1,3 @@
-import { OneDimensionalSpacePoint, Ratio } from '../utils/aliases'
-import Point from '../utils/Point'
 import Subject from '../utils/Subject'
 import Handle from './Handle'
 import ModelOptions from './ModelOptions'
@@ -100,15 +98,15 @@ class Model extends Subject {
     this.notify(ModelUpdateTypes.Slide)
   }
 
-  get rangeStartPosition(): OneDimensionalSpacePoint {
+  get rangeStartPosition(): number {
     return this.track.rangeStartPosition
   }
 
-  get rangeEndPosition(): OneDimensionalSpacePoint {
+  get rangeEndPosition(): number {
     return this.track.rangeEndPosition
   }
 
-  get handlePositions(): OneDimensionalSpacePoint[] {
+  get handlePositions(): number[] {
     return this.handles.map((handle) => handle.position)
   }
 
