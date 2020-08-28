@@ -79,10 +79,7 @@ class Model extends Subject {
     this.handles.forEach((handle, i) => {
       if (values[i] !== undefined) {
         const point = this.converter.toTrackPoint(values[i], this.track.length)
-
-        const availablePoint = this.track.validatePoint(point)
-
-        handle.position = availablePoint
+        handle.position = this.track.validatePoint(point)
       }
     })
 
