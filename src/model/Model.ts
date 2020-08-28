@@ -41,11 +41,11 @@ class Model extends Subject {
     if (observer) {
       this.attach(observer)
 
-      this.notify(ModelUpdateTypes.Initialization, this.getState)
+      this.notify(ModelUpdateTypes.Initialization)
       // make the initial draw of the slider
       // TODO: by this call, model could assume that the view couldn't draw the slider in initialization step,
       // so find the better way to make iniital draw
-      this.notify(ModelUpdateTypes.Slide, this.getState)
+      this.notify(ModelUpdateTypes.Slide)
     }
   }
 
@@ -57,7 +57,7 @@ class Model extends Subject {
     if (availablePoint !== handle.position) {
       handle.position = availablePoint
 
-      this.notify(ModelUpdateTypes.Slide, this.getState)
+      this.notify(ModelUpdateTypes.Slide)
     }
   }
 
@@ -71,7 +71,7 @@ class Model extends Subject {
     if (availablePoint !== handle.position) {
       handle.position = availablePoint
 
-      this.notify(ModelUpdateTypes.Slide, this.getState)
+      this.notify(ModelUpdateTypes.Slide)
     }
   }
 
@@ -83,7 +83,7 @@ class Model extends Subject {
       }
     })
 
-    this.notify(ModelUpdateTypes.Slide, this.getState)
+    this.notify(ModelUpdateTypes.Slide)
   }
 
   // TODO: bad method name, model shouldn't know about slider resizing
@@ -97,14 +97,14 @@ class Model extends Subject {
     this.track.length = lineLength
 
     // TODO: current method needs another update type
-    this.notify(ModelUpdateTypes.Slide, this.getState)
+    this.notify(ModelUpdateTypes.Slide)
   }
 
-  private get rangeStartPosition(): OneDimensionalSpacePoint {
+  get rangeStartPosition(): OneDimensionalSpacePoint {
     return this.track.rangeStartPosition
   }
 
-  private get rangeEndPosition(): OneDimensionalSpacePoint {
+  get rangeEndPosition(): OneDimensionalSpacePoint {
     return this.track.rangeEndPosition
   }
 
@@ -112,7 +112,7 @@ class Model extends Subject {
     return this.handles.map((handle) => handle.position)
   }
 
-  private get values(): number[] {
+  get values(): number[] {
     return this.handlePositions.map((position) =>
       Math.round(this.converter.toValue(position, this.track.length))
     )
@@ -120,23 +120,6 @@ class Model extends Subject {
 
   get ruler(): RulerSegment[] {
     return this._ruler.getSegments(this.options.rulerSteps)
-  }
-
-  // TODO: state should be covered with types
-  // TODO: Subject should require the presence of this method in Model
-  private getState = (updateType: number): any => {
-    switch (updateType) {
-      case ModelUpdateTypes.Initialization:
-        return this
-      case ModelUpdateTypes.Slide:
-        return {
-          handlePositions: this.handlePositions,
-          values: this.values,
-          rangeStartPosition: this.rangeStartPosition,
-          rangeEndPosition: this.rangeEndPosition,
-          ruler: this.ruler,
-        }
-    }
   }
 }
 

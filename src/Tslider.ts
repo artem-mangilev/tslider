@@ -136,7 +136,7 @@ class Tslider implements Observer {
     rangeEndPosition,
     values,
     ruler,
-  }: any): void {
+  }: Model): void {
     this.view.slideTo(handlePositions)
 
     // TODO: find the way to hide this functionality back to slideTo
