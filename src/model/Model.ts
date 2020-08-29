@@ -73,7 +73,7 @@ class Model extends Subject {
     }
   }
 
-  public updateHandlesByValues(values: number[]): void {
+  updateHandlesByValues(values: number[]): void {
     this.handles.forEach((handle, i) => {
       if (values[i] !== undefined) {
         const point = this.converter.toTrackPoint(values[i], this.track.length)
