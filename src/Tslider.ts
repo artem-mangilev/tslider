@@ -115,8 +115,8 @@ class Tslider implements Observer {
     // when the user dragged the handle, move it to apropriate position
     this.view.onHandleDrag(updateHandlesByIndex)
 
-    const updateLine = model.updateLine.bind(model)
-    this.view.onTrackLengthChanged(updateLine)
+    const resize = model.resize.bind(model)
+    this.view.onTrackLengthChanged(resize)
 
     const updateValues = model.updateHandlesByValues.bind(model)
     this.view.onInputUpdate(updateValues)

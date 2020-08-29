@@ -124,4 +124,27 @@ describe('Model', () => {
       expect(model.handlePositions[5]).to.be.undefined
     })
   })
+
+  describe('resize', () => {
+    let model: Model
+
+    beforeEach(() => {
+      model = new Model({
+        min: 0,
+        max: 10,
+        step: 1,
+        trackLength: 100,
+        rulerSteps: 1,
+        values: [5, 7],
+      })
+    })
+
+
+    it('should recalculate handle positions according to new track length', () => {
+      model.resize(200)
+
+      expect(model.handlePositions[0]).to.equal(100)
+      expect(model.handlePositions[1]).to.equal(140)
+    })
+  })
 })

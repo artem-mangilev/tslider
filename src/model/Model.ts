@@ -84,15 +84,13 @@ class Model extends Subject {
     this.notify(ModelUpdateTypes.Slide)
   }
 
-  // TODO: bad method name, model shouldn't know about slider resizing
-  public updateLine(lineLength: number): void {
+  resize(trackLength: number): void {
     this.values.forEach((value, i) => {
-      const coordinate = this.converter.toTrackPoint(value, lineLength)
-
-      this.handles[i].position = coordinate
+      const point = this.converter.toTrackPoint(value, trackLength)
+      this.handles[i].position = point
     })
 
-    this.track.length = lineLength
+    this.track.length = trackLength
 
     // TODO: current method needs another update type
     this.notify(ModelUpdateTypes.Slide)
