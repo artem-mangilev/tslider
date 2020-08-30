@@ -25,13 +25,13 @@ export default class ViewTreeNode {
     this.$elem.css('height', `${newHeight}px`)
   }
 
-  public get position(): Point {
+  get position(): Point {
     const { x, y } = this.$elem[0].getBoundingClientRect()
 
     return { x, y }
   }
 
-  public add(...nodes: ViewTreeNode[]): ViewTreeNode {
+  add(...nodes: ViewTreeNode[]): ViewTreeNode {
     nodes.forEach((node) => {
       if (node) {
         this.$elem.append(node.$elem)
