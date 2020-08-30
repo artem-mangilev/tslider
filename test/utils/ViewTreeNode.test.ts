@@ -51,5 +51,17 @@ describe('ViewTreeNode', () => {
       expect(pos.y).not.to.be.null
     })
   })
+
+  describe('add', () => {
+    it('should add child nodes to node', () => {
+      const node = new ViewTreeNode('div', 'some-name')
+      const child = new ViewTreeNode('div', 'child')
+
+      node.add(child)
+
+      const childExists = !!node.$elem.has('.child').length
+
+      expect(childExists).to.be.true
+    })
   })
 })
