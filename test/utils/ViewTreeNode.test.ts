@@ -15,6 +15,14 @@ describe('ViewTreeNode', () => {
 
       expect(node.width).not.to.be.null
     })
+
+    it('should set a new width', () => {
+      const node = new ViewTreeNode('div', 'some-name')
+
+      node.width = 10
+
+      expect(node.width).equal(10)
+    })
   })
 
   describe('height', () => {
@@ -23,5 +31,25 @@ describe('ViewTreeNode', () => {
 
       expect(node.height).not.to.be.null
     })
+
+    it('should set a new height', () => {
+      const node = new ViewTreeNode('div', 'some-name')
+
+      node.height = 10
+
+      expect(node.height).equal(10)
+    })
+  })
+
+  describe('position', () => {
+    it('should provide a position of node', () => {
+      const node = new ViewTreeNode('div', 'some-name')
+
+      const pos = node.position
+
+      expect(pos.x).not.to.be.null
+      expect(pos.y).not.to.be.null
+    })
+  })
   })
 })
