@@ -6,19 +6,8 @@ class Handle extends ViewTreeNode {
     super('div', className)
   }
 
-  get size(): number {
-    const width = this.$elem.outerWidth()
-    const height = this.$elem.outerHeight()
-
-    if (width === height) {
-      return width
-    }
-
-    throw 'Width and height of the handle have to be the same.'
-  }
-
-  public move(position: Point): void {
-    const middle = this.size / 2
+  move(position: Point): void {
+    const middle = this.width / 2
 
     this.$elem.css(
       'transform',
