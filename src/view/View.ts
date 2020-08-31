@@ -93,17 +93,16 @@ class View {
   }
 
   // TODO: if both handles at max point, drag doesn't work
-  public slideTo(handlePositions: OneDimensionalSpacePoint[]): void {
-    const newHandlePositions = handlePositions.map((position) =>
-      // TODO: now I have no clue how type checking works for computed properties, so I just turn it off
-      // @ts-ignore
-      this.changeDirection({
-        [this.x]: position,
-        [this.y]: this.track[this.shortSide] / 2,
-      })
-    )
-    // move the handles
-    newHandlePositions.forEach((position, i) => this.handles[i].move(position))
+  slideTo(handlePositions: number[]): void {
+    handlePositions
+      .map((position) =>
+        // @ts-ignore
+        this.changeDirection({
+          [this.x]: position,
+          [this.y]: this.track[this.shortSide] / 2,
+        })
+      )
+      .forEach((position, i) => this.handles[i].move(position))
   }
 
   public updateInput(data: string): void {
