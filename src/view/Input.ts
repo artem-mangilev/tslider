@@ -9,7 +9,7 @@ class Input {
     this.input.hidden = hide
   }
 
-  public setValue(value: string): void {
+  setValue(value: string): void {
     this.input.value = value
   }
 }
