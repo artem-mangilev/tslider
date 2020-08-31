@@ -40,4 +40,8 @@ export default class ViewTreeNode {
 
     return this
   }
+
+  move(position: Point): void {
+    this.$elem.css('transform', `translate(${position.x}px, ${position.y}px)`)
+  }
 }
