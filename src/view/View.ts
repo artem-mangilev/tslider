@@ -143,7 +143,7 @@ class View {
       })
 
       // TODO: combine updateData with move, because these methods depends on each other (this should be placed BEFORE move)
-      label.updateData(data[i].toString())
+      label.setContent(data[i].toString())
 
       // label should be placed in the middle of handle
       const middle = label[this.longSide] / 2
@@ -163,7 +163,9 @@ class View {
       lastLabel.$elem.css('visibility', 'hidden')
 
       // the temp label should show the data of both labels
-      this.tempLabel.updateData(`${firstLabel.data} - ${lastLabel.data}`)
+      this.tempLabel.setContent(
+        `${firstLabel.getContent()} - ${lastLabel.getContent()}`
+      )
       this.tempLabel.$elem.css('visibility', 'visible')
 
       const rangePosition =
@@ -214,7 +216,7 @@ class View {
     ruler.forEach((segment) => {
       const node = new RulerNode('tslider__ruler-node')
 
-      node.value = segment.value.toString()
+      node.setContent(segment.value.toString())
 
       // @ts-ignore
       node.move({
@@ -323,7 +325,7 @@ class View {
       )
 
       if (targetRulerNode) {
-        handler(Number(targetRulerNode.value))
+        handler(Number(targetRulerNode.getContent()))
       }
     }
   }

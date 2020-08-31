@@ -64,4 +64,25 @@ describe('ViewTreeNode', () => {
       expect(childExists).to.be.true
     })
   })
+
+  describe('setContent', () => {
+    it('should set new value to this element', () => {
+      const node = new ViewTreeNode('div', 'some-name')
+
+      node.setContent('test data')
+
+      expect(node.$elem.text()).to.equal('test data')
+    })
+  })
+
+  describe('getContent', () => {
+    it('should get the value', () => {
+      const node = new ViewTreeNode('div', 'some-name')
+      node.setContent('test data')
+
+      const value = node.getContent()
+
+      expect(value).to.equal('test data')
+    })
+  })
 })
