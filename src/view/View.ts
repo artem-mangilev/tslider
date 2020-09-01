@@ -88,10 +88,6 @@ class View {
     this.inputValuesSeparator = inputValuesSeparator
   }
 
-  public get trackLength(): number {
-    return this.track[this.longSide]
-  }
-
   getTrackWidth(): number {
     return this.track[this.longSide]
   }

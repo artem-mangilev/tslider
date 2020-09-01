@@ -70,11 +70,9 @@ class Tslider implements Observer {
     // initialize the View
     this.view = new View(viewOptions)
 
-    const trackLength = this.view.trackLength
-
     // if the step isn't provided, the step is 1/100 of track length
     if (step === undefined) {
-      step = trackLength / 100
+      step = this.view.getTrackWidth() / 100
     }
 
     // the Model needs an additional data
@@ -82,7 +80,6 @@ class Tslider implements Observer {
       max,
       min,
       step,
-      trackLength,
       rulerSteps,
       values: rangeValues,
       trackWidth: this.view.getTrackWidth(),
