@@ -3,6 +3,8 @@ export default interface ModelOptions {
   max: number
   min: number
   trackLength: number
+  trackWidth: number
+  trackHeight: number
   rulerSteps: number
   values: number[]
 }

@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import 'mocha'
 import Track from '../../src/model/Track'
-import Handle from '../../src/model/Handle'
+import Handle from '../../src/model/HandleX'
 
 describe('Track', () => {
   describe('validatePoint in range mode', () => {
@@ -58,7 +58,7 @@ describe('Track', () => {
 
       const point = track.validatePoint(5)
 
-      expect(point).to.equal(firstHandle.position)
+      expect(point).to.equal(firstHandle.getPosition())
     })
 
     it('should return a point that equal to last handle position if first handle is active and number that greater than last handle position is passed', () => {
@@ -66,7 +66,7 @@ describe('Track', () => {
 
       const point = track.validatePoint(35)
 
-      expect(point).to.equal(lastHandle.position)
+      expect(point).to.equal(lastHandle.getPosition())
     })
   })
 

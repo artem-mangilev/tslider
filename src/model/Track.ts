@@ -1,4 +1,4 @@
-import Handle from './Handle'
+import Handle from './HandleX'
 
 class Track {
   private activeHandle: Handle | null
@@ -41,7 +41,7 @@ class Track {
   }
 
   private isPointCollidesWithLastPoint(point: number): boolean {
-    const isPointAfterLastPoint = point > this.lastHandle.position
+    const isPointAfterLastPoint = point > this.lastHandle.getPosition()
 
     return (
       this.isRangeMode() &&
@@ -51,7 +51,7 @@ class Track {
   }
 
   private isPointCollidesWithFirstPoint(point: number): boolean {
-    const isPointBeforeFirstPoint = point < this.firstHandle.position
+    const isPointBeforeFirstPoint = point < this.firstHandle.getPosition()
 
     return (
       this.isRangeMode() &&
@@ -77,11 +77,11 @@ class Track {
   }
 
   private get firstPointPosition(): number {
-    return this.firstHandle.position
+    return this.firstHandle.getPosition()
   }
 
   private get lastPointPosition(): number {
-    return this.lastHandle.position
+    return this.lastHandle.getPosition()
   }
 
   validatePoint(point: number): number {
@@ -99,7 +99,7 @@ class Track {
   }
 
   getNearestPointIndex(targetPoint: number): number {
-    const points = this.handles.map((handle) => handle.position)
+    const points = this.handles.map((handle) => handle.getPosition())
     const nearest = this.getNearPointFromGroup(targetPoint, points)
 
     return points.findIndex((point) => point === nearest)
@@ -110,13 +110,13 @@ class Track {
   }
 
   get rangeStartPosition(): number {
-    return this.isRangeMode() ? this.firstHandle.position : this.leftBoundary
+    return this.isRangeMode() ? this.firstHandle.getPosition() : this.leftBoundary
   }
 
   get rangeEndPosition(): number {
     return this.isRangeMode()
-      ? this.lastHandle.position
-      : this.firstHandle.position
+      ? this.lastHandle.getPosition()
+      : this.firstHandle.getPosition()
   }
 }
 

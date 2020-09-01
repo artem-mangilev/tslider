@@ -14,19 +14,21 @@ describe('Model', () => {
         trackLength: 100,
         rulerSteps: 1,
         values: [5],
+        trackWidth: 100,
+        trackHeight: 10,
       })
     })
 
     it('should set 1st handle position if one value passed', () => {
       model.updateHandlesByValues([6])
 
-      expect(model.handlePositions[0]).to.equal(60)
+      expect(model.handlePositions[0]).to.eql({ x: 60, y: 5 })
     })
 
     it('should ignore the values after first one', () => {
       model.updateHandlesByValues([6, 7])
 
-      expect(model.handlePositions[0]).to.equal(60)
+      expect(model.handlePositions[0]).to.eql({ x: 60, y: 5 })
       expect(model.handlePositions[1]).to.be.undefined
     })
   })
@@ -42,28 +44,30 @@ describe('Model', () => {
         trackLength: 100,
         rulerSteps: 1,
         values: [5, 9],
+        trackWidth: 100,
+        trackHeight: 10,
       })
     })
 
     it('should set 1st handle position if one value passed', () => {
       model.updateHandlesByValues([6])
 
-      expect(model.handlePositions[0]).to.equal(60)
-      expect(model.handlePositions[1]).to.equal(90)
+      expect(model.handlePositions[0]).to.eql({ x: 60, y: 5 })
+      expect(model.handlePositions[1]).to.eql({ x: 90, y: 5 })
     })
 
     it('should set both handle positions if two values passed', () => {
       model.updateHandlesByValues([6, 7])
 
-      expect(model.handlePositions[0]).to.equal(60)
-      expect(model.handlePositions[1]).to.equal(70)
+      expect(model.handlePositions[0]).to.eql({ x: 60, y: 5 })
+      expect(model.handlePositions[1]).to.eql({ x: 70, y: 5 })
     })
 
     it('should ignore values after second one', () => {
       model.updateHandlesByValues([6, 7, 8])
 
-      expect(model.handlePositions[0]).to.equal(60)
-      expect(model.handlePositions[1]).to.equal(70)
+      expect(model.handlePositions[0]).to.eql({ x: 60, y: 5 })
+      expect(model.handlePositions[1]).to.eql({ x: 70, y: 5 })
       expect(model.handlePositions[2]).to.be.undefined
     })
   })
@@ -79,21 +83,23 @@ describe('Model', () => {
         trackLength: 100,
         rulerSteps: 1,
         values: [5, 7],
+        trackWidth: 100,
+        trackHeight: 10,
       })
     })
 
     it('should set handle with smallest position (from two) to new position', () => {
       model.updateHandle(57)
 
-      expect(model.handlePositions[0]).to.equal(60)
-      expect(model.handlePositions[1]).to.equal(70)
+      expect(model.handlePositions[0]).to.eql({ x: 60, y: 5 })
+      expect(model.handlePositions[1]).to.eql({ x: 70, y: 5 })
     })
 
     it('should set handle with biggest position (from two) to new position', () => {
       model.updateHandle(63)
 
-      expect(model.handlePositions[0]).to.equal(50)
-      expect(model.handlePositions[1]).to.equal(60)
+      expect(model.handlePositions[0]).to.eql({ x: 50, y: 5 })
+      expect(model.handlePositions[1]).to.eql({ x: 60, y: 5 })
     })
   })
 
@@ -108,14 +114,16 @@ describe('Model', () => {
         trackLength: 100,
         rulerSteps: 1,
         values: [5, 7],
+        trackWidth: 100,
+        trackHeight: 10,
       })
     })
 
     it('should set handle with specifit index to new position', () => {
       model.updateHandleByIndex(63, 0)
 
-      expect(model.handlePositions[0]).to.equal(60)
-      expect(model.handlePositions[1]).to.equal(70)
+      expect(model.handlePositions[0]).to.eql({ x: 60, y: 5 })
+      expect(model.handlePositions[1]).to.eql({ x: 70, y: 5 })
     })
 
     it('should ignore invalid indexes', () => {
@@ -136,15 +144,16 @@ describe('Model', () => {
         trackLength: 100,
         rulerSteps: 1,
         values: [5, 7],
+        trackWidth: 100,
+        trackHeight: 10,
       })
     })
-
 
     it('should recalculate handle positions according to new track length', () => {
       model.resize(200)
 
-      expect(model.handlePositions[0]).to.equal(100)
-      expect(model.handlePositions[1]).to.equal(140)
+      expect(model.handlePositions[0]).to.eql({ x: 100, y: 5 })
+      expect(model.handlePositions[1]).to.eql({ x: 140, y: 5 })
     })
   })
 })

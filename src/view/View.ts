@@ -92,16 +92,18 @@ class View {
     return this.track[this.longSide]
   }
 
+  getTrackWidth(): number {
+    return this.track[this.longSide]
+  }
+
+  getTrackHeight(): number {
+    return this.track[this.shortSide]
+  }
+
   // TODO: if both handles at max point, drag doesn't work
-  slideTo(handlePositions: number[]): void {
+  slideTo(handlePositions: Point[]): void {
     handlePositions
-      .map((position) =>
-        // @ts-ignore
-        this.changeDirection({
-          [this.x]: position,
-          [this.y]: this.track[this.shortSide] / 2,
-        })
-      )
+      .map((pos) => this.changeDirection({ x: pos[this.x], y: pos[this.y] }))
       .forEach((position, i) => this.handles[i].move(position))
   }
 

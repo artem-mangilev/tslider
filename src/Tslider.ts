@@ -85,6 +85,8 @@ class Tslider implements Observer {
       trackLength,
       rulerSteps,
       values: rangeValues,
+      trackWidth: this.view.getTrackWidth(),
+      trackHeight: this.view.getTrackHeight()
     }
 
     // initialize the Model and attach this class to Model as observer of changes
@@ -142,7 +144,7 @@ class Tslider implements Observer {
     // TODO: find the way to hide this functionality back to slideTo
     this.view.updateRange([rangeStartPosition, rangeEndPosition])
 
-    this.view.updateLabels(handlePositions, values)
+    this.view.updateLabels(handlePositions.map((position) => position.x), values)
 
     if (this.rulerFlag) {
       this.view.updateRuler(ruler)
