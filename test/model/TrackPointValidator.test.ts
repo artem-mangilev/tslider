@@ -1,18 +1,25 @@
 import { expect } from 'chai'
 import 'mocha'
-import Track from '../../src/model/Track'
+import TrackPointValidator from '../../src/model/TrackPointValidator'
 import Handle from '../../src/model/HandleX'
 
-describe('Track', () => {
+describe('TrackPointValidator', () => {
   describe('validatePoint in range mode', () => {
-    let steps, length, firstHandle: Handle, lastHandle: Handle, track: Track
+    let steps,
+      width: number,
+      firstHandle: Handle,
+      lastHandle: Handle,
+      track: TrackPointValidator
 
     beforeEach(() => {
       steps = 10
-      length = 100
+      width = 100
       firstHandle = new Handle(10)
       lastHandle = new Handle(30)
-      track = new Track(steps, length, [firstHandle, lastHandle])
+      track = new TrackPointValidator(steps, { width, height: 10 }, [
+        firstHandle,
+        lastHandle,
+      ])
     })
 
     it('should return a higher valid point', () => {
@@ -47,9 +54,9 @@ describe('Track', () => {
     })
 
     it('should return track length if point is higher than length', () => {
-      const point = track.validatePoint(track.length + 10)
+      const point = track.validatePoint(width + 10)
 
-      const validPoint = track.length
+      const validPoint = width
       expect(point).to.equal(validPoint)
     })
 
@@ -71,13 +78,15 @@ describe('Track', () => {
   })
 
   describe('validatePoint in pick single value mode', () => {
-    let steps, length, firstHandle: Handle, track: Track
+    let steps, width, firstHandle: Handle, track: TrackPointValidator
 
     beforeEach(() => {
       steps = 10
-      length = 100
+      width = 100
       firstHandle = new Handle(10)
-      track = new Track(steps, length, [firstHandle])
+      track = new TrackPointValidator(steps, { width, height: 10 }, [
+        firstHandle,
+      ])
     })
 
     it('should return a higher valid point', () => {
@@ -108,20 +117,24 @@ describe('Track', () => {
 
   describe('getNearestPointIndex', () => {
     let steps: number,
-      length: number,
+      width: number,
       firstHandle: Handle,
       lastHandle: Handle,
       handles: Handle[],
-      track: Track
+      track: TrackPointValidator
 
     beforeEach(() => {
       steps = 10
-      length = 100
+      width = 100
       firstHandle = new Handle(10)
       lastHandle = new Handle(30)
       handles = [firstHandle, lastHandle]
 
-      track = new Track(steps, length, handles)
+      track = new TrackPointValidator(
+        steps,
+        { width: 100, height: 10 },
+        handles
+      )
     })
 
     it('should return index of first handle if input point is closer to it than to the second handle', () => {
@@ -138,10 +151,13 @@ describe('Track', () => {
 
     it('should return index of single handle if there is one handle', () => {
       handles = [new Handle(10)]
-      track = new Track(steps, length, handles)
+      track = new TrackPointValidator(
+        steps,
+        { width: 100, height: 10 },
+        handles
+      )
 
       const index = track.getNearestPointIndex(50)
-
 
       expect(handles[index]).to.equal(handles[0])
     })

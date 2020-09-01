@@ -1,7 +1,7 @@
 import Subject from '../utils/Subject'
 import ModelOptions from './ModelOptions'
 import { ModelUpdateTypes } from './ModelUpdateTypes'
-import Track from './Track'
+import TrackPointValidator from './TrackPointValidator'
 import RulerSegment from '../RulerSegment'
 import Observer from '../utils/Observer'
 import ValuesToTrackPointConverter from './ValuesToTrackPointConverter'
@@ -12,11 +12,11 @@ import HandleY from './HandleY'
 import Point from '../utils/Point'
 
 class Model extends Subject {
-  private track: Track
+  private validator: TrackPointValidator
   private handlesX: HandleX[] = []
   private converter: ValuesToTrackPointConverter
   private _ruler: Ruler
-  private trackShape: Shape
+  private track: Shape
   private handleY: HandleY
 
   constructor(private options: ModelOptions, observer?: Observer) {
@@ -28,21 +28,21 @@ class Model extends Subject {
       options.step
     )
 
-    this.trackShape = {
+    this.track = {
       width: options.trackWidth,
       height: options.trackHeight,
     }
 
-    this.handleY = new HandleY(this.trackShape.height)
+    this.handleY = new HandleY(this.track.height)
 
     options.values.forEach((data) => {
-      const coordinate = this.converter.toTrackPoint(data, options.trackLength)
-      this.handlesX.push(new HandleX(coordinate))
+      const point = this.converter.toTrackPoint(data, this.track.width)
+      this.handlesX.push(new HandleX(point))
     })
 
-    this.track = new Track(
+    this.validator = new TrackPointValidator(
       this.converter.getNumberOfSteps(),
-      options.trackLength,
+      this.track,
       this.handlesX
     )
 
@@ -60,9 +60,9 @@ class Model extends Subject {
   }
 
   updateHandle(point: number): void {
-    const handle = this.handlesX[this.track.getNearestPointIndex(point)]
-    this.track.setActiveHandle(handle)
-    const availablePoint = this.track.validatePoint(point)
+    const handle = this.handlesX[this.validator.getNearestPointIndex(point)]
+    this.validator.setActiveHandle(handle)
+    const availablePoint = this.validator.validatePoint(point)
 
     if (availablePoint !== handle.getPosition()) {
       handle.setPosition(availablePoint)
@@ -75,8 +75,8 @@ class Model extends Subject {
     if (!this.handlesX[index]) return
 
     const handle = this.handlesX[index]
-    this.track.setActiveHandle(handle)
-    const availablePoint = this.track.validatePoint(point)
+    this.validator.setActiveHandle(handle)
+    const availablePoint = this.validator.validatePoint(point)
 
     if (availablePoint !== handle.getPosition()) {
       handle.setPosition(availablePoint)
@@ -88,8 +88,8 @@ class Model extends Subject {
   updateHandlesByValues(values: number[]): void {
     this.handlesX.forEach((handle, i) => {
       if (values[i] !== undefined) {
-        const point = this.converter.toTrackPoint(values[i], this.track.length)
-        handle.setPosition(this.track.validatePoint(point))
+        const point = this.converter.toTrackPoint(values[i], this.track.width)
+        handle.setPosition(this.validator.validatePoint(point))
       }
     })
 
@@ -102,18 +102,18 @@ class Model extends Subject {
       this.handlesX[i].setPosition(point)
     })
 
-    this.track.length = trackLength
+    this.track.width = trackLength
 
     // TODO: current method needs another update type
     this.notify(ModelUpdateTypes.Slide)
   }
 
   get rangeStartPosition(): number {
-    return this.track.rangeStartPosition
+    return this.validator.rangeStartPosition
   }
 
   get rangeEndPosition(): number {
-    return this.track.rangeEndPosition
+    return this.validator.rangeEndPosition
   }
 
   get handlePositions(): Point[] {
@@ -126,7 +126,7 @@ class Model extends Subject {
   get values(): number[] {
     return this.handlesX.map((handleX) =>
       Math.round(
-        this.converter.toValue(handleX.getPosition(), this.track.length)
+        this.converter.toValue(handleX.getPosition(), this.track.width)
       )
     )
   }

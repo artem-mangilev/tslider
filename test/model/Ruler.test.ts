@@ -1,13 +1,13 @@
 import { expect } from 'chai'
 import 'mocha'
-import Track from '../../src/model/Track'
 import ValuesToTrackPointConverter from '../../src/model/ValuesToTrackPointConverter'
 import Ruler from '../../src/model/Ruler'
+import Shape from '../../src/utils/Shape'
 
 describe('Ruler', () => {
   describe('getSegments', () => {
     it('should return array of ruler segments', () => {
-      const track = new Track(5, 100, [])
+      const track: Shape = { width: 100, height: 10 }
       const converter = new ValuesToTrackPointConverter(5, 10, 1)
       const ruler = new Ruler(track, converter)
 

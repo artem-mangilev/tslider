@@ -1,13 +1,14 @@
 import Handle from './HandleX'
+import Shape from '../utils/Shape'
 
-class Track {
+class TrackPointValidator {
   private activeHandle: Handle | null
   private firstHandle: Handle
   private lastHandle: Handle
 
   constructor(
     private numberOfSteps: number,
-    public length: number,
+    private track: Shape,
     private handles: Handle[]
   ) {
     this.activeHandle = null
@@ -65,7 +66,7 @@ class Track {
   }
 
   private get stepSegment(): number {
-    return this.length / this.numberOfSteps
+    return this.track.width / this.numberOfSteps
   }
 
   private get leftBoundary(): number {
@@ -73,7 +74,7 @@ class Track {
   }
 
   private get rightBoundary(): number {
-    return this.length
+    return this.track.width
   }
 
   private get firstPointPosition(): number {
@@ -120,4 +121,4 @@ class Track {
   }
 }
 
-export default Track
+export default TrackPointValidator
