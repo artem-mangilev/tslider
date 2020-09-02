@@ -10,6 +10,7 @@ import Shape from '../utils/Shape'
 import HandleX from './HandleX'
 import HandleY from './HandleY'
 import Point from '../utils/Point'
+import Filler from './Filler'
 
 class Model extends Subject {
   private validator: TrackPointValidator
@@ -18,6 +19,7 @@ class Model extends Subject {
   private _ruler: Ruler
   private track: Shape
   private handleY: HandleY
+  private filler: Filler
 
   constructor(private options: ModelOptions, observer?: Observer) {
     super()
@@ -39,6 +41,8 @@ class Model extends Subject {
       const point = this.converter.toTrackPoint(data, this.track.width)
       this.handlesX.push(new HandleX(point))
     })
+
+    this.filler = new Filler(this.handlesX)
 
     this.validator = new TrackPointValidator(
       this.converter.getNumberOfSteps(),
@@ -108,12 +112,12 @@ class Model extends Subject {
     this.notify(ModelUpdateTypes.Slide)
   }
 
-  get rangeStartPosition(): number {
-    return this.validator.rangeStartPosition
+  get rangeLength():number {
+    return this.filler.getLength()
   }
 
-  get rangeEndPosition(): number {
-    return this.validator.rangeEndPosition
+  get rangePosition(): number {
+    return this.filler.getPosition()
   }
 
   get handlePositions(): Point[] {

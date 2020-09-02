@@ -1,4 +1,4 @@
-import { OneDimensionalSpacePoint } from '../utils/aliases'
+import { OneDimensionalSpacePoint, Orientation } from '../utils/aliases'
 import Point from '../utils/Point'
 import Handle from './Handle'
 import Input from './Input'
@@ -38,6 +38,7 @@ class View {
 
   private labelFlag: boolean
   private inputValuesSeparator: string
+  private orientation: Orientation
 
   constructor({
     targetInput,
@@ -77,6 +78,8 @@ class View {
       )
     )
 
+    this.orientation = orientation
+
     // make properties from sides in order to use outside the constructor
     this.longSide = longSide
     this.shortSide = shortSide
@@ -107,20 +110,14 @@ class View {
     this.targetInput.setValue(data)
   }
 
-  updateRange(startPosition: number, endPosition: number): void {
-    const length = endPosition - startPosition
+  updateRange(position: number, length: number): void {
+    if (this.orientation === 'vertical') {
+      position = position + length
+    }
 
     this.range[this.longSide] = length
-
-    const [validStartPosition] = [startPosition, endPosition]
-      .map((position) =>
-        // @ts-ignore
-        this.changeDirection({ [this.x]: position, [this.y]: 0 })
-      )
-      // then decide what is actual start position
-      .sort((a, b) => a[this.x] - b[this.x])
-
-    this.range.move(validStartPosition)
+    // @ts-ignore
+    this.range.move(this.changeDirection({ [this.x]: position, [this.y]: 0 }))
   }
 
   public updateLabels(positions: OneDimensionalSpacePoint[], data: number[]) {

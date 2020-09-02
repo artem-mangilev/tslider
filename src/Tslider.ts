@@ -131,15 +131,16 @@ class Tslider implements Observer {
 
   private handleSlideAction({
     handlePositions,
-    rangeStartPosition,
-    rangeEndPosition,
+    rangePosition,
+    rangeLength,
     values,
     ruler,
   }: Model): void {
     this.view.slideTo(handlePositions)
 
     // TODO: find the way to hide this functionality back to slideTo
-    this.view.updateRange(rangeStartPosition, rangeEndPosition)
+    // this.view.updateRange(rangeStartPosition, rangeEndPosition)
+    this.view.updateRange(rangePosition, rangeLength)
 
     this.view.updateLabels(handlePositions.map((position) => position.x), values)
 

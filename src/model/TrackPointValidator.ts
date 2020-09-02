@@ -109,16 +109,6 @@ class TrackPointValidator {
   setActiveHandle(handle: Handle | null): void {
     this.activeHandle = handle
   }
-
-  get rangeStartPosition(): number {
-    return this.isRangeMode() ? this.firstHandle.getPosition() : this.leftBoundary
-  }
-
-  get rangeEndPosition(): number {
-    return this.isRangeMode()
-      ? this.lastHandle.getPosition()
-      : this.firstHandle.getPosition()
-  }
 }
 
 export default TrackPointValidator
