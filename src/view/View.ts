@@ -107,16 +107,12 @@ class View {
     this.targetInput.setValue(data)
   }
 
-  public updateRange(positions: OneDimensionalSpacePoint[]): void {
-    const [startPosition, endPosition] = positions
-
+  updateRange(startPosition: number, endPosition: number): void {
     const length = endPosition - startPosition
 
     this.range[this.longSide] = length
-    this.range[this.shortSide] = this.track[this.shortSide]
 
-    const [validStartPosition] = positions
-      // we need to figure out the positions of the range point according to orientation
+    const [validStartPosition] = [startPosition, endPosition]
       .map((position) =>
         // @ts-ignore
         this.changeDirection({ [this.x]: position, [this.y]: 0 })
