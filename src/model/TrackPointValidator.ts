@@ -1,5 +1,6 @@
 import Handle from './HandleX'
 import Shape from '../utils/Shape'
+import NearPointCalculator from './NearPointCalculator'
 
 class TrackPointValidator {
   private activeHandle: Handle | null
@@ -9,28 +10,13 @@ class TrackPointValidator {
   constructor(
     private numberOfSteps: number,
     private track: Shape,
-    private handles: Handle[]
+    private handles: Handle[],
+    private pointCalculator: NearPointCalculator
   ) {
     this.activeHandle = null
     this.handles = handles
     this.firstHandle = this.handles[0]
     this.lastHandle = this.handles[this.handles.length - 1]
-  }
-
-  private getNear(n1: number, n2: number, testingPoint: number): number {
-    return Math.abs(testingPoint - n1) < Math.abs(testingPoint - n2) ? n1 : n2
-  }
-
-  private getNearPointFromGroup(point: number, pointsGroup: number[]): number {
-    return pointsGroup.reduce((prev, curr) => this.getNear(prev, curr, point))
-  }
-
-  private getNearPoint(point: number): number {
-    const quotient = Math.floor(point / this.stepSegment)
-    const low = this.stepSegment * quotient
-    const high = this.stepSegment * (quotient + 1)
-
-    return this.getNear(low, high, point)
   }
 
   private isPointBeforeLeftBoundary(point: number): boolean {
@@ -96,12 +82,12 @@ class TrackPointValidator {
       return this.rightBoundary
     }
 
-    return this.getNearPoint(point)
+    return this.pointCalculator.fromSegment(point, this.stepSegment)
   }
 
   getNearestPointIndex(targetPoint: number): number {
     const points = this.handles.map((handle) => handle.getPosition())
-    const nearest = this.getNearPointFromGroup(targetPoint, points)
+    const nearest = this.pointCalculator.fromGroup(targetPoint, points)
 
     return points.findIndex((point) => point === nearest)
   }

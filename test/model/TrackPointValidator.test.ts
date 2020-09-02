@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import 'mocha'
 import TrackPointValidator from '../../src/model/TrackPointValidator'
 import Handle from '../../src/model/HandleX'
+import NearPointCalculator from '../../src/model/NearPointCalculator'
 
 describe('TrackPointValidator', () => {
   describe('validatePoint in range mode', () => {
@@ -16,10 +17,12 @@ describe('TrackPointValidator', () => {
       width = 100
       firstHandle = new Handle(10)
       lastHandle = new Handle(30)
-      track = new TrackPointValidator(steps, { width, height: 10 }, [
-        firstHandle,
-        lastHandle,
-      ])
+      track = new TrackPointValidator(
+        steps,
+        { width, height: 10 },
+        [firstHandle, lastHandle],
+        new NearPointCalculator()
+      )
     })
 
     it('should return a higher valid point', () => {
@@ -84,9 +87,12 @@ describe('TrackPointValidator', () => {
       steps = 10
       width = 100
       firstHandle = new Handle(10)
-      track = new TrackPointValidator(steps, { width, height: 10 }, [
-        firstHandle,
-      ])
+      track = new TrackPointValidator(
+        steps,
+        { width, height: 10 },
+        [firstHandle],
+        new NearPointCalculator()
+      )
     })
 
     it('should return a higher valid point', () => {
@@ -133,7 +139,8 @@ describe('TrackPointValidator', () => {
       track = new TrackPointValidator(
         steps,
         { width: 100, height: 10 },
-        handles
+        handles,
+        new NearPointCalculator()
       )
     })
 
@@ -154,7 +161,8 @@ describe('TrackPointValidator', () => {
       track = new TrackPointValidator(
         steps,
         { width: 100, height: 10 },
-        handles
+        handles,
+        new NearPointCalculator()
       )
 
       const index = track.getNearestPointIndex(50)

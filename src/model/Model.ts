@@ -12,6 +12,7 @@ import HandleY from './HandleY'
 import Point from '../utils/Point'
 import FillerX from './FillerX'
 import FillerY from './FillerY'
+import NearPointCalculator from './NearPointCalculator'
 
 class Model extends Subject {
   private validator: TrackPointValidator
@@ -50,7 +51,8 @@ class Model extends Subject {
     this.validator = new TrackPointValidator(
       this.converter.getNumberOfSteps(),
       this.track,
-      this.handlesX
+      this.handlesX,
+      new NearPointCalculator()
     )
 
     this._ruler = new Ruler(this.track, this.converter)
