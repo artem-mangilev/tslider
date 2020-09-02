@@ -110,14 +110,16 @@ class View {
     this.targetInput.setValue(data)
   }
 
-  updateRange(position: number, length: number): void {
+  updateRange(position: Point, length: number): void {
     if (this.orientation === 'vertical') {
-      position = position + length
+      position.x = position.x + length
     }
 
     this.range[this.longSide] = length
-    // @ts-ignore
-    this.range.move(this.changeDirection({ [this.x]: position, [this.y]: 0 }))
+    this.range.move(
+      // @ts-ignore
+      this.changeDirection({ [this.x]: position.x, [this.y]: position.y })
+    )
   }
 
   public updateLabels(positions: OneDimensionalSpacePoint[], data: number[]) {

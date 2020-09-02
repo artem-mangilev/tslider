@@ -10,7 +10,8 @@ import Shape from '../utils/Shape'
 import HandleX from './HandleX'
 import HandleY from './HandleY'
 import Point from '../utils/Point'
-import Filler from './Filler'
+import FillerX from './FillerX'
+import FillerY from './FillerY'
 
 class Model extends Subject {
   private validator: TrackPointValidator
@@ -19,7 +20,8 @@ class Model extends Subject {
   private _ruler: Ruler
   private track: Shape
   private handleY: HandleY
-  private filler: Filler
+  private fillerX: FillerX
+  private fillerY: FillerY
 
   constructor(private options: ModelOptions, observer?: Observer) {
     super()
@@ -42,7 +44,8 @@ class Model extends Subject {
       this.handlesX.push(new HandleX(point))
     })
 
-    this.filler = new Filler(this.handlesX)
+    this.fillerX = new FillerX(this.handlesX)
+    this.fillerY = new FillerY()
 
     this.validator = new TrackPointValidator(
       this.converter.getNumberOfSteps(),
@@ -113,11 +116,14 @@ class Model extends Subject {
   }
 
   get rangeLength():number {
-    return this.filler.getLength()
+    return this.fillerX.getLength()
   }
 
-  get rangePosition(): number {
-    return this.filler.getPosition()
+  get rangePosition(): Point {
+    return {
+      x: this.fillerX.getPosition(),
+      y: this.fillerY.getPosition()
+    }
   }
 
   get handlePositions(): Point[] {

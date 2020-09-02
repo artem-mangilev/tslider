@@ -1,6 +1,6 @@
 import HandleX from './HandleX'
 
-class Filler {
+class FillerX {
   constructor(private handles: HandleX[]) {}
 
   private isRangeMode(): boolean {
@@ -21,4 +21,4 @@ class Filler {
   }
 }
 
-export default Filler
+export default FillerX
