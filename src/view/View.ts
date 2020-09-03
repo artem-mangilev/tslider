@@ -15,7 +15,7 @@ class View {
 
   private sliderRoot: ViewTreeNode
   private track: ViewTreeNode = new ViewTreeNode('div', 'tslider__track')
-  private range: Range = new Range('tslider__range')
+  private range: Range = new Range()
   private labelsContainer: LabelsContainer
   private handlesContainer: ViewTreeNode = new ViewTreeNode(
     'div',
@@ -47,15 +47,10 @@ class View {
     this.targetInput.$element.after(this.sliderRoot.$elem)
 
     Array.from({ length: numberOfHandles }, () => {
-      this.handles.push(new Handle('tslider__handle'))
+      this.handles.push(new Handle())
     })
 
-    this.labelsContainer = new LabelsContainer(
-      'tslider__labels',
-      longSide,
-      x,
-      y
-    )
+    this.labelsContainer = new LabelsContainer(longSide, x, y)
 
     // prettier-ignore
     this.sliderRoot.add(
@@ -125,7 +120,7 @@ class View {
 
   public renderRuler(ruler: RulerSegment[]): void {
     ruler.forEach((segment) => {
-      const node = new RulerNode('tslider__ruler-node')
+      const node = new RulerNode()
 
       node.setContent(segment.value.toString())
 

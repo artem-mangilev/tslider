@@ -11,7 +11,7 @@ global.$ = $
 describe('Handle', () => {
   describe('move', () => {
     it('should change handle position on screen', () => {
-      const handle = new Handle('handle')
+      const handle = new Handle()
 
       handle.move({ x: 5, y: 5 })
 

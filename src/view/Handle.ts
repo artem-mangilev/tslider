@@ -2,8 +2,8 @@ import Point from '../utils/Point'
 import ViewTreeNode from '../utils/ViewTreeNode'
 
 class Handle extends ViewTreeNode {
-  constructor(className: string) {
-    super('div', className)
+  constructor() {
+    super('div', 'tslider__handle')
   }
 
   move(position: Point): void {

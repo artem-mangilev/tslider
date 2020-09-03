@@ -6,23 +6,22 @@ class LabelsContainer extends ViewTreeNode {
   private tempLabel: Label
 
   constructor(
-    className: string,
     private longSide: 'width' | 'height',
     private x: 'x' | 'y',
     private y: 'x' | 'y'
   ) {
-    super('div', className)
+    super('div', 'tslider__labels')
 
-    this.tempLabel = new Label('tslider__label', longSide, x, y)
+    this.tempLabel = new Label(longSide, x, y)
   }
 
   private showTempLabel() {
-    this.labels.map(label => label.hide())
+    this.labels.map((label) => label.hide())
     this.tempLabel.show()
   }
 
   private hideTempLabel() {
-    this.labels.map(label => label.show())
+    this.labels.map((label) => label.show())
     this.tempLabel.hide()
   }
 
@@ -61,9 +60,7 @@ class LabelsContainer extends ViewTreeNode {
     }[]
   ): void {
     this.labels = [
-      ...labels.map(
-        () => new Label('tslider__label', this.longSide, this.x, this.y)
-      ),
+      ...labels.map(() => new Label(this.longSide, this.x, this.y)),
     ]
     this.add(...this.labels, this.tempLabel)
   }

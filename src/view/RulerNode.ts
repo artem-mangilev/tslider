@@ -1,8 +1,8 @@
 import ViewTreeNode from '../utils/ViewTreeNode'
 
 class RulerNode extends ViewTreeNode {
-  constructor(className: string) {
-    super('span', className)
+  constructor() {
+    super('span', 'tslider__ruler-node')
   }
 }
 
