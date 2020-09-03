@@ -1,23 +1,22 @@
 import ViewTreeNode from '../utils/ViewTreeNode'
 
 class Label extends ViewTreeNode {
-  constructor(className: string) {
+  constructor(
+    className: string,
+    private longSide: 'width' | 'height',
+    private x: 'x' | 'y',
+    private y: 'x' | 'y'
+  ) {
     super('div', className)
   }
 
-  render(data: {
-    position: number
-    value: string
-    longSide: 'width' | 'height'
-    x: 'x' | 'y',
-    y: 'x' | 'y'
-  }): void {
+  render(data: { position: number; value: string }): void {
     this.setContent(data.value)
 
     // label should be placed in the middle of handle
-    const middle = this[data.longSide] / 2
+    const middle = this[this.longSide] / 2
     // @ts-ignore
-    this.move({ [data.x]: data.position - middle, [data.y]: 0 })
+    this.move({ [this.x]: data.position - middle, [this.y]: 0 })
   }
 }
 

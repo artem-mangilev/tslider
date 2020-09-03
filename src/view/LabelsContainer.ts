@@ -3,7 +3,7 @@ import Label from './Label'
 
 class LabelsContainer extends ViewTreeNode {
   private labels: Label[] = []
-  private tempLabel: Label = new Label('tslider__label')
+  private tempLabel: Label
 
   constructor(
     className: string,
@@ -12,6 +12,8 @@ class LabelsContainer extends ViewTreeNode {
     private y: 'x' | 'y'
   ) {
     super('div', className)
+
+    this.tempLabel = new Label('tslider__label', longSide, x, y)
   }
 
   private showTempLabel() {
@@ -56,27 +58,33 @@ class LabelsContainer extends ViewTreeNode {
     return isCollisionDetected
   }
 
+  private init(
+    labels: {
+      position: number
+      value: string
+    }[]
+  ): void {
+    labels.forEach(() =>
+      this.labels.push(
+        new Label('tslider__label', this.longSide, this.x, this.y)
+      )
+    )
+    this.add(...this.labels, this.tempLabel)
+  }
+
   render(
     labels: {
       position: number
       value: string
     }[],
-    rangeMiddle: number,
+    rangeMiddle: number
   ): void {
-    // if labels is empty, fill it and render
-    if (!this.labels.length) {
-      labels.forEach(() => this.labels.push(new Label('tslider__label')))
-      this.add(...this.labels, this.tempLabel)
-    }
+    if (!this.labels.length) this.init(labels)
 
-    // make render with passed data
     labels.forEach((label, i) => {
       this.labels[i].render({
         position: label.position,
         value: label.value,
-        longSide: this.longSide,
-        x: this.x,
-        y: this.y,
       })
     })
 
@@ -86,9 +94,6 @@ class LabelsContainer extends ViewTreeNode {
       this.tempLabel.render({
         position: rangeMiddle,
         value: labels.map((label) => label.value).join(' - '),
-        longSide: this.longSide,
-        x: this.x,
-        y: this.y,
       })
     } else {
       this.hideTempLabel()
