@@ -36,7 +36,6 @@ class View {
   private y: Axis
   private direction: Direction
 
-  private labelFlag: boolean
   private inputValuesSeparator: string
   private orientation: Orientation
 
@@ -50,13 +49,9 @@ class View {
   }: ViewOptions) {
     this.sliderRoot = new ViewTreeNode('div', `tslider tslider_${orientation}`)
 
-    // put it after the targetInput
     this.targetInput = new Input(targetInput, hideInput)
     this.targetInput.$element.after(this.sliderRoot.$elem)
 
-    // this is the functional way to iterate when only finish number is given
-    // for example, if length === 2, callback will be evaluated 2 times.
-    // this code just generates labels and handles
     Array.from({ length: numberOfHandles }, () => {
       this.handles.push(new Handle('tslider__handle'))
       this.labels.push(new Label('tslider__label'))
@@ -79,15 +74,12 @@ class View {
     )
 
     this.orientation = orientation
-
-    // make properties from sides in order to use outside the constructor
     this.longSide = longSide
     this.shortSide = shortSide
     this.x = x
     this.y = y
     this.direction = direction
 
-    this.labelFlag = label
     this.inputValuesSeparator = inputValuesSeparator
   }
 
@@ -122,11 +114,28 @@ class View {
     )
   }
 
-  public updateLabels(positions: OneDimensionalSpacePoint[], data: number[]) {
-    if (!this.labelFlag) {
-      return
-    }
+  private showTempLabel() {
+    this.labels[0].$elem.css('visibility', 'hidden')
+    this.labels[this.labels.length - 1].$elem.css('visibility', 'hidden')
 
+    this.tempLabel.$elem.css('visibility', 'visible')
+  }
+
+  private hideTempLabel() {
+    this.labels[0].$elem.css('visibility', 'visible')
+    this.labels[this.labels.length - 1].$elem.css('visibility', 'visible')
+
+    this.tempLabel.$elem.css('visibility', 'hidden')
+  }
+
+  private isLabelsHaveDifferentPosition() {
+    return (
+      this.labels[0].position[this.x] !==
+      this.labels[this.labels.length - 1].position[this.x]
+    )
+  }
+
+  updateLabels(positions: OneDimensionalSpacePoint[], data: number[]): void {
     this.labels.forEach((label, i) => {
       // @ts-ignore
       const position = this.changeDirection({
@@ -134,62 +143,43 @@ class View {
         [this.y]: 0,
       })
 
-      // TODO: combine updateData with move, because these methods depends on each other (this should be placed BEFORE move)
-      label.setContent(data[i].toString())
-
-      // label should be placed in the middle of handle
-      const middle = label[this.longSide] / 2
-      position[this.x] -= middle
-
-      label.move(position)
+      label.render({
+        position: position[this.x],
+        value: data[i].toString(),
+        longSide: this.longSide,
+        x: this.x,
+        y: this.y,
+      })
     })
 
-    const firstLabel = this.labels[0]
-    const lastLabel = this.labels[this.labels.length - 1]
-
-    const isHandlesHaveSamePosition =
-      firstLabel.position[this.x] === lastLabel.position[this.x]
-
-    if (this.doLabelsCollide(this.labels) && !isHandlesHaveSamePosition) {
-      firstLabel.$elem.css('visibility', 'hidden')
-      lastLabel.$elem.css('visibility', 'hidden')
-
-      // the temp label should show the data of both labels
-      this.tempLabel.setContent(
-        `${firstLabel.getContent()} - ${lastLabel.getContent()}`
-      )
-      this.tempLabel.$elem.css('visibility', 'visible')
+    if (this.doLabelsCollide() && this.isLabelsHaveDifferentPosition()) {
+      this.showTempLabel()
 
       const rangePosition =
         this.range.position[this.x] - this.track.position[this.x]
       // single label should be placed at the middle of the range
-      const rangeMiddlePosition: number =
-        rangePosition + this.range[this.longSide] / 2
+      const rangeMiddlePosition = rangePosition + this.range[this.longSide] / 2
 
-      const labelMiddle = this.tempLabel[this.longSide] / 2
-      const labelPosition = rangeMiddlePosition - labelMiddle
-
-      // @ts-ignore
-      this.tempLabel.move({
-        [this.x]: labelPosition,
-        [this.y]: 0,
+      this.tempLabel.render({
+        position: rangeMiddlePosition,
+        value: `${data[0].toString()} - ${data[data.length - 1].toString()}`,
+        longSide: this.longSide,
+        x: this.x,
+        y: this.y,
       })
     } else {
-      firstLabel.$elem.css('visibility', 'visible')
-      lastLabel.$elem.css('visibility', 'visible')
-
-      this.tempLabel.$elem.css('visibility', 'hidden')
+      this.hideTempLabel()
     }
   }
 
   // TODO: maybe this method could be more general
-  private doLabelsCollide(labels: Label[]): boolean {
+  private doLabelsCollide(): boolean {
     // they don't collide if there is 1 label
-    if (labels.length === 1) {
+    if (this.labels.length === 1) {
       return false
     }
 
-    const [firstLabel, lastLabel] = labels
+    const [firstLabel, lastLabel] = this.labels
 
     const firstLabelX = firstLabel.position[this.x]
     const lastLabelX = lastLabel.position[this.x]

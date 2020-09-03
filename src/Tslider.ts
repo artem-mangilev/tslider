@@ -13,6 +13,7 @@ class Tslider implements Observer {
   private rulerActiveFlag: boolean
   private inputValuesSeparator: string
   private model: Model
+  private labelFlag: boolean
 
   constructor({
     targetInput,
@@ -29,6 +30,7 @@ class Tslider implements Observer {
     hideInput = true,
     inputValuesSeparator = ',',
   }: SliderOptions) {
+    this.labelFlag = label
     this.rulerFlag = ruler
     this.rulerActiveFlag = rulerActive
     this.inputValuesSeparator = inputValuesSeparator
@@ -83,7 +85,7 @@ class Tslider implements Observer {
       rulerSteps,
       values: rangeValues,
       trackWidth: this.view.getTrackWidth(),
-      trackHeight: this.view.getTrackHeight()
+      trackHeight: this.view.getTrackHeight(),
     }
 
     // initialize the Model and attach this class to Model as observer of changes
@@ -142,7 +144,12 @@ class Tslider implements Observer {
     // this.view.updateRange(rangeStartPosition, rangeEndPosition)
     this.view.updateRange(rangePosition, rangeLength)
 
-    this.view.updateLabels(handlePositions.map((position) => position.x), values)
+    if (this.labelFlag) {
+      this.view.updateLabels(
+        handlePositions.map((position) => position.x),
+        values
+      )
+    }
 
     if (this.rulerFlag) {
       this.view.updateRuler(ruler)
