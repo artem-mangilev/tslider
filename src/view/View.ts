@@ -2,13 +2,13 @@ import { OneDimensionalSpacePoint, Orientation } from '../utils/aliases'
 import Point from '../utils/Point'
 import Handle from './Handle'
 import Input from './Input'
-import Label from './Label'
 import Range from './Range'
 import ViewOptions from './ViewOptions'
 import { Side, Axis, Direction } from '../OrientationOptions'
 import ViewTreeNode from '../utils/ViewTreeNode'
 import RulerSegment from '../RulerSegment'
 import RulerNode from './RulerNode'
+import LabelsContainer from './LabelsContainer'
 
 class View {
   private targetInput: Input
@@ -16,10 +16,7 @@ class View {
   private sliderRoot: ViewTreeNode
   private track: ViewTreeNode = new ViewTreeNode('div', 'tslider__track')
   private range: Range = new Range('tslider__range')
-  private labelsContainer: ViewTreeNode = new ViewTreeNode(
-    'div',
-    'tslider__labels'
-  )
+  private labelsContainer: LabelsContainer
   private handlesContainer: ViewTreeNode = new ViewTreeNode(
     'div',
     'tslider__handles'
@@ -27,8 +24,6 @@ class View {
   private ruler: ViewTreeNode = new ViewTreeNode('div', 'tslider__ruler')
   private rulerNodes: RulerNode[] = []
   private handles: Handle[] = []
-  private labels: Label[] = []
-  private tempLabel: Label
 
   private longSide: Side
   private shortSide: Side
@@ -43,7 +38,6 @@ class View {
     targetInput,
     numberOfHandles,
     orientationOption: { orientation, longSide, shortSide, x, y, direction },
-    label,
     hideInput,
     inputValuesSeparator,
   }: ViewOptions) {
@@ -54,19 +48,19 @@ class View {
 
     Array.from({ length: numberOfHandles }, () => {
       this.handles.push(new Handle('tslider__handle'))
-      this.labels.push(new Label('tslider__label'))
     })
 
-    this.tempLabel = new Label('tslider__label')
+    this.labelsContainer = new LabelsContainer(
+      'tslider__labels',
+      longSide,
+      x,
+      y
+    )
 
     // prettier-ignore
     this.sliderRoot.add(
-      label && this.labelsContainer.add(
-        ...this.labels,
-        this.tempLabel
-      ),
-      this.track.add(
-      ),
+      this.labelsContainer,
+      this.track,
       this.range,
       this.handlesContainer.add(
         ...this.handles
@@ -114,84 +108,19 @@ class View {
     )
   }
 
-  private showTempLabel() {
-    this.labels[0].$elem.css('visibility', 'hidden')
-    this.labels[this.labels.length - 1].$elem.css('visibility', 'hidden')
-
-    this.tempLabel.$elem.css('visibility', 'visible')
-  }
-
-  private hideTempLabel() {
-    this.labels[0].$elem.css('visibility', 'visible')
-    this.labels[this.labels.length - 1].$elem.css('visibility', 'visible')
-
-    this.tempLabel.$elem.css('visibility', 'hidden')
-  }
-
-  private isLabelsHaveDifferentPosition() {
-    return (
-      this.labels[0].position[this.x] !==
-      this.labels[this.labels.length - 1].position[this.x]
-    )
+  private getRangeMiddle(): number {
+    const position = this.range.position[this.x] - this.track.position[this.x]
+    return position + this.range[this.longSide] / 2
   }
 
   updateLabels(labelsData: { position: number; value: string }[]): void {
-    labelsData.forEach((label, i) => {
-      // @ts-ignore
-      const position = this.changeDirection({
-        [this.x]: label.position,
-        [this.y]: 0,
-      })
-
-      this.labels[i].render({
-        position: position[this.x],
-        value: label.value,
-        longSide: this.longSide,
-        x: this.x,
-        y: this.y,
-      })
-    })
-
-    if (this.doLabelsCollide() && this.isLabelsHaveDifferentPosition()) {
-      this.showTempLabel()
-
-      const rangePosition =
-        this.range.position[this.x] - this.track.position[this.x]
-      // single label should be placed at the middle of the range
-      const rangeMiddlePosition = rangePosition + this.range[this.longSide] / 2
-
-      this.tempLabel.render({
-        position: rangeMiddlePosition,
-        value: labelsData.map((label) => label.value).join(' - '),
-        longSide: this.longSide,
-        x: this.x,
-        y: this.y,
-      })
-    } else {
-      this.hideTempLabel()
-    }
-  }
-
-  // TODO: maybe this method could be more general
-  private doLabelsCollide(): boolean {
-    // they don't collide if there is 1 label
-    if (this.labels.length === 1) {
-      return false
-    }
-
-    const [firstLabel, lastLabel] = this.labels
-
-    const firstLabelX = firstLabel.position[this.x]
-    const lastLabelX = lastLabel.position[this.x]
-
-    const firstLabelWidth = firstLabel[this.longSide]
-    const lastLabelWidth = lastLabel[this.longSide]
-
-    const isCollisionDetected =
-      firstLabelX < lastLabelX + lastLabelWidth &&
-      firstLabelX + firstLabelWidth > lastLabelX
-
-    return isCollisionDetected
+    this.labelsContainer.render(
+      labelsData.map(({ position, value }) => ({
+        position: this.validateX(position),
+        value,
+      })),
+      this.getRangeMiddle()
+    )
   }
 
   public renderRuler(ruler: RulerSegment[]): void {
@@ -264,6 +193,14 @@ class View {
           [this.y]: point[this.y],
         }
     }
+  }
+
+  private validateX(x: number) {
+    if (this.orientation === 'horizontal') {
+      return x
+    }
+
+    return this.track[this.longSide] - x
   }
 
   private createTrackClickHandler(
