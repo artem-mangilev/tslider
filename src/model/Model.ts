@@ -13,6 +13,7 @@ import Point from '../utils/Point'
 import FillerX from './FillerX'
 import FillerY from './FillerY'
 import NearPointCalculator from './NearPointCalculator'
+import TransferHandle from './TransferHandle'
 
 class Model extends Subject {
   private validator: TrackPointValidator
@@ -117,14 +118,14 @@ class Model extends Subject {
     this.notify(ModelUpdateTypes.Slide)
   }
 
-  get rangeLength():number {
+  get rangeLength(): number {
     return this.fillerX.getLength()
   }
 
   get rangePosition(): Point {
     return {
       x: this.fillerX.getPosition(),
-      y: this.fillerY.getPosition()
+      y: this.fillerY.getPosition(),
     }
   }
 
@@ -141,6 +142,18 @@ class Model extends Subject {
         this.converter.toValue(handleX.getPosition(), this.track.width)
       )
     )
+  }
+
+  get handles(): TransferHandle[] {
+    return this.handlesX.map((handleX) => ({
+      position: {
+        x: handleX.getPosition(),
+        y: this.handleY.getPosition(),
+      },
+      value: Math.round(
+        this.converter.toValue(handleX.getPosition(), this.track.width)
+      ).toString(),
+    }))
   }
 
   get ruler(): RulerSegment[] {

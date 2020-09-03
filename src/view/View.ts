@@ -135,17 +135,17 @@ class View {
     )
   }
 
-  updateLabels(positions: OneDimensionalSpacePoint[], data: number[]): void {
-    this.labels.forEach((label, i) => {
+  updateLabels(labelsData: { position: number; value: string }[]): void {
+    labelsData.forEach((label, i) => {
       // @ts-ignore
       const position = this.changeDirection({
-        [this.x]: positions[i],
+        [this.x]: label.position,
         [this.y]: 0,
       })
 
-      label.render({
+      this.labels[i].render({
         position: position[this.x],
-        value: data[i].toString(),
+        value: label.value,
         longSide: this.longSide,
         x: this.x,
         y: this.y,
@@ -162,7 +162,7 @@ class View {
 
       this.tempLabel.render({
         position: rangeMiddlePosition,
-        value: `${data[0].toString()} - ${data[data.length - 1].toString()}`,
+        value: labelsData.map((label) => label.value).join(' - '),
         longSide: this.longSide,
         x: this.x,
         y: this.y,
