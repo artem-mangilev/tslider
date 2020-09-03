@@ -52,4 +52,12 @@ export default class ViewTreeNode {
   getContent(): string {
     return this.$elem.html()
   }
+
+  show(): void {
+    this.$elem.css('visibility', 'visible')
+  }
+
+  hide(): void {
+    this.$elem.css('visibility', 'hidden')
+  }
 }

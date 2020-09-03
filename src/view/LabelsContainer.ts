@@ -17,17 +17,13 @@ class LabelsContainer extends ViewTreeNode {
   }
 
   private showTempLabel() {
-    this.labels[0].$elem.css('visibility', 'hidden')
-    this.labels[this.labels.length - 1].$elem.css('visibility', 'hidden')
-
-    this.tempLabel.$elem.css('visibility', 'visible')
+    this.labels.map(label => label.hide())
+    this.tempLabel.show()
   }
 
   private hideTempLabel() {
-    this.labels[0].$elem.css('visibility', 'visible')
-    this.labels[this.labels.length - 1].$elem.css('visibility', 'visible')
-
-    this.tempLabel.$elem.css('visibility', 'hidden')
+    this.labels.map(label => label.show())
+    this.tempLabel.hide()
   }
 
   private isLabelsHaveDifferentPosition() {
