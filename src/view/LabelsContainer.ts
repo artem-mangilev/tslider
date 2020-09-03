@@ -64,11 +64,11 @@ class LabelsContainer extends ViewTreeNode {
       value: string
     }[]
   ): void {
-    labels.forEach(() =>
-      this.labels.push(
-        new Label('tslider__label', this.longSide, this.x, this.y)
-      )
-    )
+    this.labels = [
+      ...labels.map(
+        () => new Label('tslider__label', this.longSide, this.x, this.y)
+      ),
+    ]
     this.add(...this.labels, this.tempLabel)
   }
 
