@@ -223,11 +223,7 @@ class View {
   public onTrackClick(
     handler: (point: OneDimensionalSpacePoint) => void
   ): void {
-    // TODO: find the way to attach an event handler with Jquery
-    this.sliderRoot.$elem[0].addEventListener(
-      'click',
-      this.createTrackClickHandler(handler)
-    )
+    this.sliderRoot.onClick(this.createTrackClickHandler(handler))
   }
 
   private createRulerClickHandler(
@@ -247,15 +243,12 @@ class View {
   public onRulerClick(
     handler: (point: OneDimensionalSpacePoint) => void
   ): void {
-    this.ruler.$elem[0].addEventListener(
-      'click',
-      this.createRulerClickHandler(handler)
-    )
+    this.ruler.onClick(this.createRulerClickHandler(handler))
   }
 
   private createHandleDragHandler(
-    handler: (point: OneDimensionalSpacePoint, handleIndex: number) => void,
-    handleIndex: number
+    handler: (point: number, id: number) => void,
+    id: number
   ): (event: MouseEvent) => void {
     return (e) => {
       const position: Point = this.changeDirection({
@@ -263,31 +256,13 @@ class View {
         y: e.clientY - this.track.position.y,
       })
 
-      handler(position[this.x], handleIndex)
+      handler(position[this.x], id)
     }
   }
 
-  public onHandleDrag(
-    handler: (point: OneDimensionalSpacePoint, handleIndex: number) => void
-  ): void {
-    let dragHandler: (event: MouseEvent) => void
-
-    const $root = $('html')
-
-    $root.mousedown(({ target }) => {
-      // if target is one of the handles, attach mousemove event
-      this.handles.forEach((handle, i) => {
-        if (target === handle.$elem[0]) {
-          dragHandler = this.createHandleDragHandler(handler, i)
-
-          $root[0].addEventListener('mousemove', dragHandler)
-        }
-      })
-    })
-
-    // when user releases the button in any place, remove event
-    $root.mouseup(() => {
-      $root[0].removeEventListener('mousemove', dragHandler)
+  public onHandleDrag(handler: (point: number, id: number) => void): void {
+    this.handles.forEach((handle, i) => {
+      handle.onDrag(this.createHandleDragHandler(handler, i))
     })
   }
 

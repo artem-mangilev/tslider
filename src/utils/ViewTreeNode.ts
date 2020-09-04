@@ -60,4 +60,18 @@ export default class ViewTreeNode {
   hide(): void {
     this.$elem.css('visibility', 'hidden')
   }
+
+  onClick(handler: (e: Event) => void): void {
+    this.$elem.on('click', handler)
+  }
+
+  onDrag(handler: (e: Event) => void): void {
+    const $root = $('html')
+
+    $root.on('mousedown', ({ target }) => {
+      if (target === this.$elem[0]) $root.on('mousemove', handler)
+    })
+
+    $root.on('mouseup', () => $root.off('mousemove'))
+  }
 }
