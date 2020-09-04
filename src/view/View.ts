@@ -1,4 +1,4 @@
-import { OneDimensionalSpacePoint, Orientation } from '../utils/aliases'
+import { Orientation } from '../utils/aliases'
 import Point from '../utils/Point'
 import Handle from './Handle'
 import Input from './Input'
@@ -198,36 +198,38 @@ class View {
     return this.track[this.longSide] - x
   }
 
+  private getLocalMousePosition(
+    mouseX: number,
+    mouseY: number,
+    { position: { x, y } }: ViewTreeNode
+  ): Point {
+    return { x: mouseX - x, y: mouseY - y }
+  }
+
   private createTrackClickHandler(
-    handler: (point: OneDimensionalSpacePoint) => void
+    handler: (point: number) => void
   ): (event: MouseEvent) => void {
-    return (e) => {
-      const position = this.changeDirection({
-        x: e.clientX - this.track.position.x,
-        y: e.clientY - this.track.position.y,
-      })
-
-      // filter out negative values of x
-      if (position[this.x] < 0) return
-
-      // call handler only if click occurs on track or range
-      const isTrack = e.target === this.track.$elem[0]
-      const isRange = e.target === this.range.$elem[0]
-      const isHandles = e.target === this.handlesContainer.$elem[0]
+    return ({ target, clientX, clientY }) => {
+      const isTrack = target === this.track.$elem[0]
+      const isRange = target === this.range.$elem[0]
+      const isHandles = target === this.handlesContainer.$elem[0]
       const correctTarget = isTrack || isRange || isHandles
 
-      if (correctTarget) handler(position[this.x])
+      if (correctTarget) {
+        const position = this.validateX(
+          this.getLocalMousePosition(clientX, clientY, this.track)[this.x]
+        )
+        handler(position)
+      }
     }
   }
 
-  public onTrackClick(
-    handler: (point: OneDimensionalSpacePoint) => void
-  ): void {
+  public onTrackClick(handler: (point: number) => void): void {
     this.sliderRoot.onClick(this.createTrackClickHandler(handler))
   }
 
   private createRulerClickHandler(
-    handler: (point: OneDimensionalSpacePoint) => void
+    handler: (point: number) => void
   ): (event: MouseEvent) => void {
     return (e) => {
       const targetRulerNode = this.rulerNodes.find(
@@ -240,9 +242,7 @@ class View {
     }
   }
 
-  public onRulerClick(
-    handler: (point: OneDimensionalSpacePoint) => void
-  ): void {
+  public onRulerClick(handler: (point: number) => void): void {
     this.ruler.onClick(this.createRulerClickHandler(handler))
   }
 
@@ -250,13 +250,11 @@ class View {
     handler: (point: number, id: number) => void,
     id: number
   ): (event: MouseEvent) => void {
-    return (e) => {
-      const position: Point = this.changeDirection({
-        x: e.clientX - this.track.position.x,
-        y: e.clientY - this.track.position.y,
-      })
-
-      handler(position[this.x], id)
+    return ({ clientX, clientY }) => {
+      const position = this.validateX(
+        this.getLocalMousePosition(clientX, clientY, this.track)[this.x]
+      )
+      handler(position, id)
     }
   }
 
