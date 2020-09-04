@@ -9,19 +9,20 @@ import ViewTreeNode from '../utils/ViewTreeNode'
 import RulerSegment from '../RulerSegment'
 import RulerNode from './RulerNode'
 import LabelsContainer from './LabelsContainer'
+import Ruler from './Ruler'
 
 class View {
   private targetInput: Input
 
   private sliderRoot: ViewTreeNode
   private track: ViewTreeNode = new ViewTreeNode('div', 'tslider__track')
-  private range: Range = new Range()
+  private range: Range
   private labelsContainer: LabelsContainer
   private handlesContainer: ViewTreeNode = new ViewTreeNode(
     'div',
     'tslider__handles'
   )
-  private ruler: ViewTreeNode = new ViewTreeNode('div', 'tslider__ruler')
+  private ruler: Ruler
   private rulerNodes: RulerNode[] = []
   private handles: Handle[] = []
 
@@ -51,6 +52,8 @@ class View {
     })
 
     this.labelsContainer = new LabelsContainer(longSide, x, y)
+    this.range = new Range(longSide)
+    this.ruler = new Ruler(longSide, x ,y)
 
     // prettier-ignore
     this.sliderRoot.add(
@@ -59,7 +62,8 @@ class View {
       this.range,
       this.handlesContainer.add(
         ...this.handles
-      )
+      ),
+      this.ruler
     )
 
     this.orientation = orientation
@@ -96,10 +100,10 @@ class View {
       position.x = position.x + length
     }
 
-    this.range[this.longSide] = length
-    this.range.move(
+    this.range.render(
       // @ts-ignore
-      this.changeDirection({ [this.x]: position.x, [this.y]: position.y })
+      this.changeDirection({ [this.x]: position.x, [this.y]: position.y }),
+      length
     )
   }
 
@@ -118,59 +122,13 @@ class View {
     )
   }
 
-  public renderRuler(ruler: RulerSegment[]): void {
-    ruler.forEach((segment) => {
-      const node = new RulerNode()
-
-      node.setContent(segment.value.toString())
-
-      // @ts-ignore
-      node.move({
-        [this.x]: segment.point,
-        [this.y]: 0,
-      })
-
-      this.rulerNodes.push(node)
-    })
-
-    // prettier-ignore
-    this.sliderRoot.add(
-      this.ruler.add(
-        ...this.rulerNodes
-      )
+  renderRuler(ruler: RulerSegment[]): void {
+    this.ruler.render(
+      ruler.map((segment) => ({
+        point: this.validateX(segment.point),
+        value: segment.value,
+      }))
     )
-
-    ruler.forEach((segment, i) => {
-      const node = this.rulerNodes[i]
-
-      // @ts-ignore
-      const position = this.changeDirection({
-        [this.x]: segment.point,
-        [this.y]: 0,
-      })
-
-      const middle = node[this.longSide] / 2
-      position[this.x] -= middle
-
-      this.rulerNodes[i].move(position)
-    })
-  }
-
-  public updateRuler(ruler: RulerSegment[]): void {
-    ruler.forEach((segment, i) => {
-      const node = this.rulerNodes[i]
-
-      // @ts-ignore
-      const position = this.changeDirection({
-        [this.x]: segment.point,
-        [this.y]: 0,
-      })
-
-      const middle = node[this.longSide] / 2
-      position[this.x] -= middle
-
-      this.rulerNodes[i].move(position)
-    })
   }
 
   private changeDirection(point: Point): Point {
