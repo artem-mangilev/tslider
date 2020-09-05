@@ -1,16 +1,18 @@
-class Input {
-  input: HTMLInputElement
-  $element: JQuery<HTMLInputElement>
+import ViewTreeNode from "../utils/ViewTreeNode"
 
-  constructor(input: HTMLInputElement, hide: boolean) {
-    this.input = input
-    this.$element = $(this.input)
+class Input extends ViewTreeNode {
+  constructor(private input: HTMLInputElement, hide: boolean) {
+    super(input)
 
-    this.input.hidden = hide
+    hide ? this.hide() : this.show()
   }
 
   setValue(value: string): void {
     this.input.value = value
+  }
+
+  getValue(): string {
+    return this.input.value
   }
 }
 
