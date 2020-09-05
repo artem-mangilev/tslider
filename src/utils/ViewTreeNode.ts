@@ -4,10 +4,16 @@ import Shape from './Shape'
 export default class ViewTreeNode {
   $elem: JQuery<HTMLElement>
 
-  constructor(elementName: string, className: string) {
-    this.$elem = $(`<${elementName}>`, {
-      class: className,
-    })
+  constructor(element: string | HTMLElement, className?: string) {
+    if (element instanceof HTMLElement) {
+      this.$elem = $(element)
+    }
+
+    if (typeof element === 'string') {
+      this.$elem = $(`<${element}>`, {
+        class: className,
+      })
+    }
   }
 
   get width(): number {
@@ -62,6 +68,10 @@ export default class ViewTreeNode {
     this.$elem.css('visibility', 'hidden')
   }
 
+  after(node: ViewTreeNode): void {
+    this.$elem.after(node.$elem)
+  }
+
   onClick(handler: (e: Event) => void): void {
     this.$elem.on('click', handler)
   }
@@ -85,5 +95,9 @@ export default class ViewTreeNode {
     })
 
     ro.observe(this.$elem[0])
+  }
+
+  onFocusout(handler: (e: Event) => void): void {
+    this.$elem.on('focusout', handler)
   }
 }
