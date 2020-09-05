@@ -1,4 +1,5 @@
 import Point from './Point'
+import Shape from './Shape'
 
 export default class ViewTreeNode {
   $elem: JQuery<HTMLElement>
@@ -73,5 +74,16 @@ export default class ViewTreeNode {
     })
 
     $root.on('mouseup', () => $root.off('mousemove'))
+  }
+
+  onResize(handler: (size: Shape) => void): void {
+    const ro = new ResizeObserver((entries) => {
+      handler({
+        width: entries[0].contentRect.width,
+        height: entries[0].contentRect.height,
+      })
+    })
+
+    ro.observe(this.$elem[0])
   }
 }

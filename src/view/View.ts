@@ -146,16 +146,17 @@ class View {
     return { x: mouseX - x, y: mouseY - y }
   }
 
+  private getIfOneOf(element: HTMLElement, nodes: ViewTreeNode[]) {
+    return nodes.find((node) => node.$elem[0] === element)
+  }
+
   private createTrackClickHandler(
     handler: (point: number) => void
   ): (event: MouseEvent) => void {
     return ({ target, clientX, clientY }) => {
-      const isTrack = target === this.track.$elem[0]
-      const isRange = target === this.range.$elem[0]
-      const isHandles = target === this.handlesContainer.$elem[0]
-      const correctTarget = isTrack || isRange || isHandles
+      const possibleTargets = [this.track, this.range, this.handlesContainer]
 
-      if (correctTarget) {
+      if (this.getIfOneOf(<HTMLElement>target, possibleTargets)) {
         const position = this.validateX(
           this.getLocalMousePosition(clientX, clientY, this.track)[this.x]
         )
@@ -171,14 +172,9 @@ class View {
   private createRulerClickHandler(
     handler: (point: number) => void
   ): (event: MouseEvent) => void {
-    return (e) => {
-      const targetRulerNode = this.rulerNodes.find(
-        (node) => node.$elem[0] === e.target
-      )
-
-      if (targetRulerNode) {
-        handler(Number(targetRulerNode.getContent()))
-      }
+    return ({ target }) => {
+      const node = this.getIfOneOf(<HTMLElement>target, this.rulerNodes)
+      if (node) handler(Number(node.getContent()))
     }
   }
 
@@ -205,15 +201,7 @@ class View {
   }
 
   public onTrackLengthChanged(handler: (length: number) => void): void {
-    const ro = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        handler(entry.contentRect[this.longSide])
-      }
-    })
-
-    // at this moment this API didn't allow to get border-box size of element
-    // so I decide to track the roor of slider, which length is same as track's border-box length
-    ro.observe(this.sliderRoot.$elem[0])
+    this.sliderRoot.onResize((size) => handler(size[this.longSide]))
   }
 
   public onInputUpdate(handler: (values: string[]) => void): void {
