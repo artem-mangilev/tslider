@@ -4,7 +4,7 @@ import Handle from './Handle'
 import Input from './Input'
 import Range from './Range'
 import ViewOptions from './ViewOptions'
-import { Side, Axis, Direction } from '../OrientationOptions'
+import { Side, Axis } from '../OrientationOptions'
 import ViewTreeNode from '../utils/ViewTreeNode'
 import RulerSegment from '../RulerSegment'
 import RulerNode from './RulerNode'
@@ -30,7 +30,6 @@ class View {
   private shortSide: Side
   private x: Axis
   private y: Axis
-  private direction: Direction
 
   private inputValuesSeparator: string
   private orientation: Orientation
@@ -38,7 +37,7 @@ class View {
   constructor({
     targetInput,
     numberOfHandles,
-    orientationOption: { orientation, longSide, shortSide, x, y, direction },
+    orientationOption: { orientation, longSide, shortSide, x, y },
     hideInput,
     inputValuesSeparator,
   }: ViewOptions) {
@@ -53,7 +52,7 @@ class View {
 
     this.labelsContainer = new LabelsContainer(longSide, x, y)
     this.range = new Range(longSide)
-    this.ruler = new Ruler(longSide, x ,y)
+    this.ruler = new Ruler(longSide, x, y)
 
     // prettier-ignore
     this.sliderRoot.add(
@@ -71,7 +70,6 @@ class View {
     this.shortSide = shortSide
     this.x = x
     this.y = y
-    this.direction = direction
 
     this.inputValuesSeparator = inputValuesSeparator
   }
@@ -85,9 +83,13 @@ class View {
   }
 
   // TODO: if both handles at max point, drag doesn't work
-  slideTo(handlePositions: Point[]): void {
-    handlePositions
-      .map((pos) => this.changeDirection({ x: pos[this.x], y: pos[this.y] }))
+  slideTo(positions: Point[]): void {
+    positions
+      .map((position) => ({
+        [this.x]: this.validateX(position.x),
+        [this.y]: position.y,
+      }))
+      // @ts-ignore
       .forEach((position, i) => this.handles[i].move(position))
   }
 
@@ -102,7 +104,7 @@ class View {
 
     this.range.render(
       // @ts-ignore
-      this.changeDirection({ [this.x]: position.x, [this.y]: position.y }),
+      { [this.x]: this.validateX(position.x), [this.y]: position.y },
       length
     )
   }
@@ -124,28 +126,8 @@ class View {
 
   renderRuler(ruler: RulerSegment[]): void {
     this.ruler.render(
-      ruler.map((segment) => ({
-        point: this.validateX(segment.point),
-        value: segment.value,
-      }))
+      ruler.map(({ point, value }) => ({ point: this.validateX(point), value }))
     )
-  }
-
-  private changeDirection(point: Point): Point {
-    switch (this.direction) {
-      case 'left-to-right':
-        // @ts-ignore
-        return {
-          [this.x]: point[this.x],
-          [this.y]: point[this.y],
-        }
-      case 'bottom-to-top':
-        // @ts-ignore
-        return {
-          [this.x]: this.track[this.longSide] - point[this.x],
-          [this.y]: point[this.y],
-        }
-    }
   }
 
   private validateX(x: number) {
