@@ -10,11 +10,12 @@ import RulerSegment from '../RulerSegment'
 import RulerNode from './RulerNode'
 import LabelsContainer from './LabelsContainer'
 import Ruler from './Ruler'
+import SliderRoot from './SliderRoot'
 
 class View {
-  private targetInput: Input
+  private input: Input
 
-  private sliderRoot: ViewTreeNode
+  private sliderRoot: SliderRoot
   private track: ViewTreeNode = new ViewTreeNode('div', 'tslider__track')
   private range: Range
   private labelsContainer: LabelsContainer
@@ -41,10 +42,10 @@ class View {
     hideInput,
     inputValuesSeparator,
   }: ViewOptions) {
-    this.sliderRoot = new ViewTreeNode('div', `tslider tslider_${orientation}`)
+    this.sliderRoot = new SliderRoot(orientation)
 
-    this.targetInput = new Input(targetInput, hideInput)
-    this.targetInput.$element.after(this.sliderRoot.$elem)
+    this.input = new Input(targetInput, hideInput)
+    this.input.after(this.sliderRoot)
 
     Array.from({ length: numberOfHandles }, () => {
       this.handles.push(new Handle())
@@ -94,7 +95,7 @@ class View {
   }
 
   public updateInput(data: string): void {
-    this.targetInput.setValue(data)
+    this.input.setValue(data)
   }
 
   updateRange(position: Point, length: number): void {
@@ -205,10 +206,8 @@ class View {
   }
 
   public onInputUpdate(handler: (values: string[]) => void): void {
-    const input = this.targetInput.$element[0]
-
-    input.addEventListener('focusout', () => {
-      const values = input.value.split(this.inputValuesSeparator)
+    this.input.onFocusout(() => {
+      const values = this.input.getValue().split(this.inputValuesSeparator)
 
       for (const value of values) {
         if (isNaN(Number(value))) {
