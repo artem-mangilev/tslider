@@ -6,4 +6,5 @@ export default interface ModelOptions {
   trackHeight: number
   rulerSteps: number
   values: number[]
+  inputValuesSeparator: string
 }

@@ -11,7 +11,6 @@ class Tslider implements Observer {
   private view: View
   private rulerFlag: boolean
   private rulerActiveFlag: boolean
-  private inputValuesSeparator: string
   private model: Model
   private labelFlag: boolean
 
@@ -33,7 +32,6 @@ class Tslider implements Observer {
     this.labelFlag = label
     this.rulerFlag = ruler
     this.rulerActiveFlag = rulerActive
-    this.inputValuesSeparator = inputValuesSeparator
 
     // 'from' is required parameter at this moment, to is optional
     const rangeValues: number[] = [from, ...(to !== undefined ? [to] : [])]
@@ -86,6 +84,7 @@ class Tslider implements Observer {
       values: rangeValues,
       trackWidth: this.view.getTrackWidth(),
       trackHeight: this.view.getTrackHeight(),
+      inputValuesSeparator,
     }
 
     // initialize the Model and attach this class to Model as observer of changes
@@ -119,15 +118,15 @@ class Tslider implements Observer {
     const resize = model.resize.bind(model)
     this.view.onTrackLengthChanged(resize)
 
-    const updateValues = model.updateHandlesByValues.bind(model)
-    this.view.onInputUpdate(updateValues)
+    const updateHandlesByInput = model.updateHandlesByInput.bind(model)
+    this.view.onInputUpdate(updateHandlesByInput)
 
     if (this.rulerFlag) {
       this.view.renderRuler(model.ruler)
     }
 
     if (this.rulerActiveFlag) {
-      this.view.onRulerClick(updateValues)
+      this.view.onRulerClick(updateHandle)
     }
   }
 
@@ -136,6 +135,7 @@ class Tslider implements Observer {
     rangePosition,
     rangeLength,
     ruler,
+    inputValue,
   }: Model): void {
     this.view.slideTo(handles.map((handle) => handle.position))
 
@@ -156,9 +156,7 @@ class Tslider implements Observer {
     //   this.view.renderRuler(ruler)
     // }
 
-    this.view.updateInput(
-      handles.map((handle) => handle.value).join(this.inputValuesSeparator)
-    )
+    this.view.updateInput(inputValue)
   }
 
   public updateHandles(from: number, to?: number): void {

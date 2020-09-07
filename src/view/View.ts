@@ -32,7 +32,6 @@ class View {
   private x: Axis
   private y: Axis
 
-  private inputValuesSeparator: string
   private orientation: Orientation
 
   constructor({
@@ -40,7 +39,6 @@ class View {
     numberOfHandles,
     orientationOption: { orientation, longSide, shortSide, x, y },
     hideInput,
-    inputValuesSeparator,
   }: ViewOptions) {
     this.sliderRoot = new SliderRoot(orientation)
 
@@ -71,8 +69,6 @@ class View {
     this.shortSide = shortSide
     this.x = x
     this.y = y
-
-    this.inputValuesSeparator = inputValuesSeparator
   }
 
   getTrackWidth(): number {
@@ -205,18 +201,8 @@ class View {
     this.sliderRoot.onResize((size) => handler(size[this.longSide]))
   }
 
-  public onInputUpdate(handler: (values: string[]) => void): void {
-    this.input.onFocusout(() => {
-      const values = this.input.getValue().split(this.inputValuesSeparator)
-
-      for (const value of values) {
-        if (isNaN(Number(value))) {
-          return
-        }
-      }
-
-      handler(values)
-    })
+  public onInputUpdate(handler: (value: string) => void): void {
+    this.input.onFocusout(() => handler(this.input.getValue()))
   }
 }
 

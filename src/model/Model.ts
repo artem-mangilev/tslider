@@ -14,6 +14,7 @@ import FillerX from './FillerX'
 import FillerY from './FillerY'
 import NearPointCalculator from './NearPointCalculator'
 import TransferHandle from './TransferHandle'
+import Input from './Input'
 
 class Model extends Subject {
   private validator: TrackPointValidator
@@ -24,9 +25,15 @@ class Model extends Subject {
   private handleY: HandleY
   private fillerX: FillerX
   private fillerY: FillerY
+  private input: Input
 
   constructor(private options: ModelOptions, observer?: Observer) {
     super()
+
+    this.input = new Input(
+      options.inputValuesSeparator,
+      options.values.join(options.inputValuesSeparator)
+    )
 
     this.converter = new ValuesToTrackPointConverter(
       options.min,
@@ -77,6 +84,8 @@ class Model extends Subject {
     if (availablePoint !== handle.getPosition()) {
       handle.setPosition(availablePoint)
 
+      this.setInput()
+
       this.notify(ModelUpdateTypes.Slide)
     }
   }
@@ -91,6 +100,8 @@ class Model extends Subject {
     if (availablePoint !== handle.getPosition()) {
       handle.setPosition(availablePoint)
 
+      this.setInput()
+
       this.notify(ModelUpdateTypes.Slide)
     }
   }
@@ -101,6 +112,19 @@ class Model extends Subject {
         const point = this.converter.toTrackPoint(values[i], this.track.width)
         handle.setPosition(this.validator.validatePoint(point))
       }
+    })
+
+    this.setInput()
+
+    this.notify(ModelUpdateTypes.Slide)
+  }
+
+  updateHandlesByInput(input: string): void {
+    this.input.set(input)
+
+    this.input.getAsList().forEach((value, i) => {
+      const point = this.converter.toTrackPoint(value, this.track.width)
+      this.handlesX[i].setPosition(this.validator.validatePoint(point))
     })
 
     this.notify(ModelUpdateTypes.Slide)
@@ -137,11 +161,7 @@ class Model extends Subject {
   }
 
   get values(): number[] {
-    return this.handlesX.map((handleX) =>
-      Math.round(
-        this.converter.toValue(handleX.getPosition(), this.track.width)
-      )
-    )
+    return this.handlesX.map((handleX) => this.handleToValue(handleX))
   }
 
   get handles(): TransferHandle[] {
@@ -150,14 +170,28 @@ class Model extends Subject {
         x: handleX.getPosition(),
         y: this.handleY.getPosition(),
       },
-      value: Math.round(
-        this.converter.toValue(handleX.getPosition(), this.track.width)
-      ).toString(),
+      value: this.handleToValue(handleX).toString(),
     }))
   }
 
   get ruler(): RulerSegment[] {
     return this._ruler.getSegments(this.options.rulerSteps)
+  }
+
+  get inputValue(): string {
+    return this.input.get()
+  }
+
+  private handleToValue(handle: HandleX): number {
+    return Math.round(
+      this.converter.toValue(handle.getPosition(), this.track.width)
+    )
+  }
+
+  private setInput(): void {
+    this.input.setFromList(
+      this.handlesX.map((handle) => this.handleToValue(handle).toString())
+    )
   }
 }
 
