@@ -14,7 +14,6 @@ import SliderRoot from './SliderRoot'
 
 class View {
   private input: Input
-
   private sliderRoot: SliderRoot
   private track: ViewTreeNode = new ViewTreeNode('div', 'tslider__track')
   private range: Range
@@ -23,16 +22,15 @@ class View {
     'div',
     'tslider__handles'
   )
+  private handles: Handle[] = []
   private ruler: Ruler
   private rulerNodes: RulerNode[] = []
-  private handles: Handle[] = []
 
+  private orientation: Orientation
   private longSide: Side
   private shortSide: Side
   private x: Axis
   private y: Axis
-
-  private orientation: Orientation
 
   constructor({
     targetInput,
@@ -90,7 +88,7 @@ class View {
       .forEach((position, i) => this.handles[i].move(position))
   }
 
-  public updateInput(data: string): void {
+  updateInput(data: string): void {
     this.input.setValue(data)
   }
 
@@ -104,11 +102,6 @@ class View {
       { [this.x]: this.validateX(position.x), [this.y]: position.y },
       length
     )
-  }
-
-  private getRangeMiddle(): number {
-    const position = this.range.position[this.x] - this.track.position[this.x]
-    return position + this.range[this.longSide] / 2
   }
 
   updateLabels(labelsData: { position: number; value: string }[]): void {
@@ -125,6 +118,28 @@ class View {
     this.ruler.render(
       ruler.map(({ point, value }) => ({ point: this.validateX(point), value }))
     )
+  }
+
+  onTrackClick(handler: (point: number) => void): void {
+    this.sliderRoot.onClick(this.createTrackClickHandler(handler))
+  }
+
+  onRulerClick(handler: (point: number) => void): void {
+    this.ruler.onClick(this.createRulerClickHandler(handler))
+  }
+
+  onHandleDrag(handler: (point: number, id: number) => void): void {
+    this.handles.forEach((handle, i) => {
+      handle.onDrag(this.createHandleDragHandler(handler, i))
+    })
+  }
+
+  onTrackLengthChanged(handler: (length: number) => void): void {
+    this.sliderRoot.onResize((size) => handler(size[this.longSide]))
+  }
+
+  onInputUpdate(handler: (value: string) => void): void {
+    this.input.onFocusout(() => handler(this.input.getValue()))
   }
 
   private validateX(x: number) {
@@ -162,10 +177,6 @@ class View {
     }
   }
 
-  public onTrackClick(handler: (point: number) => void): void {
-    this.sliderRoot.onClick(this.createTrackClickHandler(handler))
-  }
-
   private createRulerClickHandler(
     handler: (point: number) => void
   ): (event: MouseEvent) => void {
@@ -173,10 +184,6 @@ class View {
       const node = this.getIfOneOf(<HTMLElement>target, this.rulerNodes)
       if (node) handler(Number(node.getContent()))
     }
-  }
-
-  public onRulerClick(handler: (point: number) => void): void {
-    this.ruler.onClick(this.createRulerClickHandler(handler))
   }
 
   private createHandleDragHandler(
@@ -191,18 +198,9 @@ class View {
     }
   }
 
-  public onHandleDrag(handler: (point: number, id: number) => void): void {
-    this.handles.forEach((handle, i) => {
-      handle.onDrag(this.createHandleDragHandler(handler, i))
-    })
-  }
-
-  public onTrackLengthChanged(handler: (length: number) => void): void {
-    this.sliderRoot.onResize((size) => handler(size[this.longSide]))
-  }
-
-  public onInputUpdate(handler: (value: string) => void): void {
-    this.input.onFocusout(() => handler(this.input.getValue()))
+  private getRangeMiddle(): number {
+    const position = this.range.position[this.x] - this.track.position[this.x]
+    return position + this.range[this.longSide] / 2
   }
 }
 
