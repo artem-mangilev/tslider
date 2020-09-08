@@ -15,6 +15,7 @@ describe('Model', () => {
         values: [5],
         trackWidth: 100,
         trackHeight: 10,
+        inputValuesSeparator: '-'
       })
     })
 
@@ -44,6 +45,7 @@ describe('Model', () => {
         values: [5, 9],
         trackWidth: 100,
         trackHeight: 10,
+        inputValuesSeparator: '-'
       })
     })
 
@@ -82,6 +84,7 @@ describe('Model', () => {
         values: [5, 7],
         trackWidth: 100,
         trackHeight: 10,
+        inputValuesSeparator: '-'
       })
     })
 
@@ -112,6 +115,7 @@ describe('Model', () => {
         values: [5, 7],
         trackWidth: 100,
         trackHeight: 10,
+        inputValuesSeparator: '-'
       })
     })
 
@@ -141,6 +145,7 @@ describe('Model', () => {
         values: [5, 7],
         trackWidth: 100,
         trackHeight: 10,
+        inputValuesSeparator: '-'
       })
     })
 

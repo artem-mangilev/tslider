@@ -62,22 +62,6 @@ describe('TrackPointValidator', () => {
       const validPoint = width
       expect(point).to.equal(validPoint)
     })
-
-    it('should return a point that equal to first handle position if last handle is active and number that lower than first handle position is passed', () => {
-      track.setActiveHandle(lastHandle)
-
-      const point = track.validatePoint(5)
-
-      expect(point).to.equal(firstHandle.getPosition())
-    })
-
-    it('should return a point that equal to last handle position if first handle is active and number that greater than last handle position is passed', () => {
-      track.setActiveHandle(firstHandle)
-
-      const point = track.validatePoint(35)
-
-      expect(point).to.equal(lastHandle.getPosition())
-    })
   })
 
   describe('validatePoint in pick single value mode', () => {
@@ -108,15 +92,6 @@ describe('TrackPointValidator', () => {
       const point = track.validatePoint(pointThatCloseToLowerValidPoint)
 
       const validPoint = 10
-      expect(point).to.equal(validPoint)
-    })
-
-    it('should return a valid point if active handle selected', () => {
-      track.setActiveHandle(firstHandle)
-      const pointThatCloseToHigherValidPoint = 18
-      const point = track.validatePoint(pointThatCloseToHigherValidPoint)
-
-      const validPoint = 20
       expect(point).to.equal(validPoint)
     })
   })
