@@ -121,7 +121,11 @@ class View {
   }
 
   onTrackClick(handler: (point: number) => void): void {
-    this.sliderRoot.onClick(this.createTrackClickHandler(handler))
+    const possibleTargets = [this.track, this.range, this.handlesContainer]
+
+    possibleTargets.forEach((target) => {
+      target.onClick(this.createTrackClickHandler(handler))
+    })
   }
 
   onRulerClick(handler: (point: number) => void): void {
@@ -165,24 +169,11 @@ class View {
   private createTrackClickHandler(
     handler: (point: number) => void
   ): (event: MouseEvent) => void {
-    return ({ target, clientX, clientY }) => {
-      const possibleTargets = [this.track, this.range, this.handlesContainer]
-
-      if (this.getIfOneOf(<HTMLElement>target, possibleTargets)) {
-        const position = this.validateX(
-          this.getLocalMousePosition(clientX, clientY, this.track)[this.x]
-        )
-        handler(position)
-      }
-    }
-  }
-
-  private createRulerClickHandler(
-    handler: (point: number) => void
-  ): (event: MouseEvent) => void {
-    return ({ target }) => {
-      const node = this.getIfOneOf(<HTMLElement>target, this.rulerNodes)
-      if (node) handler(Number(node.getContent()))
+    return ({ clientX, clientY }) => {
+      const position = this.validateX(
+        this.getLocalMousePosition(clientX, clientY, this.track)[this.x]
+      )
+      handler(position)
     }
   }
 
@@ -195,6 +186,15 @@ class View {
         this.getLocalMousePosition(clientX, clientY, this.track)[this.x]
       )
       handler(position, id)
+    }
+  }
+
+  private createRulerClickHandler(
+    handler: (point: number) => void
+  ): (event: MouseEvent) => void {
+    return ({ target }) => {
+      const node = this.getIfOneOf(<HTMLElement>target, this.rulerNodes)
+      if (node) handler(Number(node.getContent()))
     }
   }
 
