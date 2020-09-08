@@ -37,19 +37,20 @@ class Model extends Subject {
       options.values.join(options.inputValuesSeparator)
     )
 
-    this.converter = new ValuesToTrackPointConverter(
-      options.min,
-      options.max,
-      options.step
-    )
-
     this.track = {
       width: options.trackWidth,
       height: options.trackHeight,
     }
 
+    this.converter = new ValuesToTrackPointConverter(
+      options.min,
+      options.max,
+      options.step,
+      this.track
+    )
+
     options.values.forEach((data) => {
-      const point = this.converter.toTrackPoint(data, this.track.width)
+      const point = this.converter.toTrackPoint(data)
       this.handlesX.push(new HandleX(point))
     })
     this.handleY = new HandleY(this.track.height)
@@ -114,7 +115,7 @@ class Model extends Subject {
   updateHandlesByValues(values: number[]): void {
     this.handlesX.forEach((handle, i) => {
       if (values[i] !== undefined) {
-        const point = this.converter.toTrackPoint(values[i], this.track.width)
+        const point = this.converter.toTrackPoint(values[i])
         handle.setPosition(this.validator.validatePoint(point))
       }
     })
@@ -128,7 +129,7 @@ class Model extends Subject {
     this.input.set(input)
 
     this.input.getAsList().forEach((value, i) => {
-      const point = this.converter.toTrackPoint(value, this.track.width)
+      const point = this.converter.toTrackPoint(value)
       this.handlesX[i].setPosition(this.validator.validatePoint(point))
     })
 
@@ -136,9 +137,9 @@ class Model extends Subject {
   }
 
   resize(trackLength: number): void {
-    this.values.forEach((value, i) => {
-      const point = this.converter.toTrackPoint(value, trackLength)
-      this.handlesX[i].setPosition(point)
+    this.handlesX.forEach((handle) => {
+      const point = (trackLength / this.track.width) * handle.getPosition()
+      handle.setPosition(point)
     })
 
     this.track.width = trackLength
@@ -188,9 +189,7 @@ class Model extends Subject {
   }
 
   private handleToValue(handle: HandleX): number {
-    return Math.round(
-      this.converter.toValue(handle.getPosition(), this.track.width)
-    )
+    return Math.round(this.converter.toValue(handle.getPosition()))
   }
 
   private setInput(): void {

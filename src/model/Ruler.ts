@@ -14,7 +14,7 @@ class Ruler {
     const ruler = []
 
     for (let current = 0; current <= this.track.width; current += step) {
-      const value = this.converter.toValue(current, this.track.width)
+      const value = this.converter.toValue(current)
       ruler.push({ point: current, value })
     }
 
