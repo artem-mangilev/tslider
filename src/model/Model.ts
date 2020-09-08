@@ -15,6 +15,7 @@ import FillerY from './FillerY'
 import NearPointCalculator from './NearPointCalculator'
 import TransferHandle from './TransferHandle'
 import Input from './Input'
+import HandlesCollisionDetector from './HandlesCollisionDetector'
 
 class Model extends Subject {
   private validator: TrackPointValidator
@@ -26,6 +27,7 @@ class Model extends Subject {
   private fillerX: FillerX
   private fillerY: FillerY
   private input: Input
+  private collisionDetector: HandlesCollisionDetector
 
   constructor(private options: ModelOptions, observer?: Observer) {
     super()
@@ -46,15 +48,16 @@ class Model extends Subject {
       height: options.trackHeight,
     }
 
-    this.handleY = new HandleY(this.track.height)
-
     options.values.forEach((data) => {
       const point = this.converter.toTrackPoint(data, this.track.width)
       this.handlesX.push(new HandleX(point))
     })
+    this.handleY = new HandleY(this.track.height)
 
     this.fillerX = new FillerX(this.handlesX)
     this.fillerY = new FillerY()
+
+    this.collisionDetector = new HandlesCollisionDetector(this.handlesX)
 
     this.validator = new TrackPointValidator(
       this.converter.getNumberOfSteps(),
@@ -78,12 +81,13 @@ class Model extends Subject {
 
   updateHandle(point: number): void {
     const handle = this.handlesX[this.validator.getNearestPointIndex(point)]
-    this.validator.setActiveHandle(handle)
+    const oldPoint = handle.getPosition()
     const availablePoint = this.validator.validatePoint(point)
+    handle.setPosition(availablePoint)
 
-    if (availablePoint !== handle.getPosition()) {
-      handle.setPosition(availablePoint)
-
+    if (this.collisionDetector.doCollide()) {
+      handle.setPosition(oldPoint)
+    } else if (oldPoint !== handle.getPosition()) {
       this.setInput()
 
       this.notify(ModelUpdateTypes.Slide)
@@ -94,12 +98,13 @@ class Model extends Subject {
     if (!this.handlesX[index]) return
 
     const handle = this.handlesX[index]
-    this.validator.setActiveHandle(handle)
+    const oldPoint = handle.getPosition()
     const availablePoint = this.validator.validatePoint(point)
+    handle.setPosition(availablePoint)
 
-    if (availablePoint !== handle.getPosition()) {
-      handle.setPosition(availablePoint)
-
+    if (this.collisionDetector.doCollide()) {
+      handle.setPosition(oldPoint)
+    } else if (oldPoint !== handle.getPosition()) {
       this.setInput()
 
       this.notify(ModelUpdateTypes.Slide)
