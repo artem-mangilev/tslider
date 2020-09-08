@@ -43,7 +43,6 @@ class Tslider implements Observer {
         shortSide: 'height',
         x: 'x',
         y: 'y',
-        direction: 'left-to-right',
       },
       vertical: {
         orientation: 'vertical',
@@ -51,7 +50,6 @@ class Tslider implements Observer {
         shortSide: 'width',
         x: 'y',
         y: 'x',
-        direction: 'bottom-to-top',
       },
     }
 
