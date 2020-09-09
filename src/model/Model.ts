@@ -125,6 +125,18 @@ class Model extends Subject {
     this.notify(ModelUpdateTypes.Slide)
   }
 
+  updateHandleByValue(value: number | string): void {
+    if (typeof value === 'string') value = +value
+
+    const point = this.converter.toTrackPoint(value)
+    const handle = this.handlesX[this.validator.getNearestPointIndex(point)]
+    handle.setPosition(this.validator.validatePoint(point))
+
+    this.setInput()
+
+    this.notify(ModelUpdateTypes.Slide)
+  }
+
   updateHandlesByInput(input: string): void {
     this.input.set(input)
 

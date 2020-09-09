@@ -3,23 +3,27 @@ import RulerSegment from '../RulerSegment'
 import RulerNode from './RulerNode'
 
 class Ruler extends ViewTreeNode {
+  private nodes: RulerNode[]
+
   constructor(
     private longSide: 'width' | 'height',
     private x: 'x' | 'y',
     private y: 'x' | 'y'
   ) {
     super('div', 'tslider__ruler')
+
+    this.nodes = []
   }
 
   render(ruler: RulerSegment[]) {
-    const nodes: RulerNode[] = []
+    if (!this.nodes.length) {
+      ruler.forEach(() => this.nodes.push(new RulerNode()))
 
-    ruler.forEach(() => nodes.push(new RulerNode()))
-
-    this.add(...nodes)
+      this.add(...this.nodes)
+    }
 
     ruler.forEach((segment, i) => {
-      const node = nodes[i]
+      const node = this.nodes[i]
 
       node.setContent(segment.value.toString())
 
@@ -27,6 +31,10 @@ class Ruler extends ViewTreeNode {
       // @ts-ignore
       node.move({ [this.x]: segment.point - middle, [this.y]: 0 })
     })
+  }
+
+  onClick(handler: (e: MouseEvent) => void): void {
+    this.nodes.forEach((node) => node.onClick(handler))
   }
 }
 

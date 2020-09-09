@@ -124,7 +124,8 @@ class Tslider implements Observer {
     }
 
     if (this.rulerActiveFlag) {
-      this.view.onRulerClick(updateHandle)
+      const updateHandleByValue = model.updateHandleByValue.bind(model)
+      this.view.onRulerClick(updateHandleByValue)
     }
   }
 

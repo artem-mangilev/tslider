@@ -7,7 +7,6 @@ import ViewOptions from './ViewOptions'
 import { Side, Axis } from '../OrientationOptions'
 import ViewTreeNode from '../utils/ViewTreeNode'
 import RulerSegment from '../RulerSegment'
-import RulerNode from './RulerNode'
 import LabelsContainer from './LabelsContainer'
 import Ruler from './Ruler'
 import SliderRoot from './SliderRoot'
@@ -24,7 +23,6 @@ class View {
   )
   private handles: Handle[] = []
   private ruler: Ruler
-  private rulerNodes: RulerNode[] = []
 
   private orientation: Orientation
   private longSide: Side
@@ -128,8 +126,10 @@ class View {
     })
   }
 
-  onRulerClick(handler: (point: number) => void): void {
-    this.ruler.onClick(this.createRulerClickHandler(handler))
+  onRulerClick(handler: (value: string) => void): void {
+    this.ruler.onClick(({ target }) => {
+      handler(new ViewTreeNode(<HTMLElement>target).getContent())
+    })
   }
 
   onHandleDrag(handler: (point: number, id: number) => void): void {
@@ -162,10 +162,6 @@ class View {
     return { x: mouseX - x, y: mouseY - y }
   }
 
-  private getIfOneOf(element: HTMLElement, nodes: ViewTreeNode[]) {
-    return nodes.find((node) => node.$elem[0] === element)
-  }
-
   private createTrackClickHandler(
     handler: (point: number) => void
   ): (event: MouseEvent) => void {
@@ -186,15 +182,6 @@ class View {
         this.getLocalMousePosition(clientX, clientY, this.track)[this.x]
       )
       handler(position, id)
-    }
-  }
-
-  private createRulerClickHandler(
-    handler: (point: number) => void
-  ): (event: MouseEvent) => void {
-    return ({ target }) => {
-      const node = this.getIfOneOf(<HTMLElement>target, this.rulerNodes)
-      if (node) handler(Number(node.getContent()))
     }
   }
 
