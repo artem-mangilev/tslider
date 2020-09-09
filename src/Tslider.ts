@@ -1,10 +1,10 @@
 import Model from './model/Model'
-import ModelOptions from './model/ModelOptions'
+import ModelOptions from './model/ModelParams'
 import { ModelEvents } from './model/ModelEvents'
-import SliderOptions from './SliderOptions'
+import SliderParams from './SliderParams'
 import Observer from './utils/Observer'
 import View from './view/View'
-import ViewOptions from './view/ViewOptions'
+import ViewParams from './view/ViewParams'
 import { OrientationOptions } from './OrientationOptions'
 
 class Tslider implements Observer {
@@ -25,7 +25,7 @@ class Tslider implements Observer {
     showLabels = true,
     hideInput = true,
     inputValuesSeparator = ',',
-  }: SliderOptions) {
+  }: SliderParams) {
     const rangeValues: number[] = [from, ...(to !== undefined ? [to] : [])]
 
     const orientationOptions: OrientationOptions = {
@@ -47,7 +47,7 @@ class Tslider implements Observer {
 
     const orientationOption = orientationOptions[orientation]
     const numberOfHandles = rangeValues.length
-    const viewOptions: ViewOptions = {
+    const viewOptions: ViewParams = {
       orientationOption,
       numberOfHandles,
       targetInput,

@@ -1,4 +1,4 @@
-export default interface ModelOptions {
+export default interface ModelParams {
   step: number
   max: number
   min: number

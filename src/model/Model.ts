@@ -1,5 +1,5 @@
 import Subject from '../utils/Subject'
-import ModelOptions from './ModelOptions'
+import ModelParams from './ModelParams'
 import { ModelEvents } from './ModelEvents'
 import TrackPointValidator from './TrackPointValidator'
 import RulerSegment from '../RulerSegment'
@@ -28,7 +28,7 @@ class Model extends Subject {
   private input: Input
   private collisionDetector: HandlesCollisionDetector
 
-  constructor(private options: ModelOptions) {
+  constructor(private options: ModelParams) {
     super()
 
     this.input = new Input(

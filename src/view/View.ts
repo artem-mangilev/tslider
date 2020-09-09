@@ -3,7 +3,7 @@ import Point from '../utils/Point'
 import Handle from './Handle'
 import Input from './Input'
 import Range from './Range'
-import ViewOptions from './ViewOptions'
+import ViewParams from './ViewParams'
 import { Side, Axis } from '../OrientationOptions'
 import ViewTreeNode from '../utils/ViewTreeNode'
 import RulerSegment from '../RulerSegment'
@@ -41,7 +41,7 @@ class View extends ViewTreeNode {
     isRulerClickable,
     showLabels,
     showRuler,
-  }: ViewOptions) {
+  }: ViewParams) {
     super('div', `tslider tslider_${orientation}`)
 
     this.input = new Input(targetInput, hideInput)

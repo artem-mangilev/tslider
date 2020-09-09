@@ -1,6 +1,6 @@
 import { Orientation } from './utils/aliases'
 
-export default interface SliderOptions {
+export default interface SliderParams {
   min: number
   max: number
   from: number

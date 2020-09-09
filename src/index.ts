@@ -1,5 +1,5 @@
 import './index.scss'
-import SliderOptions from './SliderOptions'
+import SliderParams from './SliderParams'
 import Tslider from './Tslider'
 import { Orientation } from './utils/aliases'
 
@@ -7,7 +7,7 @@ const orientations: Orientation[] = ['vertical', 'horizontal']
 
 $(document).ready(() => {
   $('.tsl-target').each((i, elem) => {
-    const options: SliderOptions = {
+    const options: SliderParams = {
       min: 0,
       max: 100,
       from: 50,
@@ -19,9 +19,6 @@ $(document).ready(() => {
       showLabels: true,
       hideInput: false,
       inputValuesSeparator: ', ',
-      // TODO: implement these options
-      // handleMotion: 'smooth' | 'discrete'
-      // labelVisibility: 'visible' | 'hidden' | 'appears-on-hover'
       orientation: orientations[i],
       targetInput: <HTMLInputElement>elem,
     }
