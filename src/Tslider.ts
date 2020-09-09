@@ -94,21 +94,13 @@ class Tslider implements Observer {
   }
 
   private handleInitializationAction(model: Model): void {
-    const updateHandle = model.updateHandle.bind(model)
-    this.view.onTrackClick(updateHandle)
-
-    const updateHandlesByIndex = model.updateHandleByIndex.bind(model)
-    this.view.onHandleDrag(updateHandlesByIndex)
-
-    const resize = model.resize.bind(model)
-    this.view.onTrackLengthChanged(resize)
-
-    const updateHandlesByInput = model.updateHandlesByInput.bind(model)
-    this.view.onInputUpdate(updateHandlesByInput)
-
+    this.view.onTrackClick(model.updateHandle.bind(model))
+    this.view.onHandleDrag(model.updateHandleByIndex.bind(model))
+    this.view.onTrackLengthChanged(model.resize.bind(model))
+    this.view.onInputUpdate(model.updateHandlesByInput.bind(model))
+    
     if (this.rulerActiveFlag) {
-      const updateHandleByValue = model.updateHandleByValue.bind(model)
-      this.view.onRulerClick(updateHandleByValue)
+      this.view.onRulerClick(model.updateHandleByValue.bind(model))
     }
   }
 
