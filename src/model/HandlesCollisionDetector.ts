@@ -8,7 +8,7 @@ class HandlesCollisionDetector {
 
     if (this.handles.length === 2) {
       return this.handles[0].getPosition() > this.handles[1].getPosition()
-    } 
+    }
   }
 }
 

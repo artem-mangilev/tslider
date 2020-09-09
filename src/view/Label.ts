@@ -12,7 +12,6 @@ class Label extends ViewTreeNode {
   render(data: { position: number; value: string }): void {
     this.setContent(data.value)
 
-    // label should be placed in the middle of handle
     const middle = this[this.longSide] / 2
     // @ts-ignore
     this.move({ [this.x]: data.position - middle, [this.y]: 0 })

@@ -73,9 +73,6 @@ class Model extends Subject {
       this.attach(observer)
 
       this.notify(ModelUpdateTypes.Initialization)
-      // make the initial draw of the slider
-      // TODO: by this call, model could assume that the view couldn't draw the slider in initialization step,
-      // so find the better way to make iniital draw
       this.notify(ModelUpdateTypes.Slide)
     }
   }

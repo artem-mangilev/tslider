@@ -22,11 +22,6 @@ class ValuesToTrackPointConverter {
     return ratio * this.getMaxMinDiff() + this.min
   }
 
-  // getTrackStep(trackLength: number): number {
-  //   const ratio = this.step / this.getMaxMinDiff()
-  //   return ratio * trackLength
-  // }
-
   getNumberOfSteps(): number {
     return this.getMaxMinDiff() / this.step
   }

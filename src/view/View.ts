@@ -49,14 +49,11 @@ class View {
     this.range = new Range(longSide)
     this.ruler = new Ruler(longSide, x, y)
 
-    // prettier-ignore
     this.sliderRoot.add(
       this.labelsContainer,
       this.track,
       this.range,
-      this.handlesContainer.add(
-        ...this.handles
-      ),
+      this.handlesContainer.add(...this.handles),
       this.ruler
     )
 
