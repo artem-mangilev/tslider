@@ -3,7 +3,6 @@ import ModelOptions from './ModelOptions'
 import { ModelUpdateTypes } from './ModelUpdateTypes'
 import TrackPointValidator from './TrackPointValidator'
 import RulerSegment from '../RulerSegment'
-import Observer from '../utils/Observer'
 import ValuesToTrackPointConverter from './ValuesToTrackPointConverter'
 import Ruler from './Ruler'
 import Shape from '../utils/Shape'
@@ -29,7 +28,7 @@ class Model extends Subject {
   private input: Input
   private collisionDetector: HandlesCollisionDetector
 
-  constructor(private options: ModelOptions, observer?: Observer) {
+  constructor(private options: ModelOptions) {
     super()
 
     this.input = new Input(
@@ -68,13 +67,6 @@ class Model extends Subject {
     )
 
     this._ruler = new Ruler(this.track, this.converter)
-
-    if (observer) {
-      this.attach(observer)
-
-      this.notify(ModelUpdateTypes.Initialization)
-      this.notify(ModelUpdateTypes.Slide)
-    }
   }
 
   updateHandle(point: number): void {

@@ -76,7 +76,9 @@ class Tslider implements Observer {
       inputValuesSeparator,
     }
 
-    this.model = new Model(modelOptions, this)
+    this.model = new Model(modelOptions)
+    this.model.attach(this)
+    this.model.notify(ModelUpdateTypes.Initialization)
   }
 
   // TODO: this method should not be public

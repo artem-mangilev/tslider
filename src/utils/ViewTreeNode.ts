@@ -48,6 +48,10 @@ export default class ViewTreeNode {
     return this
   }
 
+  oneOf(nodes: ViewTreeNode[]): boolean {
+    return !!nodes.find(node => node.$elem[0] === this.$elem[0])
+  }
+
   move(position: Point): void {
     this.$elem.css('transform', `translate(${position.x}px, ${position.y}px)`)
   }

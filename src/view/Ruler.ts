@@ -38,6 +38,11 @@ class Ruler extends ViewTreeNode {
 
   onClick(handler: (e: MouseEvent) => void): void {
     this.nodes.forEach((node) => node.onClick(handler))
+
+    super.onClick((e) => {
+      const node = new ViewTreeNode(<HTMLElement>e.target)
+      if (node.oneOf(this.nodes)) handler(<MouseEvent>e)
+    })
   }
 }
 
