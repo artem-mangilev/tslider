@@ -5,7 +5,7 @@ export default interface SliderOptions {
   max: number
   from: number
   to?: number
-  step?: number
+  step: number
   ruler?: boolean
   rulerSteps?: number
   rulerActive?: boolean
