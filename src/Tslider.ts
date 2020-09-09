@@ -151,9 +151,9 @@ class Tslider implements Observer {
       )
     }
 
-    // if (this.rulerFlag) {
-    //   this.view.renderRuler(ruler)
-    // }
+    if (this.rulerFlag) {
+      this.view.renderRuler(ruler)
+    }
 
     this.view.updateInput(inputValue)
   }
