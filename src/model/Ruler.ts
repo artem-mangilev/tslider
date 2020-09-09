@@ -5,11 +5,12 @@ import Shape from '../utils/Shape'
 class Ruler {
   constructor(
     private track: Shape,
-    private converter: ValuesToTrackPointConverter
+    private converter: ValuesToTrackPointConverter,
+    private steps: number
   ) {}
 
-  getSegments(steps: number): RulerSegment[] {
-    const step = this.track.width / steps
+  getSegments(): RulerSegment[] {
+    const step = this.track.width / this.steps
 
     const ruler = []
 

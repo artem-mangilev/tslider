@@ -28,28 +28,26 @@ class Model extends Subject {
   private input: Input
   private collisionDetector: HandlesCollisionDetector
 
-  constructor(private options: ModelParams) {
+  constructor({
+    inputValuesSeparator: separator,
+    trackHeight: height,
+    trackWidth: width,
+    min,
+    max,
+    step,
+    rulerSteps,
+    values,
+  }: ModelParams) {
     super()
 
-    this.input = new Input(
-      options.inputValuesSeparator,
-      options.values.join(options.inputValuesSeparator)
-    )
+    this.input = new Input(separator, values.join(separator))
 
-    this.track = {
-      width: options.trackWidth,
-      height: options.trackHeight,
-    }
+    this.track = { width, height }
 
-    this.converter = new ValuesToTrackPointConverter(
-      options.min,
-      options.max,
-      options.step,
-      this.track
-    )
+    this.converter = new ValuesToTrackPointConverter(min, max, step, this.track)
 
-    options.values.forEach((data) => {
-      const point = this.converter.toTrackPoint(data)
+    values.forEach((value) => {
+      const point = this.converter.toTrackPoint(value)
       this.handlesX.push(new HandleX(point))
     })
     this.handleY = new HandleY(this.track.height)
@@ -66,7 +64,7 @@ class Model extends Subject {
       new NearPointCalculator()
     )
 
-    this._ruler = new Ruler(this.track, this.converter)
+    this._ruler = new Ruler(this.track, this.converter, rulerSteps)
   }
 
   updateHandle(point: number): void {
@@ -145,7 +143,6 @@ class Model extends Subject {
 
     this.track.width = trackLength
 
-    // TODO: current method needs another update type
     this.notify(ModelEvents.Update)
   }
 
@@ -182,7 +179,7 @@ class Model extends Subject {
   }
 
   get ruler(): RulerSegment[] {
-    return this._ruler.getSegments(this.options.rulerSteps)
+    return this._ruler.getSegments()
   }
 
   get inputValue(): string {
