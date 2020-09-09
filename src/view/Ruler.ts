@@ -15,11 +15,14 @@ class Ruler extends ViewTreeNode {
     this.nodes = []
   }
 
-  render(ruler: RulerSegment[]) {
-    if (!this.nodes.length) {
-      ruler.forEach(() => this.nodes.push(new RulerNode()))
+  private init(ruler: RulerSegment[]) {
+    ruler.forEach(() => this.nodes.push(new RulerNode()))
+    this.add(...this.nodes)
+  }
 
-      this.add(...this.nodes)
+  render(ruler: RulerSegment[]) {
+    if (!this.nodes.length || ruler.length !== this.nodes.length) {
+      this.init(ruler)
     }
 
     ruler.forEach((segment, i) => {
