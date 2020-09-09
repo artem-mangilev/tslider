@@ -9,12 +9,10 @@ import ViewTreeNode from '../utils/ViewTreeNode'
 import RulerSegment from '../RulerSegment'
 import LabelsContainer from './LabelsContainer'
 import Ruler from './Ruler'
-import SliderRoot from './SliderRoot'
 import TransferHandle from '../model/TransferHandle'
 
-class View {
+class View extends ViewTreeNode {
   private input: Input
-  private sliderRoot: SliderRoot
   private track: ViewTreeNode = new ViewTreeNode('div', 'tslider__track')
   private range: Range
   private labelsContainer: LabelsContainer
@@ -44,10 +42,10 @@ class View {
     showLabels,
     showRuler,
   }: ViewOptions) {
-    this.sliderRoot = new SliderRoot(orientation)
+    super('div', `tslider tslider_${orientation}`)
 
     this.input = new Input(targetInput, hideInput)
-    this.input.after(this.sliderRoot)
+    this.input.after(this)
 
     Array.from({ length: numberOfHandles }, () => {
       this.handles.push(new Handle())
@@ -57,7 +55,7 @@ class View {
     this.range = new Range(longSide)
     this.ruler = new Ruler(longSide, x, y)
 
-    this.sliderRoot.add(
+    this.add(
       this.labelsContainer,
       this.track,
       this.range,
@@ -135,7 +133,9 @@ class View {
     )
   }
 
-  private renderLabels(labelsData: { position: number; value: string }[]): void {
+  private renderLabels(
+    labelsData: { position: number; value: string }[]
+  ): void {
     this.labelsContainer.render(
       labelsData.map(({ position, value }) => ({
         position: this.validateX(position),
@@ -173,7 +173,7 @@ class View {
   }
 
   onTrackLengthChanged(handler: (length: number) => void): void {
-    this.sliderRoot.onResize((size) => handler(size[this.longSide]))
+    this.onResize((size) => handler(size[this.longSide]))
   }
 
   onInputUpdate(handler: (value: string) => void): void {
