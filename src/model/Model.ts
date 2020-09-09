@@ -1,6 +1,6 @@
 import Subject from '../utils/Subject'
 import ModelOptions from './ModelOptions'
-import { ModelUpdateTypes } from './ModelUpdateTypes'
+import { ModelEvents } from './ModelEvents'
 import TrackPointValidator from './TrackPointValidator'
 import RulerSegment from '../RulerSegment'
 import ValuesToTrackPointConverter from './ValuesToTrackPointConverter'
@@ -80,7 +80,7 @@ class Model extends Subject {
     } else if (oldPoint !== handle.getPosition()) {
       this.setInput()
 
-      this.notify(ModelUpdateTypes.Slide)
+      this.notify(ModelEvents.Update)
     }
   }
 
@@ -97,7 +97,7 @@ class Model extends Subject {
     } else if (oldPoint !== handle.getPosition()) {
       this.setInput()
 
-      this.notify(ModelUpdateTypes.Slide)
+      this.notify(ModelEvents.Update)
     }
   }
 
@@ -111,7 +111,7 @@ class Model extends Subject {
 
     this.setInput()
 
-    this.notify(ModelUpdateTypes.Slide)
+    this.notify(ModelEvents.Update)
   }
 
   updateHandleByValue(value: number | string): void {
@@ -123,7 +123,7 @@ class Model extends Subject {
 
     this.setInput()
 
-    this.notify(ModelUpdateTypes.Slide)
+    this.notify(ModelEvents.Update)
   }
 
   updateHandlesByInput(input: string): void {
@@ -134,7 +134,7 @@ class Model extends Subject {
       this.handlesX[i].setPosition(this.validator.validatePoint(point))
     })
 
-    this.notify(ModelUpdateTypes.Slide)
+    this.notify(ModelEvents.Update)
   }
 
   resize(trackLength: number): void {
@@ -146,7 +146,7 @@ class Model extends Subject {
     this.track.width = trackLength
 
     // TODO: current method needs another update type
-    this.notify(ModelUpdateTypes.Slide)
+    this.notify(ModelEvents.Update)
   }
 
   get rangeLength(): number {

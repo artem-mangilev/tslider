@@ -1,6 +1,6 @@
 import Model from './model/Model'
 import ModelOptions from './model/ModelOptions'
-import { ModelUpdateTypes } from './model/ModelUpdateTypes'
+import { ModelEvents } from './model/ModelEvents'
 import SliderOptions from './SliderOptions'
 import Observer from './utils/Observer'
 import View from './view/View'
@@ -78,33 +78,32 @@ class Tslider implements Observer {
 
     this.model = new Model(modelOptions)
     this.model.attach(this)
-    this.model.notify(ModelUpdateTypes.Initialization)
+    this.model.notify(ModelEvents.Init)
   }
 
   // TODO: this method should not be public
-  public update(updateType: ModelUpdateTypes, state: Model): void {
-    switch (updateType) {
-      case ModelUpdateTypes.Initialization:
-        this.handleInitializationAction(state)
-        break
-      case ModelUpdateTypes.Slide:
-        this.handleSlideAction(state)
-        break
+  public update(event: ModelEvents, state: Model): void {
+    if (event === ModelEvents.Init) {
+      this.handleInit(state)
+    }
+
+    if (event === ModelEvents.Update) {
+      this.handleUpdate(state)
     }
   }
 
-  private handleInitializationAction(model: Model): void {
+  private handleInit(model: Model): void {
     this.view.onTrackClick(model.updateHandle.bind(model))
     this.view.onHandleDrag(model.updateHandleByIndex.bind(model))
     this.view.onTrackLengthChanged(model.resize.bind(model))
     this.view.onInputUpdate(model.updateHandlesByInput.bind(model))
-    
+
     if (this.rulerActiveFlag) {
       this.view.onRulerClick(model.updateHandleByValue.bind(model))
     }
   }
 
-  private handleSlideAction({
+  private handleUpdate({
     handles,
     rangePosition,
     rangeLength,
