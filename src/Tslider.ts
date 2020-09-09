@@ -110,12 +110,12 @@ class Tslider implements Observer {
     ruler,
     inputValue,
   }: Model): void {
-    this.view.slideTo(handles.map((handle) => handle.position))
+    this.view.renderHandles(handles.map((handle) => handle.position))
 
-    this.view.updateRange(rangePosition, rangeLength)
+    this.view.renderRange(rangePosition, rangeLength)
 
     if (this.labelFlag) {
-      this.view.updateLabels(
+      this.view.renderLabels(
         handles.map((handle) => ({
           position: handle.position.x,
           value: handle.value,
@@ -127,7 +127,7 @@ class Tslider implements Observer {
       this.view.renderRuler(ruler)
     }
 
-    this.view.updateInput(inputValue)
+    this.view.renderInput(inputValue)
   }
 
   public updateHandles(from: number, to?: number): void {

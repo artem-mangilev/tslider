@@ -73,7 +73,7 @@ class View {
   }
 
   // TODO: if both handles at max point, drag doesn't work
-  slideTo(positions: Point[]): void {
+  renderHandles(positions: Point[]): void {
     positions
       .map((position) => ({
         [this.x]: this.validateX(position.x),
@@ -83,11 +83,11 @@ class View {
       .forEach((position, i) => this.handles[i].move(position))
   }
 
-  updateInput(data: string): void {
+  renderInput(data: string): void {
     this.input.setValue(data)
   }
 
-  updateRange(position: Point, length: number): void {
+  renderRange(position: Point, length: number): void {
     if (this.orientation === 'vertical') {
       position.x = position.x + length
     }
@@ -99,7 +99,7 @@ class View {
     )
   }
 
-  updateLabels(labelsData: { position: number; value: string }[]): void {
+  renderLabels(labelsData: { position: number; value: string }[]): void {
     this.labelsContainer.render(
       labelsData.map(({ position, value }) => ({
         position: this.validateX(position),
