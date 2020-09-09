@@ -1,4 +1,4 @@
-import HandleAxle from "./HandleAxle";
+import HandleAxle from './HandleAxle'
 
 class HandleX implements HandleAxle {
   constructor(private position: number) {}

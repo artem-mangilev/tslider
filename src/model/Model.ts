@@ -2,7 +2,7 @@ import Subject from '../utils/Subject'
 import ModelParams from './ModelParams'
 import { ModelEvents } from './ModelEvents'
 import TrackPointValidator from './TrackPointValidator'
-import RulerSegment from '../RulerSegment'
+import RulerSegment from './RulerSegment'
 import ValuesToTrackPointConverter from './ValuesToTrackPointConverter'
 import Ruler from './Ruler'
 import Shape from '../utils/Shape'
@@ -32,11 +32,11 @@ class Model extends Subject {
     inputValuesSeparator: separator,
     trackHeight: height,
     trackWidth: width,
-    min,
-    max,
-    step,
     rulerSteps,
     values,
+    step,
+    min,
+    max,
   }: ModelParams) {
     super()
 

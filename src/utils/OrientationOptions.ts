@@ -1,4 +1,4 @@
-import { Orientation } from './utils/aliases'
+import { Orientation } from './aliases'
 
 export type OrientationOptions = {
   [T in Orientation]?: OrientationOption

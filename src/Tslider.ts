@@ -5,7 +5,7 @@ import SliderParams from './SliderParams'
 import Observer from './utils/Observer'
 import View from './view/View'
 import ViewParams from './view/ViewParams'
-import { OrientationOptions } from './OrientationOptions'
+import { OrientationOptions } from './utils/OrientationOptions'
 
 class Tslider implements Observer {
   private view: View

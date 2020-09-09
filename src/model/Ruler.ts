@@ -1,4 +1,4 @@
-import RulerSegment from '../RulerSegment'
+import RulerSegment from './RulerSegment'
 import ValuesToTrackPointConverter from './ValuesToTrackPointConverter'
 import Shape from '../utils/Shape'
 
