@@ -13,10 +13,10 @@ $(document).ready(() => {
       from: 50,
       to: 100,
       step: 1,
-      ruler: true,
+      showRuler: true,
       rulerSteps: 4,
-      rulerActive: true,
-      label: true,
+      isRulerClickable: true,
+      showLabels: true,
       hideInput: false,
       inputValuesSeparator: ', ',
       // TODO: implement these options

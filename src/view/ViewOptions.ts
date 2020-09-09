@@ -6,7 +6,9 @@ export default interface ViewOptions {
   targetInput: HTMLInputElement
   numberOfHandles: number
   orientationOption: OrientationOption
-  label: boolean
+  showLabels: boolean
+  showRuler: boolean
+  isRulerClickable: boolean
   hideInput: boolean
   inputValuesSeparator: string
 }

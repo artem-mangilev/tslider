@@ -10,6 +10,7 @@ import RulerSegment from '../RulerSegment'
 import LabelsContainer from './LabelsContainer'
 import Ruler from './Ruler'
 import SliderRoot from './SliderRoot'
+import TransferHandle from '../model/TransferHandle'
 
 class View {
   private input: Input
@@ -30,11 +31,18 @@ class View {
   private x: Axis
   private y: Axis
 
+  private isRulerClickable: boolean
+  private showLabels: boolean
+  private showRuler: boolean
+
   constructor({
     targetInput,
     numberOfHandles,
     orientationOption: { orientation, longSide, shortSide, x, y },
     hideInput,
+    isRulerClickable,
+    showLabels,
+    showRuler,
   }: ViewOptions) {
     this.sliderRoot = new SliderRoot(orientation)
 
@@ -62,6 +70,10 @@ class View {
     this.shortSide = shortSide
     this.x = x
     this.y = y
+
+    this.isRulerClickable = isRulerClickable
+    this.showLabels = showLabels
+    this.showRuler = showRuler
   }
 
   getTrackWidth(): number {
@@ -72,8 +84,32 @@ class View {
     return this.track[this.shortSide]
   }
 
+  render(data: {
+    handles: TransferHandle[]
+    inputValue: string
+    rangePosition: Point
+    rangeLength: number
+    ruler: RulerSegment[]
+  }): void {
+    this.renderHandles(data.handles.map((handle) => handle.position))
+
+    this.showLabels &&
+      this.renderLabels(
+        data.handles.map(({ position, value }) => ({
+          position: position.x,
+          value,
+        }))
+      )
+
+    this.renderInput(data.inputValue)
+
+    this.renderRange(data.rangePosition, data.rangeLength)
+
+    this.showRuler && this.renderRuler(data.ruler)
+  }
+
   // TODO: if both handles at max point, drag doesn't work
-  renderHandles(positions: Point[]): void {
+  private renderHandles(positions: Point[]): void {
     positions
       .map((position) => ({
         [this.x]: this.validateX(position.x),
@@ -83,11 +119,11 @@ class View {
       .forEach((position, i) => this.handles[i].move(position))
   }
 
-  renderInput(data: string): void {
+  private renderInput(data: string): void {
     this.input.setValue(data)
   }
 
-  renderRange(position: Point, length: number): void {
+  private renderRange(position: Point, length: number): void {
     if (this.orientation === 'vertical') {
       position.x = position.x + length
     }
@@ -99,7 +135,7 @@ class View {
     )
   }
 
-  renderLabels(labelsData: { position: number; value: string }[]): void {
+  private renderLabels(labelsData: { position: number; value: string }[]): void {
     this.labelsContainer.render(
       labelsData.map(({ position, value }) => ({
         position: this.validateX(position),
@@ -109,7 +145,7 @@ class View {
     )
   }
 
-  renderRuler(ruler: RulerSegment[]): void {
+  private renderRuler(ruler: RulerSegment[]): void {
     this.ruler.render(
       ruler.map(({ point, value }) => ({ point: this.validateX(point), value }))
     )
@@ -124,9 +160,10 @@ class View {
   }
 
   onRulerClick(handler: (value: string) => void): void {
-    this.ruler.onClick(({ target }) => {
-      handler(new ViewTreeNode(<HTMLElement>target).getContent())
-    })
+    this.isRulerClickable &&
+      this.ruler.onClick(({ target }) => {
+        handler(new ViewTreeNode(<HTMLElement>target).getContent())
+      })
   }
 
   onHandleDrag(handler: (point: number, id: number) => void): void {

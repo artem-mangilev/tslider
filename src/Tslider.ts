@@ -9,10 +9,7 @@ import { OrientationOptions } from './OrientationOptions'
 
 class Tslider implements Observer {
   private view: View
-  private rulerFlag: boolean
-  private rulerActiveFlag: boolean
   private model: Model
-  private labelFlag: boolean
 
   constructor({
     targetInput,
@@ -22,17 +19,13 @@ class Tslider implements Observer {
     min,
     step,
     orientation,
-    ruler = false,
+    showRuler = false,
     rulerSteps = 4,
-    rulerActive = true,
-    label = true,
+    isRulerClickable = true,
+    showLabels = true,
     hideInput = true,
     inputValuesSeparator = ',',
   }: SliderOptions) {
-    this.labelFlag = label
-    this.rulerFlag = ruler
-    this.rulerActiveFlag = rulerActive
-
     const rangeValues: number[] = [from, ...(to !== undefined ? [to] : [])]
 
     const orientationOptions: OrientationOptions = {
@@ -58,7 +51,9 @@ class Tslider implements Observer {
       orientationOption,
       numberOfHandles,
       targetInput,
-      label,
+      showLabels,
+      showRuler,
+      isRulerClickable,
       hideInput,
       inputValuesSeparator,
     }
@@ -97,10 +92,7 @@ class Tslider implements Observer {
     this.view.onHandleDrag(model.updateHandleByIndex.bind(model))
     this.view.onTrackLengthChanged(model.resize.bind(model))
     this.view.onInputUpdate(model.updateHandlesByInput.bind(model))
-
-    if (this.rulerActiveFlag) {
-      this.view.onRulerClick(model.updateHandleByValue.bind(model))
-    }
+    this.view.onRulerClick(model.updateHandleByValue.bind(model))
   }
 
   private handleUpdate({
@@ -110,24 +102,13 @@ class Tslider implements Observer {
     ruler,
     inputValue,
   }: Model): void {
-    this.view.renderHandles(handles.map((handle) => handle.position))
-
-    this.view.renderRange(rangePosition, rangeLength)
-
-    if (this.labelFlag) {
-      this.view.renderLabels(
-        handles.map((handle) => ({
-          position: handle.position.x,
-          value: handle.value,
-        }))
-      )
-    }
-
-    if (this.rulerFlag) {
-      this.view.renderRuler(ruler)
-    }
-
-    this.view.renderInput(inputValue)
+    this.view.render({
+      handles,
+      rangePosition,
+      rangeLength,
+      ruler,
+      inputValue,
+    })
   }
 
   public updateHandles(from: number, to?: number): void {

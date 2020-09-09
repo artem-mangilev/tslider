@@ -6,10 +6,10 @@ export default interface SliderOptions {
   from: number
   to?: number
   step: number
-  ruler?: boolean
+  showRuler?: boolean
   rulerSteps?: number
-  rulerActive?: boolean
-  label?: boolean
+  isRulerClickable?: boolean
+  showLabels?: boolean
   hideInput?: boolean
   inputValuesSeparator?: string
   targetInput: HTMLInputElement
