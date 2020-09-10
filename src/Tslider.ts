@@ -26,7 +26,7 @@ class Tslider implements Observer {
     hideInput = true,
     inputValuesSeparator = ',',
   }: SliderParams) {
-    const rangeValues: number[] = [from, ...(to !== undefined ? [to] : [])]
+    const rangeValues = [from, ...(to !== undefined ? [to] : [])]
 
     const orientationOptions: OrientationOptions = {
       horizontal: {
@@ -46,10 +46,8 @@ class Tslider implements Observer {
     }
 
     const orientationOption = orientationOptions[orientation]
-    const numberOfHandles = rangeValues.length
     const viewOptions: ViewParams = {
       orientationOption,
-      numberOfHandles,
       targetInput,
       showLabels,
       showRuler,
