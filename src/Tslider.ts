@@ -54,7 +54,7 @@ class Tslider {
     this.model.notify(ModelEvents.Init)
   }
 
-  updateHandles(from: number, to?: number): void {
+  setValues(from: number, to?: number): void {
     if (to === undefined) {
       this.model.updateHandlesByValues([from])
     } else {
