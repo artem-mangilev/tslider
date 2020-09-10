@@ -21,7 +21,8 @@ $ruler-margin-from-track: 5px;
   }
 
   &__ruler,
-  &__label {
+  &__label,
+  &__handle {
     user-select: none;
   }
 
