@@ -40,13 +40,12 @@ class View extends ViewTreeNode {
     super('div', `tslider tslider_${orientation}`)
 
     this.input = new Input(targetInput, hideInput)
-    this.input.after(this)
-
     this.handlesContainer = new HandlesContainer()
     this.labelsContainer = new LabelsContainer(longSide, x, y)
     this.range = new Range(longSide)
     this.ruler = new Ruler(longSide, x, y)
 
+    this.input.after(this)
     this.add(
       this.labelsContainer,
       this.track,
