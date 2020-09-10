@@ -6,6 +6,5 @@ export default interface ViewParams {
   showLabels: boolean
   showRuler: boolean
   isRulerClickable: boolean
-  hideInput: boolean
   inputValuesSeparator: string
 }

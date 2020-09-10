@@ -1,10 +1,10 @@
 import ViewTreeNode from "../utils/ViewTreeNode"
 
 class Input extends ViewTreeNode {
-  constructor(private input: HTMLInputElement, hide: boolean) {
+  constructor(private input: HTMLInputElement) {
     super(input)
 
-    hide ? this.hide() : this.show()
+    this.attr('type', 'hidden')
   }
 
   setValue(value: string): void {

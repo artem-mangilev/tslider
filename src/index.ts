@@ -17,7 +17,6 @@ $(document).ready(() => {
       rulerSteps: 4,
       isRulerClickable: true,
       showLabels: true,
-      hideInput: false,
       inputValuesSeparator: ', ',
       orientation: orientations[i],
       targetInput: <HTMLInputElement>elem,

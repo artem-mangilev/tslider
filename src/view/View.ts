@@ -32,14 +32,13 @@ class View extends ViewTreeNode {
   constructor({
     targetInput,
     orientationOption: { orientation, longSide, shortSide, x, y },
-    hideInput,
     isRulerClickable,
     showLabels,
     showRuler,
   }: ViewParams) {
     super('div', `tslider tslider_${orientation}`)
 
-    this.input = new Input(targetInput, hideInput)
+    this.input = new Input(targetInput)
     this.handlesContainer = new HandlesContainer()
     this.labelsContainer = new LabelsContainer(longSide, x, y)
     this.range = new Range(longSide)
@@ -168,10 +167,6 @@ class View extends ViewTreeNode {
 
   onTrackLengthChanged(handler: (length: number) => void): void {
     this.onResize((size) => handler(size[this.longSide]))
-  }
-
-  onInputUpdate(handler: (value: string) => void): void {
-    this.input.onFocusout(() => handler(this.input.getValue()))
   }
 
   private validateX(x: number) {

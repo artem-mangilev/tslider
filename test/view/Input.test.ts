@@ -17,7 +17,7 @@ describe('Input', () => {
       const $input: JQuery = $('<input/>', {
         type: 'text',
       })
-      const input = new Input(<HTMLInputElement>$input[0], false)
+      const input = new Input(<HTMLInputElement>$input[0])
 
       input.setValue('test val')
 

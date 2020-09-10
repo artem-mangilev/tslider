@@ -76,6 +76,10 @@ export default class ViewTreeNode {
     this.$elem.css('visibility', 'hidden')
   }
 
+  attr(name: string, value: string): void {
+    this.$elem.attr(name, value)
+  }
+
   after(node: ViewTreeNode): void {
     this.$elem.after(node.$elem)
   }

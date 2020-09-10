@@ -124,17 +124,6 @@ class Model extends Subject {
     this.notify(ModelEvents.Update)
   }
 
-  updateHandlesByInput(input: string): void {
-    this.input.set(input)
-
-    this.input.getAsList().forEach((value, i) => {
-      const point = this.converter.toTrackPoint(value)
-      this.handlesX[i].setPosition(this.validator.validatePoint(point))
-    })
-
-    this.notify(ModelEvents.Update)
-  }
-
   resize(trackLength: number): void {
     this.handlesX.forEach((handle) => {
       const point = (trackLength / this.track.width) * handle.getPosition()

@@ -10,7 +10,6 @@ export default interface SliderParams {
   rulerSteps?: number
   isRulerClickable?: boolean
   showLabels?: boolean
-  hideInput?: boolean
   inputValuesSeparator?: string
   targetInput: HTMLInputElement
   orientation: Orientation

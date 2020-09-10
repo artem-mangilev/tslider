@@ -23,7 +23,6 @@ class Tslider {
     rulerSteps = 4,
     isRulerClickable = true,
     showLabels = true,
-    hideInput = true,
     inputValuesSeparator = ',',
   }: SliderParams) {
     this.view = new View({
@@ -32,7 +31,6 @@ class Tslider {
       showLabels,
       showRuler,
       isRulerClickable,
-      hideInput,
       inputValuesSeparator,
     })
 

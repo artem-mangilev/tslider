@@ -20,7 +20,6 @@ class ModelEventsHandler implements Observer {
     this.view.onTrackClick(model.updateHandle.bind(model))
     this.view.onHandleDrag(model.updateHandleByIndex.bind(model))
     this.view.onTrackLengthChanged(model.resize.bind(model))
-    this.view.onInputUpdate(model.updateHandlesByInput.bind(model))
     this.view.onRulerClick(model.updateHandleByValue.bind(model))
   }
 
