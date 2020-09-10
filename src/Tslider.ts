@@ -1,11 +1,10 @@
 import Model from './model/Model'
-import ModelOptions from './model/ModelParams'
 import { ModelEvents } from './model/ModelEvents'
-import SliderParams from './SliderParams'
-import View from './view/View'
-import ViewParams from './view/ViewParams'
-import { OrientationOptions } from './utils/OrientationOptions'
 import ModelEventsHandler from './ModelEventsHandler'
+import SliderParams from './SliderParams'
+import { Orientation } from './utils/aliases'
+import { OrientationOption, OrientationOptions } from './utils/OrientationOptions'
+import View from './view/View'
 
 class Tslider {
   private view: View
@@ -27,8 +26,43 @@ class Tslider {
     hideInput = true,
     inputValuesSeparator = ',',
   }: SliderParams) {
-    const rangeValues = [from, ...(to !== undefined ? [to] : [])]
+    this.view = new View({
+      orientationOption: this.getOrientationOption(orientation),
+      targetInput,
+      showLabels,
+      showRuler,
+      isRulerClickable,
+      hideInput,
+      inputValuesSeparator,
+    })
 
+    const values = [from, ...(to !== undefined ? [to] : [])]
+    this.model = new Model({
+      max,
+      min,
+      step,
+      rulerSteps,
+      values,
+      trackWidth: this.view.getTrackWidth(),
+      trackHeight: this.view.getTrackHeight(),
+      inputValuesSeparator,
+    })
+
+    this.handler = new ModelEventsHandler(this.view)
+    this.model.attach(this.handler)
+
+    this.model.notify(ModelEvents.Init)
+  }
+
+  updateHandles(from: number, to?: number): void {
+    if (to === undefined) {
+      this.model.updateHandlesByValues([from])
+    } else {
+      this.model.updateHandlesByValues([from, to])
+    }
+  }
+
+  private getOrientationOption(orientation: Orientation): OrientationOption {
     const orientationOptions: OrientationOptions = {
       horizontal: {
         orientation: 'horizontal',
@@ -46,42 +80,7 @@ class Tslider {
       },
     }
 
-    const orientationOption = orientationOptions[orientation]
-    const viewOptions: ViewParams = {
-      orientationOption,
-      targetInput,
-      showLabels,
-      showRuler,
-      isRulerClickable,
-      hideInput,
-      inputValuesSeparator,
-    }
-
-    this.view = new View(viewOptions)
-
-    const modelOptions: ModelOptions = {
-      max,
-      min,
-      step,
-      rulerSteps,
-      values: rangeValues,
-      trackWidth: this.view.getTrackWidth(),
-      trackHeight: this.view.getTrackHeight(),
-      inputValuesSeparator,
-    }
-
-    this.model = new Model(modelOptions)
-    this.handler = new ModelEventsHandler(this.view)
-    this.model.attach(this.handler)
-    this.model.notify(ModelEvents.Init)
-  }
-
-  updateHandles(from: number, to?: number): void {
-    if (to === undefined) {
-      this.model.updateHandlesByValues([from])
-    } else {
-      this.model.updateHandlesByValues([from, to])
-    }
+    return orientationOptions[orientation]
   }
 }
 
