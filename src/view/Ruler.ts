@@ -1,9 +1,11 @@
 import ViewTreeNode from '../utils/ViewTreeNode'
-import RulerSegment from '../RulerSegment'
+import RulerSegment from '../model/RulerSegment'
 import RulerNode from './RulerNode'
+import { equals } from '../utils/equals'
 
 class Ruler extends ViewTreeNode {
-  private nodes: RulerNode[]
+  private nodes: RulerNode[] = []
+  private ruler: RulerSegment[] = []
 
   constructor(
     private longSide: 'width' | 'height',
@@ -11,29 +13,34 @@ class Ruler extends ViewTreeNode {
     private y: 'x' | 'y'
   ) {
     super('div', 'tslider__ruler')
-
-    this.nodes = []
   }
 
   private init(ruler: RulerSegment[]) {
     ruler.forEach(() => this.nodes.push(new RulerNode()))
     this.add(...this.nodes)
+
+    this.init = undefined
+  }
+
+  private shouldRender(ruler: RulerSegment[]): boolean {
+    return !equals(this.ruler, ruler)
   }
 
   render(ruler: RulerSegment[]) {
-    if (!this.nodes.length || ruler.length !== this.nodes.length) {
-      this.init(ruler)
-    }
+    this.init && this.init(ruler)
 
-    ruler.forEach((segment, i) => {
-      const node = this.nodes[i]
+    this.shouldRender(ruler) &&
+      ruler.forEach((segment, i) => {
+        const node = this.nodes[i]
 
-      node.setContent(segment.value.toString())
+        node.setContent(segment.value.toString())
 
-      const middle = node[this.longSide] / 2
-      // @ts-ignore
-      node.move({ [this.x]: segment.point - middle, [this.y]: 0 })
-    })
+        const middle = node[this.longSide] / 2
+        // @ts-ignore
+        node.move({ [this.x]: segment.point - middle, [this.y]: 0 })
+      })
+
+    this.ruler = ruler
   }
 
   onClick(handler: (e: MouseEvent) => void): void {
