@@ -2,14 +2,15 @@ import Model from './model/Model'
 import ModelOptions from './model/ModelParams'
 import { ModelEvents } from './model/ModelEvents'
 import SliderParams from './SliderParams'
-import Observer from './utils/Observer'
 import View from './view/View'
 import ViewParams from './view/ViewParams'
 import { OrientationOptions } from './utils/OrientationOptions'
+import ModelEventsHandler from './ModelEventsHandler'
 
-class Tslider implements Observer {
+class Tslider {
   private view: View
   private model: Model
+  private handler: ModelEventsHandler
 
   constructor({
     targetInput,
@@ -70,46 +71,12 @@ class Tslider implements Observer {
     }
 
     this.model = new Model(modelOptions)
-    this.model.attach(this)
+    this.handler = new ModelEventsHandler(this.view)
+    this.model.attach(this.handler)
     this.model.notify(ModelEvents.Init)
   }
 
-  // TODO: this method should not be public
-  public update(event: ModelEvents, state: Model): void {
-    if (event === ModelEvents.Init) {
-      this.handleInit(state)
-    }
-
-    if (event === ModelEvents.Update) {
-      this.handleUpdate(state)
-    }
-  }
-
-  private handleInit(model: Model): void {
-    this.view.onTrackClick(model.updateHandle.bind(model))
-    this.view.onHandleDrag(model.updateHandleByIndex.bind(model))
-    this.view.onTrackLengthChanged(model.resize.bind(model))
-    this.view.onInputUpdate(model.updateHandlesByInput.bind(model))
-    this.view.onRulerClick(model.updateHandleByValue.bind(model))
-  }
-
-  private handleUpdate({
-    handles,
-    rangePosition,
-    rangeLength,
-    ruler,
-    inputValue,
-  }: Model): void {
-    this.view.render({
-      handles,
-      rangePosition,
-      rangeLength,
-      ruler,
-      inputValue,
-    })
-  }
-
-  public updateHandles(from: number, to?: number): void {
+  updateHandles(from: number, to?: number): void {
     if (to === undefined) {
       this.model.updateHandlesByValues([from])
     } else {
