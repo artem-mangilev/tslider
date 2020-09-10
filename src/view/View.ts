@@ -1,6 +1,5 @@
 import { Orientation } from '../utils/aliases'
 import Point from '../utils/Point'
-import Handle from './Handle'
 import Input from './Input'
 import Range from './Range'
 import ViewParams from './ViewParams'
@@ -10,17 +9,14 @@ import RulerSegment from '../model/RulerSegment'
 import LabelsContainer from './LabelsContainer'
 import Ruler from './Ruler'
 import TransferHandle from '../model/TransferHandle'
+import HandlesContainer from './HandlesContainer'
 
 class View extends ViewTreeNode {
   private input: Input
   private track: ViewTreeNode = new ViewTreeNode('div', 'tslider__track')
   private range: Range
   private labelsContainer: LabelsContainer
-  private handlesContainer: ViewTreeNode = new ViewTreeNode(
-    'div',
-    'tslider__handles'
-  )
-  private handles: Handle[] = []
+  private handlesContainer: HandlesContainer
   private ruler: Ruler
 
   private orientation: Orientation
@@ -35,7 +31,6 @@ class View extends ViewTreeNode {
 
   constructor({
     targetInput,
-    numberOfHandles,
     orientationOption: { orientation, longSide, shortSide, x, y },
     hideInput,
     isRulerClickable,
@@ -47,10 +42,7 @@ class View extends ViewTreeNode {
     this.input = new Input(targetInput, hideInput)
     this.input.after(this)
 
-    Array.from({ length: numberOfHandles }, () => {
-      this.handles.push(new Handle())
-    })
-
+    this.handlesContainer = new HandlesContainer()
     this.labelsContainer = new LabelsContainer(longSide, x, y)
     this.range = new Range(longSide)
     this.ruler = new Ruler(longSide, x, y)
@@ -59,7 +51,7 @@ class View extends ViewTreeNode {
       this.labelsContainer,
       this.track,
       this.range,
-      this.handlesContainer.add(...this.handles),
+      this.handlesContainer,
       this.ruler
     )
 
@@ -108,13 +100,13 @@ class View extends ViewTreeNode {
 
   // TODO: if both handles at max point, drag doesn't work
   private renderHandles(positions: Point[]): void {
-    positions
-      .map((position) => ({
+    this.handlesContainer.render(
+      // @ts-ignore
+      positions.map((position) => ({
         [this.x]: this.validateX(position.x),
         [this.y]: position.y,
       }))
-      // @ts-ignore
-      .forEach((position, i) => this.handles[i].move(position))
+    )
   }
 
   private renderInput(data: string): void {
@@ -167,8 +159,11 @@ class View extends ViewTreeNode {
   }
 
   onHandleDrag(handler: (point: number, id: number) => void): void {
-    this.handles.forEach((handle, i) => {
-      handle.onDrag(this.createHandleDragHandler(handler, i))
+    this.handlesContainer.onHandleDrag((point, id) => {
+      const position = this.validateX(
+        this.getLocalMousePosition(point.x, point.y, this.track)[this.x]
+      )
+      handler(position, id)
     })
   }
 
@@ -204,18 +199,6 @@ class View extends ViewTreeNode {
         this.getLocalMousePosition(clientX, clientY, this.track)[this.x]
       )
       handler(position)
-    }
-  }
-
-  private createHandleDragHandler(
-    handler: (point: number, id: number) => void,
-    id: number
-  ): (event: MouseEvent) => void {
-    return ({ clientX, clientY }) => {
-      const position = this.validateX(
-        this.getLocalMousePosition(clientX, clientY, this.track)[this.x]
-      )
-      handler(position, id)
     }
   }
 

@@ -49,7 +49,11 @@ export default class ViewTreeNode {
   }
 
   oneOf(nodes: ViewTreeNode[]): boolean {
-    return !!nodes.find(node => node.$elem[0] === this.$elem[0])
+    return !!nodes.find((node) => node.$elem[0] === this.$elem[0])
+  }
+
+  find(nodes: ViewTreeNode[]): ViewTreeNode {
+    return nodes.find((node) => node.$elem[0] === this.$elem[0])
   }
 
   move(position: Point): void {
@@ -78,6 +82,10 @@ export default class ViewTreeNode {
 
   onClick(handler: (e: Event) => void): void {
     this.$elem.on('click', handler)
+  }
+
+  onMouseDown(handler: (e: Event) => void): void {
+    this.$elem.on('mousedown', handler)
   }
 
   onDrag(handler: (e: Event) => void): void {
