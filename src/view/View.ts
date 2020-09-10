@@ -81,6 +81,8 @@ class View extends ViewTreeNode {
   }): void {
     this.renderHandles(data.handles.map((handle) => handle.position))
 
+    this.renderRange(data.rangePosition, data.rangeLength)
+
     this.showLabels &&
       this.renderLabels(
         data.handles.map(({ position, value }) => ({
@@ -90,8 +92,6 @@ class View extends ViewTreeNode {
       )
 
     this.renderInput(data.inputValue)
-
-    this.renderRange(data.rangePosition, data.rangeLength)
 
     this.showRuler && this.renderRuler(data.ruler)
   }
