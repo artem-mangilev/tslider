@@ -39,7 +39,11 @@ class TrackPointValidator {
       return this.rightBoundary
     }
 
-    return this.pointCalculator.fromSegment(point, this.stepSegment)
+    return this.pointCalculator.fromSegment(
+      point,
+      this.stepSegment,
+      this.rightBoundary
+    )
   }
 
   getNearestPointIndex(targetPoint: number): number {
