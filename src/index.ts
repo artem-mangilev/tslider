@@ -9,10 +9,10 @@ $(document).ready(() => {
   $('.tsl-target').each((i, elem) => {
     const options: SliderParams = {
       min: 0,
-      max: 100,
-      from: 50,
-      to: 100,
-      step: 1,
+      max: 10,
+      from: 5,
+      to: 10,
+      step: 0.5,
       showRuler: true,
       rulerSteps: 4,
       isRulerClickable: true,

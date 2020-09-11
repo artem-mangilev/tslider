@@ -15,6 +15,7 @@ import NearPointCalculator from './NearPointCalculator'
 import TransferHandle from './TransferHandle'
 import Input from './Input'
 import HandlesCollisionDetector from './HandlesCollisionDetector'
+import PrecisionFormatter from './PrecisionFormatter'
 
 class Model extends Subject {
   private validator: TrackPointValidator
@@ -27,6 +28,7 @@ class Model extends Subject {
   private fillerY: FillerY
   private input: Input
   private collisionDetector: HandlesCollisionDetector
+  private precisionFormatter: PrecisionFormatter
 
   constructor({
     inputValuesSeparator: separator,
@@ -43,6 +45,8 @@ class Model extends Subject {
     this.input = new Input(separator, values.join(separator))
 
     this.track = { width, height }
+
+    this.precisionFormatter = new PrecisionFormatter(step)
 
     this.converter = new ValuesToTrackPointConverter(min, max, step, this.track)
 
@@ -146,17 +150,6 @@ class Model extends Subject {
     }
   }
 
-  get handlePositions(): Point[] {
-    return this.handlesX.map((handleX) => ({
-      x: handleX.getPosition(),
-      y: this.handleY.getPosition(),
-    }))
-  }
-
-  get values(): number[] {
-    return this.handlesX.map((handleX) => this.handleToValue(handleX))
-  }
-
   get handles(): TransferHandle[] {
     return this.handlesX.map((handleX) => ({
       position: {
@@ -175,8 +168,10 @@ class Model extends Subject {
     return this.input.get()
   }
 
-  private handleToValue(handle: HandleX): number {
-    return Math.round(this.converter.toValue(handle.getPosition()))
+  private handleToValue(handle: HandleX): string {
+    return this.precisionFormatter.format(
+      this.converter.toValue(handle.getPosition())
+    )
   }
 
   private setInput(): void {
