@@ -1,6 +1,4 @@
-import { Orientation } from './utils/aliases'
-
-export default interface SliderParams {
+interface SliderParams {
   min: number
   max: number
   from: number
@@ -12,5 +10,9 @@ export default interface SliderParams {
   showLabels?: boolean
   inputValuesSeparator?: string
   targetInput: HTMLInputElement
-  orientation: Orientation
+  orientation: 'horizontal' | 'vertical'
+}
+
+interface JQuery {
+  tsliderPlugin(params: Omit<SliderParams, 'targetInput'>): JQuery
 }

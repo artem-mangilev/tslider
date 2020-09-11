@@ -1,7 +1,6 @@
 import Model from './model/Model'
 import { ModelEvents } from './model/ModelEvents'
 import ModelEventsHandler from './ModelEventsHandler'
-import SliderParams from './SliderParams'
 import { Orientation } from './utils/aliases'
 import { OrientationOption, OrientationOptions } from './utils/OrientationOptions'
 import View from './view/View'

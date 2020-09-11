@@ -27,7 +27,7 @@ module.exports = {
 
   context: CONTEXT,
 
-  entry: './index.ts',
+  entry: './tsliderPlugin.ts',
 
   output: {
     filename: '[name].js',
