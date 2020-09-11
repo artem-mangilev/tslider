@@ -50,8 +50,17 @@ class Model extends Subject {
 
     this.converter = new ValuesToTrackPointConverter(min, max, step, this.track)
 
+    this.validator = new TrackPointValidator(
+      this.converter.getNumberOfSteps(),
+      this.track,
+      this.handlesX,
+      new NearPointCalculator()
+    )
+
     values.forEach((value) => {
-      const point = this.converter.toTrackPoint(value)
+      const point = this.validator.validatePoint(
+        this.converter.toTrackPoint(value)
+      )
       this.handlesX.push(new HandleX(point))
     })
     this.handleY = new HandleY(this.track.height)
@@ -60,13 +69,6 @@ class Model extends Subject {
     this.fillerY = new FillerY()
 
     this.collisionDetector = new HandlesCollisionDetector(this.handlesX)
-
-    this.validator = new TrackPointValidator(
-      this.converter.getNumberOfSteps(),
-      this.track,
-      this.handlesX,
-      new NearPointCalculator()
-    )
 
     this._ruler = new Ruler(this.track, this.converter, rulerSteps)
   }
