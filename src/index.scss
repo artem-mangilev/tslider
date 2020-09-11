@@ -1,6 +1,5 @@
-$track-border: 1px;
+$track-height: 7px;
 $track-border-radius: 3px;
-$track-height: 5px;
 $handle-size: 10px;
 $label-margin-from-track: 5px;
 $ruler-margin-from-track: 5px;
@@ -37,12 +36,8 @@ $ruler-margin-from-track: 5px;
     height: $handle-size;
   }
 
-  &__track {
-    border-width: $track-border;
-    border-radius: $track-border-radius;
-  }
-
-  &__range {
+  &__track, &__range {
+    box-sizing: border-box;
     border-radius: $track-border-radius;
   }
 
@@ -61,10 +56,6 @@ $ruler-margin-from-track: 5px;
 
     & .tslider__ruler {
       margin-top: $ruler-margin-from-track;
-    }
-
-    & .tslider__range {
-      height: $track-height + (2 * $track-border);
     }
   }
 
@@ -90,16 +81,12 @@ $ruler-margin-from-track: 5px;
       justify-items: end;
       margin-right: $ruler-margin-from-track;
     }
-
-    & .tslider__range {
-      width: $track-height + (2 * $track-border);
-    }
   }
 
   // customisation
 
   &__track {
-    border: solid rgba(31, 32, 65, 0.25);
+    border: 1px solid rgba(31, 32, 65, 0.25);
   }
 
   &__handle {
