@@ -92,14 +92,27 @@ export default class ViewTreeNode {
     this.$elem.on('mousedown', handler)
   }
 
+  onTouch(handler: (touch: Touch) => void): void {
+    this.$elem.on('touchstart', (e) => {
+      handler(e.touches[0])
+    })
+  }
+
   onDrag(handler: (e: Event) => void): void {
     const $root = $('html')
-
     $root.on('mousedown', ({ target }) => {
       if (target === this.$elem[0]) $root.on('mousemove', handler)
     })
-
     $root.on('mouseup', () => $root.off('mousemove'))
+  }
+
+  onTouchDrag(handler: (touch: Touch) => void): void {
+    const $root = $('html')
+    $root.on('touchstart', ({ target }) => {
+      if (target === this.$elem[0])
+        $root.on('touchmove', (e) => handler(e.touches[0]))
+    })
+    $root.on('touchend', () => $root.off('touchmove'))
   }
 
   onResize(handler: (size: Shape) => void): void {

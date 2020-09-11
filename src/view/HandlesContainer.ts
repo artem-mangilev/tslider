@@ -28,6 +28,14 @@ class HandlesContainer extends ViewTreeNode {
           handler({ x: e.clientX, y: e.clientY }, this.handles.indexOf(handle))
         )
     })
+
+    this.onTouch(({ target }) => {
+      const handle = new ViewTreeNode(<HTMLElement>target).find(this.handles)
+      handle &&
+        handle.onTouchDrag((e: Touch) => {
+          handler({ x: e.clientX, y: e.clientY }, this.handles.indexOf(handle))
+        })
+    })
   }
 }
 
