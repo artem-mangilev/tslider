@@ -105,6 +105,26 @@ class Model extends Subject {
     }
   }
 
+  updateFrom(value: number): void {
+    const point = this.converter.toTrackPoint(value)
+    this.handlesX[0].setPosition(this.validator.validatePoint(point))
+
+    this.setInput()
+
+    this.notify(ModelEvents.Update)
+  }
+
+  updateTo(value: number): void {
+    if (!this.handlesX[1]) return
+
+    const point = this.converter.toTrackPoint(value)
+    this.handlesX[1].setPosition(this.validator.validatePoint(point))
+
+    this.setInput()
+
+    this.notify(ModelEvents.Update)
+  }
+
   updateHandlesByValues(values: number[]): void {
     this.handlesX.forEach((handle, i) => {
       if (values[i] !== undefined) {
@@ -112,8 +132,6 @@ class Model extends Subject {
         handle.setPosition(this.validator.validatePoint(point))
       }
     })
-
-    this.setInput()
 
     this.notify(ModelEvents.Update)
   }

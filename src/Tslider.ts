@@ -23,7 +23,7 @@ class Tslider {
     isRulerClickable = true,
     showLabels = true,
     inputValuesSeparator = ',',
-  }: SliderParams) {
+  }: TsliderParams) {
     this.view = new View({
       orientationOption: this.getOrientationOption(orientation),
       targetInput,
@@ -57,6 +57,18 @@ class Tslider {
     } else {
       this.model.updateHandlesByValues([from, to])
     }
+  }
+
+  setFrom(from: number): void {
+    this.model.updateFrom(from)
+  }
+
+  setTo(to: number): void {
+    this.model.updateTo(to)
+  }
+
+  getInstance(): HTMLElement {
+    return this.view.getElement()
   }
 
   private getOrientationOption(orientation: Orientation): OrientationOption {

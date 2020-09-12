@@ -69,6 +69,10 @@ export default class ViewTreeNode {
     return this.$elem.html()
   }
 
+  getElement(): HTMLElement {
+    return this.$elem[0]
+  }
+
   show(): void {
     this.$elem.css('visibility', 'visible')
   }

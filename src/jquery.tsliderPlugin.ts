@@ -1,4 +1,4 @@
-interface SliderParams {
+interface TsliderParams {
   min: number
   max: number
   from: number
@@ -13,6 +13,10 @@ interface SliderParams {
   orientation: 'horizontal' | 'vertical'
 }
 
+type PluginParams = Omit<TsliderParams, 'targetInput'>
+
+type Methods = 'setFrom' | 'setTo' | 'getFrom' | 'getTo'
+
 interface JQuery {
-  tsliderPlugin(params: Omit<SliderParams, 'targetInput'>): JQuery
+  tsliderPlugin(method: PluginParams | Methods, ...args: any[]): JQuery
 }
