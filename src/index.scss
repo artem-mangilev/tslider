@@ -36,7 +36,8 @@ $ruler-margin-from-track: 5px;
     height: $handle-size;
   }
 
-  &__track, &__range {
+  &__track,
+  &__range {
     box-sizing: border-box;
     border-radius: $track-border-radius;
   }
@@ -55,6 +56,7 @@ $ruler-margin-from-track: 5px;
     }
 
     & .tslider__ruler {
+      grid-row: 3 / 4;
       margin-top: $ruler-margin-from-track;
     }
   }
