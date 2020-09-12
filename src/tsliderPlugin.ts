@@ -31,9 +31,13 @@ $.fn.tsliderPlugin = function (method, ...args) {
       })
     },
 
-    getFrom: function () {},
+    getFrom: function () {
+      return $(this).data('sliders')[0].getFrom()
+    },
 
-    getTo: function () {},
+    getTo: function () {
+      return $(this).data('sliders')[0].getTo()
+    },
   }
 
   if (methods[<Methods>method]) {
@@ -91,4 +95,6 @@ $(document).ready(() => {
   $plugin1.tsliderPlugin('setTo', 80)
 
   $plugin2.tsliderPlugin('setFrom', 40)
+
+  console.log($plugin2.tsliderPlugin('getFrom'))
 })

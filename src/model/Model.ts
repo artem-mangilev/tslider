@@ -125,6 +125,14 @@ class Model extends Subject {
     this.notify(ModelEvents.Update)
   }
 
+  getFrom(): string {
+    return this.handleToValue(this.handlesX[0])
+  }
+
+  getTo(): string {
+    return this.handlesX[1] && this.handleToValue(this.handlesX[1])
+  }
+
   updateHandlesByValues(values: number[]): void {
     this.handlesX.forEach((handle, i) => {
       if (values[i] !== undefined) {

@@ -66,6 +66,14 @@ class Tslider {
   setTo(to: number): void {
     this.model.updateTo(to)
   }
+  
+  getFrom(): string {
+    return this.model.getFrom()
+  }
+
+  getTo(): string {
+    return this.model.getTo()
+  }
 
   getInstance(): HTMLElement {
     return this.view.getElement()
