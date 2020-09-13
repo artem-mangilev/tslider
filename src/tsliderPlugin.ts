@@ -20,15 +20,13 @@ $.fn.tsliderPlugin = function (method, ...args) {
     },
 
     setFrom: function (from: number) {
-      ;(<Tslider[]>$(this).data('sliders')).forEach((slider) => {
-        slider.setFrom(from)
-      })
+      const sliders = <Tslider[]>$(this).data('sliders')
+      sliders.forEach((slider) => slider.setFrom(from))
     },
 
     setTo: function (to: number) {
-      ;(<Tslider[]>$(this).data('sliders')).forEach((slider) => {
-        slider.setTo(to)
-      })
+      const sliders = <Tslider[]>$(this).data('sliders')
+      sliders.forEach((slider) => slider.setTo(to))
     },
 
     getFrom: function () {
@@ -41,16 +39,12 @@ $.fn.tsliderPlugin = function (method, ...args) {
 
     hideLabels: function () {
       const sliders = <Tslider[]>$(this).data('sliders')
-      sliders.forEach((slider) => {
-        slider.hideLabels()
-      })
+      sliders.forEach((slider) => slider.hideLabels())
     },
 
     showLabels: function () {
       const sliders = <Tslider[]>$(this).data('sliders')
-      sliders.forEach((slider) => {
-        slider.showLabels()
-      })
+      sliders.forEach((slider) => slider.showLabels())
     },
 
     hideRuler: function () {
@@ -66,7 +60,7 @@ $.fn.tsliderPlugin = function (method, ...args) {
     onUpdate: function (handler: (value: string) => void) {
       const sliders = <Tslider[]>$(this).data('sliders')
       sliders.forEach((slider) => slider.onUpdate(handler))
-    }
+    },
   }
 
   if (methods[<Methods>method]) {
