@@ -15,6 +15,8 @@ interface TsliderParams {
 
 type PluginParams = Omit<TsliderParams, 'targetInput'>
 
+type Args = number | ((value: string) => void)
+
 type Methods =
   | 'setFrom'
   | 'setTo'
@@ -24,7 +26,8 @@ type Methods =
   | 'showLabels'
   | 'hideRuler'
   | 'showRuler'
+  | 'onUpdate'
 
 interface JQuery {
-  tsliderPlugin(method: PluginParams | Methods, ...args: any[]): JQuery
+  tsliderPlugin(method: PluginParams | Methods, ...args: Args[]): JQuery
 }

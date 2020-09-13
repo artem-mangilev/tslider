@@ -29,6 +29,7 @@ class Model extends Subject {
   private input: Input
   private collisionDetector: HandlesCollisionDetector
   private precisionFormatter: PrecisionFormatter
+  private handler: (value: string) => void
 
   constructor({
     inputValuesSeparator: separator,
@@ -73,6 +74,10 @@ class Model extends Subject {
     this._ruler = new Ruler(this.track, this.converter, rulerSteps)
   }
 
+  addUpdateHandler(handler: (value: string) => void): void {
+    this.handler = handler
+  }
+
   updateHandle(point: number): void {
     const handle = this.handlesX[this.validator.getNearestPointIndex(point)]
     const oldPoint = handle.getPosition()
@@ -83,6 +88,8 @@ class Model extends Subject {
       handle.setPosition(oldPoint)
     } else if (oldPoint !== handle.getPosition()) {
       this.setInput()
+
+      this.callHandler()
 
       this.notify(ModelEvents.Update)
     }
@@ -101,6 +108,8 @@ class Model extends Subject {
     } else if (oldPoint !== handle.getPosition()) {
       this.setInput()
 
+      this.callHandler()
+
       this.notify(ModelEvents.Update)
     }
   }
@@ -110,6 +119,8 @@ class Model extends Subject {
     this.handlesX[0].setPosition(this.validator.validatePoint(point))
 
     this.setInput()
+
+    this.callHandler()
 
     this.notify(ModelEvents.Update)
   }
@@ -121,6 +132,8 @@ class Model extends Subject {
     this.handlesX[1].setPosition(this.validator.validatePoint(point))
 
     this.setInput()
+
+    this.callHandler()
 
     this.notify(ModelEvents.Update)
   }
@@ -141,6 +154,8 @@ class Model extends Subject {
       }
     })
 
+    this.callHandler()
+
     this.notify(ModelEvents.Update)
   }
 
@@ -152,6 +167,8 @@ class Model extends Subject {
     handle.setPosition(this.validator.validatePoint(point))
 
     this.setInput()
+
+    this.callHandler()
 
     this.notify(ModelEvents.Update)
   }
@@ -206,6 +223,10 @@ class Model extends Subject {
     this.input.setFromList(
       this.handlesX.map((handle) => this.handleToValue(handle).toString())
     )
+  }
+
+  private callHandler() {
+    this.handler && this.handler(this.input.get())
   }
 }
 

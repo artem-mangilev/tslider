@@ -98,6 +98,10 @@ class Tslider {
     this.view.toggleRuler(false)
   }
 
+  onUpdate(handler: (value: string) => void): void {
+    this.model.addUpdateHandler(handler)
+  }
+
   private getOrientationOption(orientation: Orientation): OrientationOption {
     const orientationOptions: OrientationOptions = {
       horizontal: {

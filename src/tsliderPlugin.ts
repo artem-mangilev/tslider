@@ -62,6 +62,11 @@ $.fn.tsliderPlugin = function (method, ...args) {
       const sliders = <Tslider[]>$(this).data('sliders')
       sliders.forEach((slider) => slider.showRuler())
     },
+
+    onUpdate: function (handler: (value: string) => void) {
+      const sliders = <Tslider[]>$(this).data('sliders')
+      sliders.forEach((slider) => slider.onUpdate(handler))
+    }
   }
 
   if (methods[<Methods>method]) {
@@ -124,4 +129,7 @@ $(document).ready(() => {
 
   $plugin2.tsliderPlugin('hideRuler')
   // $plugin2.tsliderPlugin('hideLabels')
+  $plugin2.tsliderPlugin('onUpdate', (value) => {
+    console.log(value)
+  })
 })
