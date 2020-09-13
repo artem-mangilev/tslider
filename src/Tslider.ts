@@ -2,7 +2,10 @@ import Model from './model/Model'
 import { ModelEvents } from './model/ModelEvents'
 import ModelEventsHandler from './ModelEventsHandler'
 import { Orientation } from './utils/aliases'
-import { OrientationOption, OrientationOptions } from './utils/OrientationOptions'
+import {
+  OrientationOption,
+  OrientationOptions,
+} from './utils/OrientationOptions'
 import View from './view/View'
 
 class Tslider {
@@ -66,7 +69,7 @@ class Tslider {
   setTo(to: number): void {
     this.model.updateTo(to)
   }
-  
+
   getFrom(): string {
     return this.model.getFrom()
   }
@@ -77,6 +80,22 @@ class Tslider {
 
   getInstance(): HTMLElement {
     return this.view.getElement()
+  }
+
+  showLabels(): void {
+    this.view.toggleLabels(true)
+  }
+
+  hideLabels(): void {
+    this.view.toggleLabels(false)
+  }
+
+  showRuler(): void {
+    this.view.toggleRuler(true)
+  }
+
+  hideRuler(): void {
+    this.view.toggleRuler(false)
   }
 
   private getOrientationOption(orientation: Orientation): OrientationOption {

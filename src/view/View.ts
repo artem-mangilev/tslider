@@ -72,6 +72,26 @@ class View extends ViewTreeNode {
     return this.track[this.shortSide]
   }
 
+  toggleLabels(show: boolean): void {
+    this.showLabels = show
+
+    if (show) {
+      this.labelsContainer.show()
+    } else {
+      this.labelsContainer.hide()
+    }
+  }
+
+  toggleRuler(show: boolean): void {
+    this.showRuler = show
+
+    if (show) {
+      this.ruler.show()
+    } else {
+      this.ruler.hide()
+    }
+  }
+
   render(data: {
     handles: TransferHandle[]
     inputValue: string

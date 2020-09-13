@@ -74,11 +74,11 @@ export default class ViewTreeNode {
   }
 
   show(): void {
-    this.$elem.css('visibility', 'visible')
+    this.$elem.css('position', 'static')
   }
 
   hide(): void {
-    this.$elem.css('visibility', 'hidden')
+    this.$elem.css('position', 'absolute').css('left', '-999px')
   }
 
   attr(name: string, value: string): void {

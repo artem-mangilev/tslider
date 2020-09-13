@@ -38,6 +38,30 @@ $.fn.tsliderPlugin = function (method, ...args) {
     getTo: function () {
       return $(this).data('sliders')[0].getTo()
     },
+
+    hideLabels: function () {
+      const sliders = <Tslider[]>$(this).data('sliders')
+      sliders.forEach((slider) => {
+        slider.hideLabels()
+      })
+    },
+
+    showLabels: function () {
+      const sliders = <Tslider[]>$(this).data('sliders')
+      sliders.forEach((slider) => {
+        slider.showLabels()
+      })
+    },
+
+    hideRuler: function () {
+      const sliders = <Tslider[]>$(this).data('sliders')
+      sliders.forEach((slider) => slider.hideRuler())
+    },
+
+    showRuler: function () {
+      const sliders = <Tslider[]>$(this).data('sliders')
+      sliders.forEach((slider) => slider.showRuler())
+    },
   }
 
   if (methods[<Methods>method]) {
@@ -83,7 +107,7 @@ $(document).ready(() => {
     max: 100,
     from: 10,
     to: 50,
-    step: 10,
+    step: 1,
     showRuler: true,
     rulerSteps: 4,
     isRulerClickable: true,
@@ -97,4 +121,7 @@ $(document).ready(() => {
   $plugin2.tsliderPlugin('setFrom', 40)
 
   console.log($plugin2.tsliderPlugin('getFrom'))
+
+  $plugin2.tsliderPlugin('hideRuler')
+  // $plugin2.tsliderPlugin('hideLabels')
 })
