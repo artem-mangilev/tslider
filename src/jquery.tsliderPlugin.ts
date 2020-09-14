@@ -27,6 +27,8 @@ type Methods =
   | 'hideRuler'
   | 'showRuler'
   | 'onUpdate'
+  | 'setMin'
+  | 'setMax'
 
 interface JQuery {
   tsliderPlugin(method: PluginParams | Methods, ...args: Args[]): JQuery

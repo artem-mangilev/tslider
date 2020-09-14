@@ -1,10 +1,11 @@
 import Handle from './HandleX'
 import Shape from '../utils/Shape'
 import NearPointCalculator from './NearPointCalculator'
+import ValuesToTrackPointConverter from './ValuesToTrackPointConverter'
 
 class TrackPointValidator {
   constructor(
-    private numberOfSteps: number,
+    private converter: ValuesToTrackPointConverter,
     private track: Shape,
     private handles: Handle[],
     private pointCalculator: NearPointCalculator
@@ -21,7 +22,7 @@ class TrackPointValidator {
   }
 
   private get stepSegment(): number {
-    return this.track.width / this.numberOfSteps
+    return this.track.width / this.converter.getNumberOfSteps()
   }
 
   private get leftBoundary(): number {

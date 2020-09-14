@@ -37,6 +37,8 @@ $blocks.each(function () {
 
   const $from = $block.find('.slider__from-value')
   const $to = $block.find('.slider__to-value')
+  const $min = $block.find('.slider__min-value')
+  const $max = $block.find('.slider__max-value')
 
   const $plugin = $block.find('.slider__target')
 
@@ -54,6 +56,14 @@ $blocks.each(function () {
 
   $to.on('focusout', () => {
     $plugin.tsliderPlugin('setTo', $to.val())
+  })
+
+  $min.on('focusout', () => {
+    $plugin.tsliderPlugin('setMin', $min.val())
+  })
+
+  $max.on('focusout', () => {
+    $plugin.tsliderPlugin('setMax', $max.val())
   })
 
   const $showLabels = $block.find('.slider__show-labels')

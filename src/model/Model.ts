@@ -52,7 +52,7 @@ class Model extends Subject {
     this.converter = new ValuesToTrackPointConverter(min, max, step, this.track)
 
     this.validator = new TrackPointValidator(
-      this.converter.getNumberOfSteps(),
+      this.converter,
       this.track,
       this.handlesX,
       new NearPointCalculator()
@@ -72,6 +72,40 @@ class Model extends Subject {
     this.collisionDetector = new HandlesCollisionDetector(this.handlesX)
 
     this._ruler = new Ruler(this.track, this.converter, rulerSteps)
+  }
+
+  setMinValue(min: number | string): void {
+    if (typeof min === 'string') min = +min
+
+    const values = this.handlesX.map((handle) =>
+      this.converter.toValue(handle.getPosition())
+    )
+
+    this.converter.setMin(min)
+
+    values.forEach((value, i) => {
+      const point = this.converter.toTrackPoint(value)
+      this.handlesX[i].setPosition(point)
+    })
+
+    this.notify(ModelEvents.Update)
+  }
+
+  setMaxValue(max: number | string): void {
+    if (typeof max === 'string') max = +max
+
+    const values = this.handlesX.map((handle) =>
+      this.converter.toValue(handle.getPosition())
+    )
+
+    this.converter.setMax(max)
+
+    values.forEach((value, i) => {
+      const point = this.converter.toTrackPoint(value)
+      this.handlesX[i].setPosition(point)
+    })
+
+    this.notify(ModelEvents.Update)
   }
 
   addUpdateHandler(handler: (value: string) => void): void {

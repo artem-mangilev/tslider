@@ -8,8 +8,12 @@ class ValuesToTrackPointConverter {
     private track: Shape
   ) {}
 
-  private getMaxMinDiff(): number {
-    return this.max - this.min
+  setMin(min: number): void {
+    this.min = min
+  }
+
+  setMax(max: number): void {
+    this.max = max
   }
 
   toTrackPoint(value: number): number {
@@ -24,6 +28,10 @@ class ValuesToTrackPointConverter {
 
   getNumberOfSteps(): number {
     return this.getMaxMinDiff() / this.step
+  }
+
+  private getMaxMinDiff(): number {
+    return this.max - this.min
   }
 }
 
