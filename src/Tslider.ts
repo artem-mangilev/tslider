@@ -87,6 +87,10 @@ class Tslider {
     this.model.setMaxValue(max)
   }
 
+  setStep(step: number): void {
+    this.model.setStep(step)
+  }
+
   getInstance(): HTMLElement {
     return this.view.getElement()
   }

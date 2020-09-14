@@ -1,13 +1,15 @@
 class PrecisionFormatter {
-  private afterDotLength: number
+  constructor(private numberWithTargetPrecision: number) {}
 
-  constructor(private numberWithTargetPrecision: number) {
-    const afterDot = this.numberWithTargetPrecision.toString().split('.')[1]
-    this.afterDotLength = afterDot?.length || 0
+  setNumberWithTargetPrecision(number: number): void {
+    this.numberWithTargetPrecision = number
   }
 
   format(number: number): string {
-    return number.toFixed(this.afterDotLength)
+    const afterDot = this.numberWithTargetPrecision.toString().split('.')[1]
+    const afterDotLength = afterDot?.length || 0
+
+    return number.toFixed(afterDotLength)
   }
 }
 

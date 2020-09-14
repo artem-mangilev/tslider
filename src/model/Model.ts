@@ -108,6 +108,14 @@ class Model extends Subject {
     this.notify(ModelEvents.Update)
   }
 
+  setStep(step: number | string): void {
+    if (typeof step === 'string') step = +step
+    this.converter.setStep(step)
+    this.precisionFormatter.setNumberWithTargetPrecision(step)
+
+    this.notify(ModelEvents.Update)
+  }
+
   addUpdateHandler(handler: (value: string) => void): void {
     this.handler = handler
   }

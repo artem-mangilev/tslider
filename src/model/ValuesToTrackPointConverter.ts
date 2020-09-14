@@ -16,6 +16,10 @@ class ValuesToTrackPointConverter {
     this.max = max
   }
 
+  setStep(step: number): void {
+    this.step = step
+  }
+
   toTrackPoint(value: number): number {
     const ratio = (value - this.min) / this.getMaxMinDiff()
     return ratio * this.track.width

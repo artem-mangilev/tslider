@@ -46,6 +46,11 @@ $.fn.tsliderPlugin = function (method, ...args) {
       sliders.forEach((slider) => slider.setMax(max))
     },
 
+    setStep: function(step: number) {
+      const sliders = <Tslider[]>$(this).data('sliders')
+      sliders.forEach((slider) => slider.setStep(step))
+    },
+
     hideLabels: function () {
       const sliders = <Tslider[]>$(this).data('sliders')
       sliders.forEach((slider) => slider.hideLabels())
