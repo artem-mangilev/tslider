@@ -7,6 +7,7 @@ import {
   OrientationOptions,
 } from './utils/OrientationOptions'
 import View from './view/View'
+import './plugin.scss'
 
 class Tslider {
   private view: View
