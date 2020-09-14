@@ -4,7 +4,30 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
   body
-    .slider-container.slider-container_vertical
-      input.tsl-target-1(type="text")
-    .slider-container.slider-container_horizontal
-      input.tsl-target-2(type="text")
+    h1 Tslider
+
+    .slider.slider_horizontal
+      .slider__container
+        input.slider__target(type="text")
+      .slider__config-panel
+        label.slider__label From value: 
+          input.slider__from-value(type="text")
+        label.slider__label To value: 
+          input.slider__to-value(type="text")
+        label.slider__label Show labels
+          input.slider__show-labels(type="checkbox" checked)
+        label.slider__label Show ruler
+          input.slider__show-ruler(type="checkbox" checked)
+        
+    .slider.slider_vertical
+      .slider__container
+        input.slider__target(type="text")
+      .slider__config-panel
+        label.slider__label From value: 
+          input.slider__from-value(type="test")
+        label.slider__label To value: 
+          input.slider__to-value(type="text")
+        label.slider__label Show labels
+          input.slider__show-labels(type="checkbox" checked)
+        label.slider__label Show ruler
+          input.slider__show-ruler(type="checkbox" checked)

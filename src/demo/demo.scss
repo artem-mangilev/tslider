@@ -1,5 +1,17 @@
-.slider-container {
-  margin: 2rem auto;
-  width: 300px;
-  height: 200px;
+.slider {
+  &__label {
+    display: block;
+  }
+
+  &_horizontal {
+    .slider__container {
+      width: 300px;
+    }
+  }
+
+  &_vertical {
+    .slider__container {
+      height: 200px;
+    }
+  }
 }
