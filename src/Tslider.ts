@@ -56,10 +56,10 @@ class Tslider {
   }
 
   setValues(from: number, to?: number): void {
-    if (to === undefined) {
-      this.model.updateHandlesByValues([from])
-    } else {
-      this.model.updateHandlesByValues([from, to])
+    this.model.updateFrom(from)
+
+    if (to !== undefined) {
+      this.model.updateTo(to)
     }
   }
 

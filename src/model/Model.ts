@@ -188,19 +188,6 @@ class Model extends Subject {
     return this.handlesX[1] && this.handleToValue(this.handlesX[1])
   }
 
-  updateHandlesByValues(values: number[]): void {
-    this.handlesX.forEach((handle, i) => {
-      if (values[i] !== undefined) {
-        const point = this.converter.toTrackPoint(values[i])
-        handle.setPosition(this.validator.validatePoint(point))
-      }
-    })
-
-    this.callHandler()
-
-    this.notify(ModelEvents.Update)
-  }
-
   updateHandleByValue(value: number | string): void {
     if (typeof value === 'string') value = +value
 
