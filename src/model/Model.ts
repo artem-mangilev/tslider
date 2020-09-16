@@ -53,7 +53,10 @@ class Model extends Subject {
 
     this.precisionFormatter = new PrecisionFormatter(step)
 
-    this.converter = new ValuesToTrackPointConverter(this.valuesValidator, this.track)
+    this.converter = new ValuesToTrackPointConverter(
+      this.valuesValidator,
+      this.track
+    )
 
     this.validator = new TrackPointValidator(
       this.converter,
@@ -85,14 +88,16 @@ class Model extends Subject {
       this.converter.toValue(handle.getPosition())
     )
 
-    this.valuesValidator.setMin(min)
+    if (values.every((value) => value >= min)) {
+      this.valuesValidator.setMin(min)
 
-    values.forEach((value, i) => {
-      const point = this.converter.toTrackPoint(value)
-      this.handlesX[i].setPosition(point)
-    })
+      values.forEach((value, i) => {
+        const point = this.converter.toTrackPoint(value)
+        this.handlesX[i].setPosition(point)
+      })
 
-    this.notify(ModelEvents.Update)
+      this.notify(ModelEvents.Update)
+    }
   }
 
   setMaxValue(max: number | string): void {
@@ -102,14 +107,16 @@ class Model extends Subject {
       this.converter.toValue(handle.getPosition())
     )
 
-    this.valuesValidator.setMax(max)
+    if (values.every((value) => value <= max)) {
+      this.valuesValidator.setMax(max)
 
-    values.forEach((value, i) => {
-      const point = this.converter.toTrackPoint(value)
-      this.handlesX[i].setPosition(point)
-    })
+      values.forEach((value, i) => {
+        const point = this.converter.toTrackPoint(value)
+        this.handlesX[i].setPosition(point)
+      })
 
-    this.notify(ModelEvents.Update)
+      this.notify(ModelEvents.Update)
+    }
   }
 
   setStep(step: number | string): void {

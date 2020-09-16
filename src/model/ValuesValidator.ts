@@ -3,11 +3,7 @@ class ValuesValidator {
   private max: number
   private step: number
 
-  constructor(
-    min: number,
-    max: number,
-    step: number,
-  ) {
+  constructor(min: number, max: number, step: number) {
     if (this.validateMinMax(min, max)) {
       this.min = min
       this.max = max
@@ -21,11 +17,7 @@ class ValuesValidator {
       throw new Error('Invalid step')
     }
   }
-
-  validate(value: number): boolean {
-    return value >= this.min && value <= this.max
-  }
-
+  
   setMin(min: number): void {
     if (this.validateMinMax(min, this.max)) {
       this.min = min
