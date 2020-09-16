@@ -1,41 +1,28 @@
 import Shape from "../utils/Shape"
+import ValuesValidator from "./ValuesValidator"
 
 class ValuesToTrackPointConverter {
   constructor(
-    private min: number,
-    private max: number,
-    private step: number,
+    private values: ValuesValidator,
     private track: Shape
   ) {}
 
-  setMin(min: number): void {
-    this.min = min
-  }
-
-  setMax(max: number): void {
-    this.max = max
-  }
-
-  setStep(step: number): void {
-    this.step = step
-  }
-
   toTrackPoint(value: number): number {
-    const ratio = (value - this.min) / this.getMaxMinDiff()
+    const ratio = (value - this.values.getMin()) / this.getMaxMinDiff()
     return ratio * this.track.width
   }
 
   toValue(trackPoint: number): number {
     const ratio = trackPoint / this.track.width
-    return ratio * this.getMaxMinDiff() + this.min
+    return ratio * this.getMaxMinDiff() + this.values.getMin()
   }
 
   getNumberOfSteps(): number {
-    return this.getMaxMinDiff() / this.step
+    return this.getMaxMinDiff() / this.values.getStep()
   }
 
   private getMaxMinDiff(): number {
-    return this.max - this.min
+    return this.values.getMax() - this.values.getMin()
   }
 }
 

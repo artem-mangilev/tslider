@@ -16,6 +16,7 @@ import TransferHandle from './TransferHandle'
 import Input from './Input'
 import HandlesCollisionDetector from './HandlesCollisionDetector'
 import PrecisionFormatter from './PrecisionFormatter'
+import ValuesValidator from './ValuesValidator'
 
 class Model extends Subject {
   private validator: TrackPointValidator
@@ -30,6 +31,7 @@ class Model extends Subject {
   private collisionDetector: HandlesCollisionDetector
   private precisionFormatter: PrecisionFormatter
   private handler: (value: string) => void
+  private valuesValidator: ValuesValidator
 
   constructor({
     inputValuesSeparator: separator,
@@ -47,9 +49,11 @@ class Model extends Subject {
 
     this.track = { width, height }
 
+    this.valuesValidator = new ValuesValidator(min, max, step)
+
     this.precisionFormatter = new PrecisionFormatter(step)
 
-    this.converter = new ValuesToTrackPointConverter(min, max, step, this.track)
+    this.converter = new ValuesToTrackPointConverter(this.valuesValidator, this.track)
 
     this.validator = new TrackPointValidator(
       this.converter,
@@ -81,7 +85,7 @@ class Model extends Subject {
       this.converter.toValue(handle.getPosition())
     )
 
-    this.converter.setMin(min)
+    this.valuesValidator.setMin(min)
 
     values.forEach((value, i) => {
       const point = this.converter.toTrackPoint(value)
@@ -98,7 +102,7 @@ class Model extends Subject {
       this.converter.toValue(handle.getPosition())
     )
 
-    this.converter.setMax(max)
+    this.valuesValidator.setMax(max)
 
     values.forEach((value, i) => {
       const point = this.converter.toTrackPoint(value)
@@ -110,7 +114,7 @@ class Model extends Subject {
 
   setStep(step: number | string): void {
     if (typeof step === 'string') step = +step
-    this.converter.setStep(step)
+    this.valuesValidator.setStep(step)
     this.precisionFormatter.setNumberWithTargetPrecision(step)
 
     this.notify(ModelEvents.Update)
