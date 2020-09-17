@@ -17,11 +17,11 @@ $('.slider_horizontal .slider__target').tsliderPlugin({
 })
 
 $('.slider_vertical .slider__target').tsliderPlugin({
-  min: 0,
-  max: 100,
-  from: 10,
-  to: 50,
-  step: 1,
+  min: -1,
+  max: 1,
+  from: -0.5,
+  to: 0,
+  step: 0.1,
   showRuler: true,
   rulerSteps: 4,
   isRulerClickable: true,

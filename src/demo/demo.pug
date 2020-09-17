@@ -1,121 +1,62 @@
+mixin panel
+  .slider__config-panel
+    label.slider__label Min value: 
+      input.slider__min-value(type="text")
+    label.slider__label Max value: 
+      input.slider__max-value(type="text")
+    label.slider__label Step: 
+      input.slider__step(type="text")
+    label.slider__label From value: 
+      input.slider__from-value(type="text")
+    label.slider__label To value: 
+      input.slider__to-value(type="text")
+    label.slider__label Show labels
+      input.slider__show-labels(type="checkbox" checked)
+    label.slider__label Show ruler
+      input.slider__show-ruler(type="checkbox" checked)
+
 doctype html
 html(lang="en")
   head
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    link(href="https://fonts.googleapis.com/css2?family=Roboto&display=swap", rel="stylesheet")
   body
-    h1 Tslider
+    .content
+      h1 Tslider
 
-    .slider.slider_horizontal
-      .slider__container
-        input.slider__target(type="text")
-      .slider__config-panel
-        label.slider__label Min value: 
-          input.slider__min-value(type="text")
-        label.slider__label Max value: 
-          input.slider__max-value(type="text")
-        label.slider__label Step: 
-          input.slider__step(type="text")
-        label.slider__label From value: 
-          input.slider__from-value(type="text")
-        label.slider__label To value: 
-          input.slider__to-value(type="text")
-        label.slider__label Show labels
-          input.slider__show-labels(type="checkbox" checked)
-        label.slider__label Show ruler
-          input.slider__show-ruler(type="checkbox" checked)
-        
-    .slider.slider_vertical
-      .slider__container
-        input.slider__target(type="text")
-      .slider__config-panel
-        label.slider__label Min value: 
-          input.slider__min-value(type="text")
-        label.slider__label Max value: 
-          input.slider__max-value(type="text")
-        label.slider__label Step: 
-          input.slider__step(type="text")
-        label.slider__label From value: 
-          input.slider__from-value(type="test")
-        label.slider__label To value: 
-          input.slider__to-value(type="text")
-        label.slider__label Show labels
-          input.slider__show-labels(type="checkbox" checked)
-        label.slider__label Show ruler
-          input.slider__show-ruler(type="checkbox" checked)
+      .slider.slider_horizontal-single
+        h2 Allows to pick a single value in horizontal view
+        .slider__container
+          input.slider__target(type="text")
+        +panel
 
-    .slider.slider_horizontal-single
-      .slider__container
-        input.slider__target(type="text")
-      .slider__config-panel
-        label.slider__label Min value: 
-          input.slider__min-value(type="text")
-        label.slider__label Max value: 
-          input.slider__max-value(type="text")
-        label.slider__label Step: 
-          input.slider__step(type="text")
-        label.slider__label From value: 
-          input.slider__from-value(type="test")
-        label.slider__label To value: 
-          input.slider__to-value(type="text")
-        label.slider__label Show labels
-          input.slider__show-labels(type="checkbox" checked)
-        label.slider__label Show ruler
-          input.slider__show-ruler(type="checkbox" checked)
+      .slider.slider_vertical-single
+        h2 Allows to pick a single value in vertical view
+        .slider__container
+          input.slider__target(type="text")
+        +panel
 
-    .slider.slider_vertical-single
-      .slider__container
-        input.slider__target(type="text")
-      .slider__config-panel
-        label.slider__label Min value: 
-          input.slider__min-value(type="text")
-        label.slider__label Max value: 
-          input.slider__max-value(type="text")
-        label.slider__label Step: 
-          input.slider__step(type="text")
-        label.slider__label From value: 
-          input.slider__from-value(type="test")
-        label.slider__label To value: 
-          input.slider__to-value(type="text")
-        label.slider__label Show labels
-          input.slider__show-labels(type="checkbox" checked)
-        label.slider__label Show ruler
-          input.slider__show-ruler(type="checkbox" checked)
+      .slider.slider_horizontal
+        h2 Allows to select a range in horizontal view
+        .slider__container
+          input.slider__target(type="text")
+        +panel
+          
+      .slider.slider_vertical
+        h2 Allows to select a range in vertical view
+        .slider__container
+          input.slider__target(type="text")
+        +panel
 
-    .slider.slider_horizontal-resizable
-      .slider__container
-        input.slider__target(type="text")
-      .slider__config-panel
-        label.slider__label Min value: 
-          input.slider__min-value(type="text")
-        label.slider__label Max value: 
-          input.slider__max-value(type="text")
-        label.slider__label Step: 
-          input.slider__step(type="text")
-        label.slider__label From value: 
-          input.slider__from-value(type="test")
-        label.slider__label To value: 
-          input.slider__to-value(type="text")
-        label.slider__label Show labels
-          input.slider__show-labels(type="checkbox" checked)
-        label.slider__label Show ruler
-          input.slider__show-ruler(type="checkbox" checked)
+      .slider.slider_horizontal-resizable
+        h2 Supports a horizontal resizing
+        .slider__container
+          input.slider__target(type="text")
+        +panel
 
-    .slider.slider_vertical-resizable
-      .slider__container
-        input.slider__target(type="text")
-      .slider__config-panel
-        label.slider__label Min value: 
-          input.slider__min-value(type="text")
-        label.slider__label Max value: 
-          input.slider__max-value(type="text")
-        label.slider__label Step: 
-          input.slider__step(type="text")
-        label.slider__label From value: 
-          input.slider__from-value(type="test")
-        label.slider__label To value: 
-          input.slider__to-value(type="text")
-        label.slider__label Show labels
-          input.slider__show-labels(type="checkbox" checked)
-        label.slider__label Show ruler
-          input.slider__show-ruler(type="checkbox" checked)
+      .slider.slider_vertical-resizable
+        h2 Supports a vertical resizing
+        .slider__container
+          input.slider__target(type="text")
+        +panel

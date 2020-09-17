@@ -1,11 +1,36 @@
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+  
+  letter-spacing: 1px;
+}
+
+.content {
+  width: max-content;
+  margin: 0 auto;
+}
+
 .slider {
+  margin-bottom: 20px;
+
   &__label {
     display: block;
+    width: max-content;
+    padding: 3px 0;
   }
 
   &__container {
     width: 300px;
-    height: 200px;
+  }
+
+  &_vertical-single,
+  &_vertical,
+  &_vertical-resizable {
+    .slider__container {
+      height: 200px;
+    }
   }
 
   &_horizontal-resizable {
