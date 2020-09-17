@@ -4,8 +4,10 @@
 import Tslider from './Tslider'
 
 $.fn.tsliderPlugin = function (method, ...args) {
+  const sliders = <Tslider[]>$(this).data('sliders')
+
   const methods = {
-    init: function (options: PluginParams) {
+    init(options: PluginParams) {
       const data = <Tslider[]>$(this).data('sliders')
       if (data) {
         data.forEach((slider) => $(slider.getInstance()).remove())
@@ -18,76 +20,63 @@ $.fn.tsliderPlugin = function (method, ...args) {
       })
     },
 
-    setFrom: function (from: number) {
-      const sliders = <Tslider[]>$(this).data('sliders')
+    setFrom(from: number) {
       sliders.forEach((slider) => slider.setFrom(from))
     },
 
-    setTo: function (to: number) {
-      const sliders = <Tslider[]>$(this).data('sliders')
+    setTo(to: number) {
       sliders.forEach((slider) => slider.setTo(to))
     },
 
-    getFrom: function () {
+    getFrom() {
       return $(this).data('sliders')[0].getFrom()
     },
 
-    getTo: function () {
+    getTo() {
       return $(this).data('sliders')[0].getTo()
     },
 
-    setMin: function (min: number) {
-      const sliders = <Tslider[]>$(this).data('sliders')
+    setMin(min: number) {
       sliders.forEach((slider) => slider.setMin(min))
     },
 
-    setMax: function (max: number) {
-      const sliders = <Tslider[]>$(this).data('sliders')
+    setMax(max: number) {
       sliders.forEach((slider) => slider.setMax(max))
     },
 
-    getMin: function () {
-      const sliders = <Tslider[]>$(this).data('sliders')
+    getMin() {
       return sliders[0].getMin()
     },
 
-    getMax: function () {
-      const sliders = <Tslider[]>$(this).data('sliders')
+    getMax() {
       return sliders[0].getMax()
     },
 
-    setStep: function(step: number) {
-      const sliders = <Tslider[]>$(this).data('sliders')
+    setStep(step: number) {
       sliders.forEach((slider) => slider.setStep(step))
     },
 
-    getStep: function() {
-      const sliders = <Tslider[]>$(this).data('sliders')
+    getStep() {
       return sliders[0].getStep()
     },
 
-    hideLabels: function () {
-      const sliders = <Tslider[]>$(this).data('sliders')
+    hideLabels() {
       sliders.forEach((slider) => slider.hideLabels())
     },
 
-    showLabels: function () {
-      const sliders = <Tslider[]>$(this).data('sliders')
+    showLabels() {
       sliders.forEach((slider) => slider.showLabels())
     },
 
-    hideRuler: function () {
-      const sliders = <Tslider[]>$(this).data('sliders')
+    hideRuler() {
       sliders.forEach((slider) => slider.hideRuler())
     },
 
-    showRuler: function () {
-      const sliders = <Tslider[]>$(this).data('sliders')
+    showRuler() {
       sliders.forEach((slider) => slider.showRuler())
     },
 
-    onUpdate: function (handler: (value: string) => void) {
-      const sliders = <Tslider[]>$(this).data('sliders')
+    onUpdate(handler: (value: string) => void) {
       sliders.forEach((slider) => slider.onUpdate(handler))
     },
   }
