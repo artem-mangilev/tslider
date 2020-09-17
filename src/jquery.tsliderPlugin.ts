@@ -30,6 +30,9 @@ type Methods =
   | 'setMin'
   | 'setMax'
   | 'setStep'
+  | 'getMin'
+  | 'getMax'
+  | 'getStep'
 
 interface JQuery {
   tsliderPlugin(method: PluginParams | Methods, ...args: Args[]): JQuery

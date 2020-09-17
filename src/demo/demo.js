@@ -43,6 +43,9 @@ $blocks.each(function () {
 
   const $plugin = $block.find('.slider__target')
 
+  $min.val($plugin.tsliderPlugin('getMin'))
+  $max.val($plugin.tsliderPlugin('getMax'))
+  $step.val($plugin.tsliderPlugin('getStep'))
   $from.val($plugin.tsliderPlugin('getFrom'))
   $to.val($plugin.tsliderPlugin('getTo'))
 

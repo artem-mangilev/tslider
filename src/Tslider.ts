@@ -87,8 +87,20 @@ class Tslider {
     this.model.setMaxValue(max)
   }
 
+  getMin(): number {
+    return this.model.getMinValue()
+  }
+
+  getMax(): number {
+    return this.model.getMaxValue()
+  }
+
   setStep(step: number): void {
     this.model.setStep(step)
+  }
+
+  getStep(): number {
+    return this.model.getStep()
   }
 
   getInstance(): HTMLElement {

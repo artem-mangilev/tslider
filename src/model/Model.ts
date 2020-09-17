@@ -100,6 +100,10 @@ class Model extends Subject {
     }
   }
 
+  getMinValue(): number {
+    return this.valuesValidator.getMin()
+  }
+
   setMaxValue(max: number | string): void {
     if (typeof max === 'string') max = +max
 
@@ -119,12 +123,20 @@ class Model extends Subject {
     }
   }
 
+  getMaxValue(): number {
+    return this.valuesValidator.getMax()
+  }
+
   setStep(step: number | string): void {
     if (typeof step === 'string') step = +step
     this.valuesValidator.setStep(step)
     this.precisionFormatter.setNumberWithTargetPrecision(step)
 
     this.notify(ModelEvents.Update)
+  }
+
+  getStep(): number {
+    return this.valuesValidator.getStep()
   }
 
   addUpdateHandler(handler: (value: string) => void): void {
