@@ -30,6 +30,58 @@ $('.slider_vertical .slider__target').tsliderPlugin({
   orientation: 'vertical',
 })
 
+$('.slider_horizontal-single .slider__target').tsliderPlugin({
+  min: 0,
+  max: 100,
+  from: 10,
+  step: 1,
+  showRuler: true,
+  rulerSteps: 4,
+  isRulerClickable: true,
+  showLabels: true,
+  inputValuesSeparator: ', ',
+  orientation: 'horizontal',
+})
+
+$('.slider_vertical-single .slider__target').tsliderPlugin({
+  min: 0,
+  max: 100,
+  from: 10,
+  step: 1,
+  showRuler: true,
+  rulerSteps: 4,
+  isRulerClickable: true,
+  showLabels: true,
+  inputValuesSeparator: ', ',
+  orientation: 'vertical',
+})
+
+$('.slider_horizontal-resizable .slider__target').tsliderPlugin({
+  min: 0,
+  max: 100,
+  from: 10,
+  step: 1,
+  showRuler: true,
+  rulerSteps: 4,
+  isRulerClickable: true,
+  showLabels: true,
+  inputValuesSeparator: ', ',
+  orientation: 'horizontal',
+})
+
+$('.slider_vertical-resizable .slider__target').tsliderPlugin({
+  min: 0,
+  max: 100,
+  from: 10,
+  step: 1,
+  showRuler: true,
+  rulerSteps: 4,
+  isRulerClickable: true,
+  showLabels: true,
+  inputValuesSeparator: ', ',
+  orientation: 'vertical',
+})
+
 const $blocks = $('.slider')
 
 $blocks.each(function () {

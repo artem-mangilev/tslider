@@ -3,15 +3,28 @@
     display: block;
   }
 
-  &_horizontal {
+  &__container {
+    width: 300px;
+    height: 200px;
+  }
+
+  &_horizontal-resizable {
     .slider__container {
-      width: 300px;
+      min-width: 100px;
+      padding: 10px;
+      border: 2px solid black;
+      resize: horizontal;
+      overflow: auto;
     }
   }
 
-  &_vertical {
+  &_vertical-resizable {
     .slider__container {
-      height: 200px;
+      min-height: 100px;
+      padding: 10px;
+      border: 2px solid black;
+      resize: vertical;
+      overflow: auto;
     }
   }
 }
