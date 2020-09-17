@@ -167,9 +167,16 @@ class Model extends Subject {
     }
   }
 
-  updateFrom(value: number): void {
+  setFrom(value: number| string): void {
+    value = +value
+
+    const oldPoint = this.handlesX[0].getPosition()
     const point = this.converter.toTrackPoint(value)
     this.handlesX[0].setPosition(this.validator.validatePoint(point))
+
+    if (this.collisionDetector.doCollide()) {
+      this.handlesX[0].setPosition(oldPoint)
+    }
 
     this.setInput()
 
@@ -178,11 +185,18 @@ class Model extends Subject {
     this.notify(ModelEvents.Update)
   }
 
-  updateTo(value: number): void {
+  setTo(value: number | string): void {
     if (!this.handlesX[1]) return
 
+    value = +value
+
+    const oldPoint = this.handlesX[1].getPosition()
     const point = this.converter.toTrackPoint(value)
     this.handlesX[1].setPosition(this.validator.validatePoint(point))
+
+    if (this.collisionDetector.doCollide()) {
+      this.handlesX[1].setPosition(oldPoint)
+    }
 
     this.setInput()
 

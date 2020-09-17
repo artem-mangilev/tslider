@@ -56,19 +56,19 @@ class Tslider {
   }
 
   setValues(from: number, to?: number): void {
-    this.model.updateFrom(from)
+    this.model.setFrom(from)
 
     if (to !== undefined) {
-      this.model.updateTo(to)
+      this.model.setTo(to)
     }
   }
 
   setFrom(from: number): void {
-    this.model.updateFrom(from)
+    this.model.setFrom(from)
   }
 
   setTo(to: number): void {
-    this.model.updateTo(to)
+    this.model.setTo(to)
   }
 
   getFrom(): string {
