@@ -84,16 +84,14 @@ class Model extends Subject {
   setMinValue(min: number): void {
     if (isFinite(min)) {
       min = +min
-    } else {
-      return
-    }
 
-    const values = this.getValues()
-    if (values.every((value) => value >= min)) {
-      this.valuesValidator.setMin(min)
-      this.setHandles(values)
+      const values = this.getValues()
+      if (values.every((value) => value >= min)) {
+        this.valuesValidator.setMin(min)
+        this.setHandles(values)
 
-      this.notify(ModelEvents.Update)
+        this.notify(ModelEvents.Update)
+      }
     }
   }
 
@@ -104,16 +102,14 @@ class Model extends Subject {
   setMaxValue(max: number): void {
     if (isFinite(max)) {
       max = +max
-    } else {
-      return
-    }
 
-    const values = this.getValues()
-    if (values.every((value) => value <= max)) {
-      this.valuesValidator.setMax(max)
-      this.setHandles(values)
+      const values = this.getValues()
+      if (values.every((value) => value <= max)) {
+        this.valuesValidator.setMax(max)
+        this.setHandles(values)
 
-      this.notify(ModelEvents.Update)
+        this.notify(ModelEvents.Update)
+      }
     }
   }
 
@@ -124,14 +120,12 @@ class Model extends Subject {
   setStep(step: number): void {
     if (isFinite(step)) {
       step = +step
-    } else {
-      return
+
+      this.valuesValidator.setStep(step)
+      this.precisionFormatter.setNumberWithTargetPrecision(step)
+
+      this.notify(ModelEvents.Update)
     }
-
-    this.valuesValidator.setStep(step)
-    this.precisionFormatter.setNumberWithTargetPrecision(step)
-
-    this.notify(ModelEvents.Update)
   }
 
   getStep(): number {
@@ -169,19 +163,17 @@ class Model extends Subject {
   updateHandleByValue(value: number): void {
     if (isFinite(value)) {
       value = +value
-    } else {
-      return
+
+      const point = this.converter.toTrackPoint(value)
+      const handle = this.handlesX[this.validator.getNearestPointIndex(point)]
+      handle.setPosition(this.validator.validatePoint(point))
+
+      this.setInput()
+
+      this.callHandler()
+
+      this.notify(ModelEvents.Update)
     }
-
-    const point = this.converter.toTrackPoint(value)
-    const handle = this.handlesX[this.validator.getNearestPointIndex(point)]
-    handle.setPosition(this.validator.validatePoint(point))
-
-    this.setInput()
-
-    this.callHandler()
-
-    this.notify(ModelEvents.Update)
   }
 
   resize(trackLength: number): void {
