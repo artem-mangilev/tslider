@@ -10,6 +10,8 @@ class LabelsContainer extends ViewTreeNode {
   private labels: Label[] = []
   private tempLabel: Label
 
+  private data: LabelsContainerRenderData
+
   constructor(
     private longSide: 'width' | 'height',
     private x: 'x' | 'y',
@@ -72,23 +74,27 @@ class LabelsContainer extends ViewTreeNode {
   render(data: LabelsContainerRenderData): void {
     if (!this.labels.length) this.init(data.labels)
 
-    data.labels.forEach((label, i) => {
-      this.labels[i].render({
-        position: label.position,
-        value: label.value,
+    if (this.shouldRender(this.data, data)) {
+      data.labels.forEach((label, i) => {
+        this.labels[i].render({
+          position: label.position,
+          value: label.value,
+        })
       })
-    })
 
-    if (this.doLabelsCollide() && this.isLabelsHaveDifferentPosition()) {
-      this.showTempLabel()
+      if (this.doLabelsCollide() && this.isLabelsHaveDifferentPosition()) {
+        this.showTempLabel()
 
-      this.tempLabel.render({
-        position: data.rangeMiddle,
-        value: data.labels.map((label) => label.value).join(' - '),
-      })
-    } else {
-      this.hideTempLabel()
+        this.tempLabel.render({
+          position: data.rangeMiddle,
+          value: data.labels.map((label) => label.value).join(' - '),
+        })
+      } else {
+        this.hideTempLabel()
+      }
     }
+
+    this.data = data
   }
 }
 

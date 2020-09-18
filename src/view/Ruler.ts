@@ -1,7 +1,6 @@
 import ViewTreeNode from '../utils/ViewTreeNode'
 import RulerSegment from '../model/RulerSegment'
 import RulerNode from './RulerNode'
-import { equals } from '../utils/equals'
 
 class Ruler extends ViewTreeNode {
   private nodes: RulerNode[] = []
@@ -22,14 +21,10 @@ class Ruler extends ViewTreeNode {
     this.init = undefined
   }
 
-  private shouldRender(ruler: RulerSegment[]): boolean {
-    return !equals(this.ruler, ruler)
-  }
-
   render(ruler: RulerSegment[]) {
     this.init && this.init(ruler)
 
-    this.shouldRender(ruler) &&
+    this.shouldRender(this.ruler, ruler) &&
       ruler.forEach((segment, i) => {
         const node = this.nodes[i]
 
