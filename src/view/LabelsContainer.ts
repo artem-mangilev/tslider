@@ -1,5 +1,10 @@
 import ViewTreeNode from '../utils/ViewTreeNode'
-import Label from './Label'
+import Label, { LabelRenderData } from './Label'
+
+export interface LabelsContainerRenderData {
+  labels: LabelRenderData[]
+  rangeMiddle: number
+}
 
 class LabelsContainer extends ViewTreeNode {
   private labels: Label[] = []
@@ -33,7 +38,6 @@ class LabelsContainer extends ViewTreeNode {
   }
 
   private doLabelsCollide(): boolean {
-    // they don't collide if there is 1 label
     if (this.labels.length === 1) {
       return false
     }
@@ -65,16 +69,10 @@ class LabelsContainer extends ViewTreeNode {
     this.add(...this.labels, this.tempLabel)
   }
 
-  render(
-    labels: {
-      position: number
-      value: string
-    }[],
-    rangeMiddle: number
-  ): void {
-    if (!this.labels.length) this.init(labels)
+  render(data: LabelsContainerRenderData): void {
+    if (!this.labels.length) this.init(data.labels)
 
-    labels.forEach((label, i) => {
+    data.labels.forEach((label, i) => {
       this.labels[i].render({
         position: label.position,
         value: label.value,
@@ -85,8 +83,8 @@ class LabelsContainer extends ViewTreeNode {
       this.showTempLabel()
 
       this.tempLabel.render({
-        position: rangeMiddle,
-        value: labels.map((label) => label.value).join(' - '),
+        position: data.rangeMiddle,
+        value: data.labels.map((label) => label.value).join(' - '),
       })
     } else {
       this.hideTempLabel()

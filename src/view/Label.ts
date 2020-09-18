@@ -1,5 +1,10 @@
 import ViewTreeNode from '../utils/ViewTreeNode'
 
+export interface LabelRenderData {
+  position: number,
+  value: string
+}
+
 class Label extends ViewTreeNode {
   constructor(
     private longSide: 'width' | 'height',
@@ -9,7 +14,7 @@ class Label extends ViewTreeNode {
     super('div', 'tslider__label')
   }
 
-  render(data: { position: number; value: string }): void {
+  render(data: LabelRenderData): void {
     this.setContent(data.value)
 
     const middle = this[this.longSide] / 2

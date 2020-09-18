@@ -10,6 +10,7 @@ import LabelsContainer from './LabelsContainer'
 import Ruler from './Ruler'
 import TransferHandle from '../model/TransferHandle'
 import HandlesContainer from './HandlesContainer'
+import { LabelRenderData } from './Label'
 
 class View extends ViewTreeNode {
   private input: Input
@@ -143,16 +144,13 @@ class View extends ViewTreeNode {
     )
   }
 
-  private renderLabels(
-    labelsData: { position: number; value: string }[]
-  ): void {
-    this.labelsContainer.render(
-      labelsData.map(({ position, value }) => ({
-        position: this.validateX(position),
-        value,
-      })),
-      this.getRangeMiddle()
-    )
+  private renderLabels(labelsData: LabelRenderData[]): void {
+    const labels = labelsData.map(({ position, value }) => ({
+      position: this.validateX(position),
+      value,
+    }))
+
+    this.labelsContainer.render({ labels, rangeMiddle: this.getRangeMiddle() })
   }
 
   private renderRuler(ruler: RulerSegment[]): void {
