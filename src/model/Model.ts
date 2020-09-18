@@ -65,12 +65,7 @@ class Model extends Subject {
       new NearPointCalculator()
     )
 
-    values.forEach((value) => {
-      const point = this.validator.validatePoint(
-        this.converter.toTrackPoint(value)
-      )
-      this.handlesX.push(new HandleX(point))
-    })
+    this.setHandlesX(values)
     this.handleY = new HandleY(this.track.height)
 
     this.fillerX = new FillerX(this.handlesX)
@@ -88,7 +83,7 @@ class Model extends Subject {
       const values = this.getValues()
       if (values.every((value) => value >= min)) {
         this.valuesValidator.setMin(min)
-        this.setHandles(values)
+        this.setHandlesX(values)
 
         this.notify(ModelEvents.Update)
       }
@@ -106,7 +101,7 @@ class Model extends Subject {
       const values = this.getValues()
       if (values.every((value) => value <= max)) {
         this.valuesValidator.setMax(max)
-        this.setHandles(values)
+        this.setHandlesX(values)
 
         this.notify(ModelEvents.Update)
       }
@@ -234,28 +229,29 @@ class Model extends Subject {
     )
   }
 
-  private setHandles(values: number[]): void {
+  private setHandlesX(values: number[]): void {
     values.forEach((value, i) => {
       const point = this.converter.toTrackPoint(value)
-      this.handlesX[i].setPosition(point)
+
+      if (this.handlesX[i]) {
+        this.handlesX[i].setPosition(point)
+      } else {
+        this.handlesX[i] = new HandleX(this.validator.validatePoint(point))
+      }
     })
   }
 
   private setValue(which: 'from' | 'to', value: number) {
     const handle = which === 'from' ? this.handlesX[0] : this.handlesX[1]
 
-    if (!handle) return
-
-    if (isFinite(value)) {
+    if (handle && isFinite(value)) {
       value = +value
-    } else {
-      return
+
+      const point = this.converter.toTrackPoint(value)
+      this.setHandlePosition(handle, point)
+
+      this.performSettersRoutine()
     }
-
-    const point = this.converter.toTrackPoint(value)
-    this.setHandlePosition(handle, point)
-
-    this.performSettersRoutine()
   }
 
   private setHandleById(point: number, id: number): void {
