@@ -72,26 +72,28 @@ class LabelsContainer extends ViewTreeNode {
     this.init && this.init(data.labels)
 
     if (this.shouldRender(this.data, data)) {
-      data.labels.forEach((label, i) => {
-        this.labels[i].render({
-          position: label.position,
-          value: label.value,
-        })
-      })
+      this.renderLabels(data.labels)
 
       if (this.doLabelsCollide() && this.isLabelsHaveDifferentPosition()) {
         this.showTempLabel()
-
-        this.tempLabel.render({
-          position: data.rangeMiddle,
-          value: data.labels.map((label) => label.value).join(' - '),
-        })
+        this.renderTempLabel(data.labels, data.rangeMiddle)
       } else {
         this.hideTempLabel()
       }
     }
 
     this.data = data
+  }
+
+  private renderLabels(labels: LabelRenderData[]) {
+    labels.forEach(({ position, value }, i) =>
+      this.labels[i].render({ position, value })
+    )
+  }
+
+  private renderTempLabel(labels: LabelRenderData[], rangeMiddle: number) {
+    const value = labels.map((label) => label.value).join(' - ')
+    this.tempLabel.render({ position: rangeMiddle, value })
   }
 }
 
