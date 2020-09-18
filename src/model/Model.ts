@@ -264,13 +264,8 @@ class Model extends Subject {
       return
     }
 
-    const oldPoint = handle.getPosition()
     const point = this.converter.toTrackPoint(value)
-    handle.setPosition(this.validator.validatePoint(point))
-
-    if (this.collisionDetector.doCollide()) {
-      handle.setPosition(oldPoint)
-    }
+    this.setHandlePosition(handle, point)
 
     this.setInput()
 
@@ -283,18 +278,21 @@ class Model extends Subject {
     if (!this.handlesX[id]) return
 
     const handle = this.handlesX[id]
+    this.setHandlePosition(handle, point)
+
+    this.setInput()
+
+    this.callHandler()
+
+    this.notify(ModelEvents.Update)
+  }
+
+  private setHandlePosition(handle: HandleX, point: number): void {
     const oldPoint = handle.getPosition()
-    const availablePoint = this.validator.validatePoint(point)
-    handle.setPosition(availablePoint)
+    handle.setPosition(this.validator.validatePoint(point))
 
     if (this.collisionDetector.doCollide()) {
       handle.setPosition(oldPoint)
-    } else if (oldPoint !== handle.getPosition()) {
-      this.setInput()
-
-      this.callHandler()
-
-      this.notify(ModelEvents.Update)
     }
   }
 }
