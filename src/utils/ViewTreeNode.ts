@@ -3,6 +3,8 @@ import Point from './Point'
 import Shape from './Shape'
 import { throttle } from './throttle'
 
+export type MouseEventOrTouch = MouseEvent & Touch
+
 export default class ViewTreeNode {
   $elem: JQuery<HTMLElement>
 
@@ -108,22 +110,20 @@ export default class ViewTreeNode {
     })
   }
 
-  onDrag(handler: (e: Event) => void): void {
+  onDrag(handler: (e: MouseEventOrTouch) => void): void {
     const $root = $('html')
+
     $root.on('mousedown', ({ target }) => {
-      if (target === this.$elem[0]) $root.on('mousemove', throttle(handler, 10))
+      target === this.$elem[0] && $root.on('mousemove', throttle(handler, 10))
     })
     $root.on('mouseup', () => $root.off('mousemove'))
-  }
 
-  onTouchDrag(handler: (touch: Touch) => void): void {
-    const $root = $('html')
+    const touchMoveHandler = (e: TouchEvent) =>
+      handler(<MouseEventOrTouch>e.touches[0])
+
     $root.on('touchstart', ({ target }) => {
-      if (target === this.$elem[0])
-        $root.on(
-          'touchmove',
-          throttle((e: TouchEvent) => handler(e.touches[0]), 75)
-        )
+      target === this.$elem[0] &&
+        $root.on('touchmove', throttle(touchMoveHandler, 75))
     })
     $root.on('touchend', () => $root.off('touchmove'))
   }

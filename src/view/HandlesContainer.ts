@@ -1,6 +1,8 @@
-import ViewTreeNode from '../utils/ViewTreeNode'
+import ViewTreeNode, { MouseEventOrTouch } from '../utils/ViewTreeNode'
 import Point from '../utils/Point'
 import Handle from './Handle'
+
+type HandleDragHandler = (point: Point, id: number) => void
 
 class HandlesContainer extends ViewTreeNode {
   private handles: Handle[] = []
@@ -12,30 +14,27 @@ class HandlesContainer extends ViewTreeNode {
   private init(positions: Point[]): void {
     this.handles = [...positions.map(() => new Handle())]
     this.add(...this.handles)
+
+    this.init = undefined
   }
 
   render(positions: Point[]): void {
-    if (!this.handles.length) this.init(positions)
+    this.init && this.init(positions)
 
     positions.forEach((position, i) => this.handles[i].move(position))
   }
 
-  onHandleDrag(handler: (point: Point, id: number) => void): void {
-    this.onMouseDown(({ target }) => {
-      const handle = new ViewTreeNode(<HTMLElement>target).find(this.handles)
-      handle &&
-        handle.onDrag((e: MouseEvent) =>
-          handler({ x: e.clientX, y: e.clientY }, this.handles.indexOf(handle))
-        )
-    })
+  onHandleDrag(handler: HandleDragHandler): void {
+    const mouseDownOrTouchHandler = (e: MouseEventOrTouch) => {
+      const handle = new ViewTreeNode(<HTMLElement>e.target).find(this.handles)
+      const index = this.handles.indexOf(handle)
+      handle?.onDrag((e: MouseEvent) =>
+        handler({ x: e.clientX, y: e.clientY }, index)
+      )
+    }
 
-    this.onTouch(({ target }) => {
-      const handle = new ViewTreeNode(<HTMLElement>target).find(this.handles)
-      handle &&
-        handle.onTouchDrag((e: Touch) => {
-          handler({ x: e.clientX, y: e.clientY }, this.handles.indexOf(handle))
-        })
-    })
+    this.onMouseDown(mouseDownOrTouchHandler)
+    this.onTouch(mouseDownOrTouchHandler)
   }
 }
 
