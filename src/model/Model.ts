@@ -88,17 +88,10 @@ class Model extends Subject {
       return
     }
 
-    const values = this.handlesX.map((handle) =>
-      this.converter.toValue(handle.getPosition())
-    )
-
+    const values = this.getValues()
     if (values.every((value) => value >= min)) {
       this.valuesValidator.setMin(min)
-
-      values.forEach((value, i) => {
-        const point = this.converter.toTrackPoint(value)
-        this.handlesX[i].setPosition(point)
-      })
+      this.setHandles(values)
 
       this.notify(ModelEvents.Update)
     }
@@ -115,17 +108,10 @@ class Model extends Subject {
       return
     }
 
-    const values = this.handlesX.map((handle) =>
-      this.converter.toValue(handle.getPosition())
-    )
-
+    const values = this.getValues()
     if (values.every((value) => value <= max)) {
       this.valuesValidator.setMax(max)
-
-      values.forEach((value, i) => {
-        const point = this.converter.toTrackPoint(value)
-        this.handlesX[i].setPosition(point)
-      })
+      this.setHandles(values)
 
       this.notify(ModelEvents.Update)
     }
@@ -142,7 +128,6 @@ class Model extends Subject {
       return
     }
 
-    if (typeof step === 'string') step = +step
     this.valuesValidator.setStep(step)
     this.precisionFormatter.setNumberWithTargetPrecision(step)
 
@@ -319,6 +304,19 @@ class Model extends Subject {
 
   private callHandler() {
     this.handler && this.handler(this.input.get())
+  }
+
+  private getValues(): number[] {
+    return this.handlesX.map((handle) =>
+      this.converter.toValue(handle.getPosition())
+    )
+  }
+
+  private setHandles(values: number[]): void {
+    values.forEach((value, i) => {
+      const point = this.converter.toTrackPoint(value)
+      this.handlesX[i].setPosition(point)
+    })
   }
 }
 
