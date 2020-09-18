@@ -81,8 +81,12 @@ class Model extends Subject {
     this._ruler = new Ruler(this.track, this.converter, rulerSteps)
   }
 
-  setMinValue(min: number | string): void {
-    if (typeof min === 'string') min = +min
+  setMinValue(min: number): void {
+    if (isFinite(min)) {
+      min = +min
+    } else {
+      return
+    }
 
     const values = this.handlesX.map((handle) =>
       this.converter.toValue(handle.getPosition())
@@ -104,8 +108,12 @@ class Model extends Subject {
     return this.valuesValidator.getMin()
   }
 
-  setMaxValue(max: number | string): void {
-    if (typeof max === 'string') max = +max
+  setMaxValue(max: number): void {
+    if (isFinite(max)) {
+      max = +max
+    } else {
+      return
+    }
 
     const values = this.handlesX.map((handle) =>
       this.converter.toValue(handle.getPosition())
@@ -127,7 +135,13 @@ class Model extends Subject {
     return this.valuesValidator.getMax()
   }
 
-  setStep(step: number | string): void {
+  setStep(step: number): void {
+    if (isFinite(step)) {
+      step = +step
+    } else {
+      return
+    }
+
     if (typeof step === 'string') step = +step
     this.valuesValidator.setStep(step)
     this.precisionFormatter.setNumberWithTargetPrecision(step)
@@ -179,8 +193,12 @@ class Model extends Subject {
     }
   }
 
-  setFrom(value: number| string): void {
-    value = +value
+  setFrom(value: number): void {
+    if (isFinite(value)) {
+      value = +value
+    } else {
+      return
+    }
 
     const oldPoint = this.handlesX[0].getPosition()
     const point = this.converter.toTrackPoint(value)
@@ -197,10 +215,14 @@ class Model extends Subject {
     this.notify(ModelEvents.Update)
   }
 
-  setTo(value: number | string): void {
+  setTo(value: number): void {
     if (!this.handlesX[1]) return
 
-    value = +value
+    if (isFinite(value)) {
+      value = +value
+    } else {
+      return
+    }
 
     const oldPoint = this.handlesX[1].getPosition()
     const point = this.converter.toTrackPoint(value)
@@ -225,8 +247,12 @@ class Model extends Subject {
     return this.handlesX[1] && this.handleToValue(this.handlesX[1])
   }
 
-  updateHandleByValue(value: number | string): void {
-    if (typeof value === 'string') value = +value
+  updateHandleByValue(value: number): void {
+    if (isFinite(value)) {
+      value = +value
+    } else {
+      return
+    }
 
     const point = this.converter.toTrackPoint(value)
     const handle = this.handlesX[this.validator.getNearestPointIndex(point)]
