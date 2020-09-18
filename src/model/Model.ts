@@ -168,11 +168,7 @@ class Model extends Subject {
       const handle = this.handlesX[this.validator.getNearestPointIndex(point)]
       handle.setPosition(this.validator.validatePoint(point))
 
-      this.setInput()
-
-      this.callHandler()
-
-      this.notify(ModelEvents.Update)
+      this.performSettersRoutine()
     }
   }
 
@@ -259,11 +255,7 @@ class Model extends Subject {
     const point = this.converter.toTrackPoint(value)
     this.setHandlePosition(handle, point)
 
-    this.setInput()
-
-    this.callHandler()
-
-    this.notify(ModelEvents.Update)
+    this.performSettersRoutine()
   }
 
   private setHandleById(point: number, id: number): void {
@@ -272,11 +264,7 @@ class Model extends Subject {
     const handle = this.handlesX[id]
     this.setHandlePosition(handle, point)
 
-    this.setInput()
-
-    this.callHandler()
-
-    this.notify(ModelEvents.Update)
+    this.performSettersRoutine()
   }
 
   private setHandlePosition(handle: HandleX, point: number): void {
@@ -286,6 +274,12 @@ class Model extends Subject {
     if (this.collisionDetector.doCollide()) {
       handle.setPosition(oldPoint)
     }
+  }
+
+  private performSettersRoutine() {
+    this.setInput()
+    this.callHandler()
+    this.notify(ModelEvents.Update)
   }
 }
 
