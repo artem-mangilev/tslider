@@ -143,85 +143,19 @@ class Model extends Subject {
   }
 
   updateHandle(point: number): void {
-    const handle = this.handlesX[this.validator.getNearestPointIndex(point)]
-    const oldPoint = handle.getPosition()
-    const availablePoint = this.validator.validatePoint(point)
-    handle.setPosition(availablePoint)
-
-    if (this.collisionDetector.doCollide()) {
-      handle.setPosition(oldPoint)
-    } else if (oldPoint !== handle.getPosition()) {
-      this.setInput()
-
-      this.callHandler()
-
-      this.notify(ModelEvents.Update)
-    }
+    this.setHandleById(point, this.validator.getNearestPointIndex(point))
   }
 
   updateHandleByIndex(point: number, index: number): void {
-    if (!this.handlesX[index]) return
-
-    const handle = this.handlesX[index]
-    const oldPoint = handle.getPosition()
-    const availablePoint = this.validator.validatePoint(point)
-    handle.setPosition(availablePoint)
-
-    if (this.collisionDetector.doCollide()) {
-      handle.setPosition(oldPoint)
-    } else if (oldPoint !== handle.getPosition()) {
-      this.setInput()
-
-      this.callHandler()
-
-      this.notify(ModelEvents.Update)
-    }
+    this.setHandleById(point, index)
   }
 
   setFrom(value: number): void {
-    if (isFinite(value)) {
-      value = +value
-    } else {
-      return
-    }
-
-    const oldPoint = this.handlesX[0].getPosition()
-    const point = this.converter.toTrackPoint(value)
-    this.handlesX[0].setPosition(this.validator.validatePoint(point))
-
-    if (this.collisionDetector.doCollide()) {
-      this.handlesX[0].setPosition(oldPoint)
-    }
-
-    this.setInput()
-
-    this.callHandler()
-
-    this.notify(ModelEvents.Update)
+    this.setValue('from', value)
   }
 
   setTo(value: number): void {
-    if (!this.handlesX[1]) return
-
-    if (isFinite(value)) {
-      value = +value
-    } else {
-      return
-    }
-
-    const oldPoint = this.handlesX[1].getPosition()
-    const point = this.converter.toTrackPoint(value)
-    this.handlesX[1].setPosition(this.validator.validatePoint(point))
-
-    if (this.collisionDetector.doCollide()) {
-      this.handlesX[1].setPosition(oldPoint)
-    }
-
-    this.setInput()
-
-    this.callHandler()
-
-    this.notify(ModelEvents.Update)
+    this.setValue('to', value)
   }
 
   getFrom(): string {
@@ -317,6 +251,51 @@ class Model extends Subject {
       const point = this.converter.toTrackPoint(value)
       this.handlesX[i].setPosition(point)
     })
+  }
+
+  private setValue(which: 'from' | 'to', value: number) {
+    const handle = which === 'from' ? this.handlesX[0] : this.handlesX[1]
+
+    if (!handle) return
+
+    if (isFinite(value)) {
+      value = +value
+    } else {
+      return
+    }
+
+    const oldPoint = handle.getPosition()
+    const point = this.converter.toTrackPoint(value)
+    handle.setPosition(this.validator.validatePoint(point))
+
+    if (this.collisionDetector.doCollide()) {
+      handle.setPosition(oldPoint)
+    }
+
+    this.setInput()
+
+    this.callHandler()
+
+    this.notify(ModelEvents.Update)
+  }
+
+  private setHandleById(point: number, id: number): void {
+    if (!this.handlesX[id]) return
+
+    const handle = this.handlesX[id]
+    const oldPoint = handle.getPosition()
+    const availablePoint = this.validator.validatePoint(point)
+    handle.setPosition(availablePoint)
+
+    if (this.collisionDetector.doCollide()) {
+      handle.setPosition(oldPoint)
+    } else if (oldPoint !== handle.getPosition()) {
+      this.setInput()
+
+      this.callHandler()
+
+      this.notify(ModelEvents.Update)
+    }
   }
 }
 
