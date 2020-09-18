@@ -59,20 +59,17 @@ class LabelsContainer extends ViewTreeNode {
     return isCollisionDetected
   }
 
-  private init(
-    labels: {
-      position: number
-      value: string
-    }[]
-  ): void {
+  private init(labels: LabelRenderData[]): void {
     this.labels = [
       ...labels.map(() => new Label(this.longSide, this.x, this.y)),
     ]
     this.add(...this.labels, this.tempLabel)
+
+    this.init = undefined
   }
 
   render(data: LabelsContainerRenderData): void {
-    if (!this.labels.length) this.init(data.labels)
+    this.init && this.init(data.labels)
 
     if (this.shouldRender(this.data, data)) {
       data.labels.forEach((label, i) => {

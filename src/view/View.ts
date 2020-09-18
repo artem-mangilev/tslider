@@ -12,6 +12,14 @@ import TransferHandle from '../model/TransferHandle'
 import HandlesContainer from './HandlesContainer'
 import { LabelRenderData } from './Label'
 
+export interface ViewRenderData {
+  handles: TransferHandle[]
+  inputValue: string
+  rangePosition: Point
+  rangeLength: number
+  ruler: RulerSegment[]
+}
+
 class View extends ViewTreeNode {
   private input: Input
   private track: ViewTreeNode = new ViewTreeNode('div', 'tslider__track')
@@ -93,17 +101,9 @@ class View extends ViewTreeNode {
     }
   }
 
-  render(data: {
-    handles: TransferHandle[]
-    inputValue: string
-    rangePosition: Point
-    rangeLength: number
-    ruler: RulerSegment[]
-  }): void {
+  render(data: ViewRenderData): void {
     this.renderHandles(data.handles.map((handle) => handle.position))
-
     this.renderRange(data.rangePosition, data.rangeLength)
-
     this.showLabels &&
       this.renderLabels(
         data.handles.map(({ position, value }) => ({
@@ -111,9 +111,7 @@ class View extends ViewTreeNode {
           value,
         }))
       )
-
     this.renderInput(data.inputValue)
-
     this.showRuler && this.renderRuler(data.ruler)
   }
 
@@ -137,11 +135,14 @@ class View extends ViewTreeNode {
       position.x = position.x + length
     }
 
-    this.range.render(
+    this.range.render({
       // @ts-ignore
-      { [this.x]: this.validateX(position.x), [this.y]: position.y },
-      length
-    )
+      position: {
+        [this.x]: this.validateX(position.x),
+        [this.y]: position.y,
+      },
+      length,
+    })
   }
 
   private renderLabels(labelsData: LabelRenderData[]): void {
