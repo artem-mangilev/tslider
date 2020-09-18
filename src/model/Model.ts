@@ -195,7 +195,7 @@ class Model extends Subject {
         x: handleX.getPosition(),
         y: this.handleY.getPosition(),
       },
-      value: this.handleToValue(handleX).toString(),
+      value: this.handleToValue(handleX),
     }))
   }
 
