@@ -3,14 +3,14 @@ import Point from '../utils/Point'
 import Input from './Input'
 import Range from './Range'
 import ViewParams from './ViewParams'
-import { Side, Axis } from '../utils/OrientationOptions'
+import { Axis } from '../utils/OrientationOptions'
 import ViewTreeNode from '../utils/ViewTreeNode'
 import RulerSegment from '../model/RulerSegment'
 import LabelsContainer from './LabelsContainer'
 import Ruler from './Ruler'
 import TransferHandle from '../model/TransferHandle'
 import HandlesContainer from './HandlesContainer'
-import { LabelRenderData } from './Label'
+import OrientationManager from './OrientationManager'
 
 export interface ViewRenderData {
   handles: TransferHandle[]
@@ -29,18 +29,17 @@ class View extends ViewTreeNode {
   private ruler: Ruler
 
   private orientation: Orientation
-  private longSide: Side
-  private shortSide: Side
   private x: Axis
   private y: Axis
 
   private isRulerClickable: boolean
   private showLabels: boolean
   private showRuler: boolean
+  private om: OrientationManager
 
   constructor({
     targetInput,
-    orientationOption: { orientation, longSide, shortSide, x, y },
+    orientationOption: { orientation, longSide, x, y },
     isRulerClickable,
     showLabels,
     showRuler,
@@ -63,22 +62,22 @@ class View extends ViewTreeNode {
     )
 
     this.orientation = orientation
-    this.longSide = longSide
-    this.shortSide = shortSide
     this.x = x
     this.y = y
 
     this.isRulerClickable = isRulerClickable
     this.showLabels = showLabels
     this.showRuler = showRuler
+
+    this.om = new OrientationManager(orientation)
   }
 
   getTrackWidth(): number {
-    return this.track[this.longSide]
+    return this.om.getWidth(this.track)
   }
 
   getTrackHeight(): number {
-    return this.track[this.shortSide]
+    return this.om.getHeight(this.track)
   }
 
   toggleLabels(show: boolean): void {
@@ -179,7 +178,7 @@ class View extends ViewTreeNode {
   }
 
   onTrackLengthChanged(handler: (length: number) => void): void {
-    this.onResize((size) => handler(size[this.longSide]))
+    this.onResize((size) => handler(this.om.getWidth(size)))
   }
 
   private validateX(x: number) {
@@ -187,7 +186,7 @@ class View extends ViewTreeNode {
       return x
     }
 
-    return this.track[this.longSide] - x
+    return this.om.getWidth(this.track) - x
   }
 
   private getLocalMousePosition(
@@ -211,7 +210,7 @@ class View extends ViewTreeNode {
 
   private getRangeMiddle(): number {
     const position = this.range.position[this.x] - this.track.position[this.x]
-    return position + this.range[this.longSide] / 2
+    return position + this.om.getWidth(this.range) / 2
   }
 }
 
