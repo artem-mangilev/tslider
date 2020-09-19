@@ -28,7 +28,7 @@ class Ruler extends ViewTreeNode {
       ruler.forEach((segment, i) => {
         const node = this.nodes[i]
 
-        node.setContent(segment.value.toString())
+        node.setContent(segment.value)
 
         const middle = node[this.longSide] / 2
         // @ts-ignore

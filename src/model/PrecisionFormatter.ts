@@ -1,12 +1,10 @@
-class PrecisionFormatter {
-  constructor(private numberWithTargetPrecision: number) {}
+import ValuesValidator from './ValuesValidator'
 
-  setNumberWithTargetPrecision(number: number): void {
-    this.numberWithTargetPrecision = number
-  }
+class PrecisionFormatter {
+  constructor(private values: ValuesValidator) {}
 
   format(number: number): string {
-    const afterDot = this.numberWithTargetPrecision.toString().split('.')[1]
+    const afterDot = this.values.getStep().toString().split('.')[1]
     const afterDotLength = afterDot?.length || 0
 
     return number.toFixed(afterDotLength)

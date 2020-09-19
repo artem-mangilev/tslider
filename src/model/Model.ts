@@ -29,7 +29,6 @@ class Model extends Subject {
   private fillerY: FillerY
   private input: Input
   private collisionDetector: HandlesCollisionDetector
-  private precisionFormatter: PrecisionFormatter
   private handler: (value: string) => void
   private valuesValidator: ValuesValidator
 
@@ -51,11 +50,10 @@ class Model extends Subject {
 
     this.valuesValidator = new ValuesValidator(min, max, step)
 
-    this.precisionFormatter = new PrecisionFormatter(step)
-
     this.converter = new ValuesToTrackPointConverter(
       this.valuesValidator,
-      this.track
+      this.track,
+      new PrecisionFormatter(this.valuesValidator)
     )
 
     this.validator = new TrackPointValidator(
@@ -117,7 +115,6 @@ class Model extends Subject {
       step = +step
 
       this.valuesValidator.setStep(step)
-      this.precisionFormatter.setNumberWithTargetPrecision(step)
 
       this.notify(ModelEvents.Update)
     }
@@ -208,9 +205,7 @@ class Model extends Subject {
   }
 
   private handleToValue(handle: HandleX): string {
-    return this.precisionFormatter.format(
-      this.converter.toValue(handle.getPosition())
-    )
+    return this.converter.toFormattedValue(handle.getPosition())
   }
 
   private setInput(): void {

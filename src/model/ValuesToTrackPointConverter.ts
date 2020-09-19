@@ -1,10 +1,12 @@
-import Shape from "../utils/Shape"
-import ValuesValidator from "./ValuesValidator"
+import Shape from '../utils/Shape'
+import PrecisionFormatter from './PrecisionFormatter'
+import ValuesValidator from './ValuesValidator'
 
 class ValuesToTrackPointConverter {
   constructor(
     private values: ValuesValidator,
-    private track: Shape
+    private track: Shape,
+    private formatter: PrecisionFormatter
   ) {}
 
   toTrackPoint(value: number): number {
@@ -15,6 +17,10 @@ class ValuesToTrackPointConverter {
   toValue(trackPoint: number): number {
     const ratio = trackPoint / this.track.width
     return ratio * this.getMaxMinDiff() + this.values.getMin()
+  }
+
+  toFormattedValue(trackPoint: number): string {
+    return this.formatter.format(this.toValue(trackPoint))
   }
 
   getNumberOfSteps(): number {
