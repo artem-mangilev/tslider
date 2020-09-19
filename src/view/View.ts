@@ -104,13 +104,7 @@ class View extends ViewTreeNode {
   render(data: ViewRenderData): void {
     this.renderHandles(data.handles.map((handle) => handle.position))
     this.renderRange(data.rangePosition, data.rangeLength)
-    this.showLabels &&
-      this.renderLabels(
-        data.handles.map(({ position, value }) => ({
-          position: position.x,
-          value,
-        }))
-      )
+    this.showLabels && this.renderLabels(data.handles)
     this.renderInput(data.inputValue)
     this.showRuler && this.renderRuler(data.ruler)
   }
@@ -145,9 +139,9 @@ class View extends ViewTreeNode {
     })
   }
 
-  private renderLabels(labelsData: LabelRenderData[]): void {
-    const labels = labelsData.map(({ position, value }) => ({
-      position: this.validateX(position),
+  private renderLabels(handles: TransferHandle[]): void {
+    const labels = handles.map(({ position, value }) => ({
+      position: this.validateX(position.x),
       value,
     }))
 
