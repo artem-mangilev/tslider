@@ -30,7 +30,6 @@ class View extends ViewTreeNode {
 
   private orientation: Orientation
   private x: Axis
-  private y: Axis
 
   private isRulerClickable: boolean
   private showLabels: boolean
@@ -63,7 +62,6 @@ class View extends ViewTreeNode {
 
     this.orientation = orientation
     this.x = x
-    this.y = y
 
     this.isRulerClickable = isRulerClickable
     this.showLabels = showLabels
@@ -111,11 +109,7 @@ class View extends ViewTreeNode {
   // TODO: if both handles at max point, drag doesn't work
   private renderHandles(positions: Point[]): void {
     this.handlesContainer.render(
-      // @ts-ignore
-      positions.map((position) => ({
-        [this.x]: this.validateX(position.x),
-        [this.y]: position.y,
-      }))
+      positions.map((position) => this.om.decodePoint(position, this.track))
     )
   }
 
@@ -129,11 +123,7 @@ class View extends ViewTreeNode {
     }
 
     this.range.render({
-      // @ts-ignore
-      position: {
-        [this.x]: this.validateX(position.x),
-        [this.y]: position.y,
-      },
+      position: this.om.decodePoint(position, this.track),
       length,
     })
   }
@@ -170,10 +160,11 @@ class View extends ViewTreeNode {
 
   onHandleDrag(handler: (point: number, id: number) => void): void {
     this.handlesContainer.onHandleDrag((point, id) => {
-      const position = this.validateX(
-        this.getLocalMousePosition(point.x, point.y, this.track)[this.x]
+      const position = this.om.encodePoint(
+        this.getLocalMousePosition(point.x, point.y, this.track),
+        this.track
       )
-      handler(position, id)
+      handler(position.x, id)
     })
   }
 
@@ -201,10 +192,11 @@ class View extends ViewTreeNode {
     handler: (point: number) => void
   ): (event: MouseEvent) => void {
     return ({ clientX, clientY }) => {
-      const position = this.validateX(
-        this.getLocalMousePosition(clientX, clientY, this.track)[this.x]
+      const position = this.om.encodePoint(
+        this.getLocalMousePosition(clientX, clientY, this.track),
+        this.track
       )
-      handler(position)
+      handler(position.x)
     }
   }
 
