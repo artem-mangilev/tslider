@@ -127,7 +127,7 @@ class View extends ViewTreeNode {
 
   private renderLabels(handles: TransferHandle[]): void {
     const labels = handles.map(({ position, value }) => ({
-      position: this.validateX(position.x),
+      position: this.om.getX(this.om.decodePoint(position, this.track)),
       value,
     }))
 
@@ -135,9 +135,7 @@ class View extends ViewTreeNode {
   }
 
   private renderRuler(ruler: RulerSegment[]): void {
-    this.ruler.render(
-      ruler.map(({ point, value }) => ({ point: this.validateX(point), value }))
-    )
+    this.ruler.render(ruler)
   }
 
   onTrackClick(handler: (point: number) => void): void {
@@ -167,14 +165,6 @@ class View extends ViewTreeNode {
 
   onTrackLengthChanged(handler: (length: number) => void): void {
     this.onResize((size) => handler(this.om.getWidth(size)))
-  }
-
-  private validateX(x: number) {
-    if (this.orientation === 'horizontal') {
-      return x
-    }
-
-    return this.om.getWidth(this.track) - x
   }
 
   private getLocalMousePosition(

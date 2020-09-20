@@ -27,8 +27,14 @@ class Ruler extends ViewTreeNode {
 
         node.setContent(segment.value)
 
+        const point = this.om.decodePoint({ x: segment.point, y: 0 }, this)
         const middle = this.om.getWidth(node) / 2
-        node.move(this.om.getPoint({ x: segment.point - middle, y: 0 }))
+        const alignedPoint = this.om.getPoint({
+          x: this.om.getX(point) - middle,
+          y: this.om.getY(point),
+        })
+
+        node.move(alignedPoint)
       })
 
     this.ruler = ruler
