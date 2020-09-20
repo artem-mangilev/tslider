@@ -76,11 +76,11 @@ class OrientationManager {
     }
   }
 
-  private isHorizontal(): boolean {
+  isHorizontal(): boolean {
     return this.orientation === 'horizontal'
   }
 
-  private isVertical(): boolean {
+  isVertical(): boolean {
     return this.orientation === 'vertical'
   }
 }

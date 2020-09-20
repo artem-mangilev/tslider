@@ -27,8 +27,6 @@ class View extends ViewTreeNode {
   private handlesContainer: HandlesContainer
   private ruler: Ruler
 
-  private orientation: Orientation
-
   private isRulerClickable: boolean
   private showLabels: boolean
   private showRuler: boolean
@@ -59,8 +57,6 @@ class View extends ViewTreeNode {
       this.handlesContainer,
       this.ruler
     )
-
-    this.orientation = orientation
 
     this.isRulerClickable = isRulerClickable
     this.showLabels = showLabels
@@ -115,14 +111,7 @@ class View extends ViewTreeNode {
   }
 
   private renderRange(position: Point, length: number): void {
-    if (this.orientation === 'vertical') {
-      position.x = position.x + length
-    }
-
-    this.range.render({
-      position: this.om.decodePoint(position, this.track),
-      length,
-    })
+    this.range.render({ position, length, track: this.track })
   }
 
   private renderLabels(handles: TransferHandle[]): void {
