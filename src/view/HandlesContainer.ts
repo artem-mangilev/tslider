@@ -7,6 +7,8 @@ type HandleDragHandler = (point: Point, id: number) => void
 class HandlesContainer extends ViewTreeNode {
   private handles: Handle[] = []
 
+  private data: Point[]
+
   constructor() {
     super('div', 'tslider__handles')
   }
@@ -21,7 +23,11 @@ class HandlesContainer extends ViewTreeNode {
   render(positions: Point[]): void {
     this.init && this.init(positions)
 
-    positions.forEach((position, i) => this.handles[i].move(position))
+    if (this.shouldRender(this.data, positions)) {
+      positions.forEach((position, i) => this.handles[i].move(position))
+    }
+
+    this.data = positions
   }
 
   onHandleDrag(handler: HandleDragHandler): void {
