@@ -19,6 +19,43 @@ class OrientationManager {
     return shape.width
   }
 
+  setWidth(shape: Shape, width: number): void {
+    if (this.isHorizontal()) {
+      shape.width = width
+    } else {
+      shape.height = width
+    }
+  }
+
+  setHeight(shape: Shape, height: number): void {
+    if (this.isHorizontal()) {
+      shape.height = height
+    } else {
+      shape.width = height
+    }
+  }
+
+  getX(point: Point): number {
+    if (this.isHorizontal()) {
+      return point.x
+    }
+    return point.y
+  }
+
+  getY(point: Point): number {
+    if (this.isHorizontal()) {
+      return point.y
+    }
+    return point.x
+  }
+
+  getPoint(point: Point): Point {
+    if (this.isHorizontal()) {
+      return point
+    }
+    return { x: point.y, y: point.x }
+  }
+
   encodePoint(point: Point, shape: Shape): Point {
     if (this.isHorizontal()) {
       return point
@@ -35,7 +72,7 @@ class OrientationManager {
     }
     return {
       x: point.y,
-      y: this.getWidth(shape) - point.x
+      y: this.getWidth(shape) - point.x,
     }
   }
 

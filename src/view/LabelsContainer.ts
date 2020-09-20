@@ -1,5 +1,6 @@
 import ViewTreeNode from '../utils/ViewTreeNode'
 import Label, { LabelRenderData } from './Label'
+import OrientationManager from './OrientationManager'
 
 export interface LabelsContainerRenderData {
   labels: LabelRenderData[]
@@ -12,14 +13,10 @@ class LabelsContainer extends ViewTreeNode {
 
   private data: LabelsContainerRenderData
 
-  constructor(
-    private longSide: 'width' | 'height',
-    private x: 'x' | 'y',
-    private y: 'x' | 'y'
-  ) {
+  constructor(private om: OrientationManager) {
     super('div', 'tslider__labels')
 
-    this.tempLabel = new Label(longSide, x, y)
+    this.tempLabel = new Label(om)
   }
 
   private showTempLabel() {
@@ -34,8 +31,8 @@ class LabelsContainer extends ViewTreeNode {
 
   private isLabelsHaveDifferentPosition() {
     return (
-      this.labels[0].position[this.x] !==
-      this.labels[this.labels.length - 1].position[this.x]
+      this.om.getX(this.labels[0].position) !==
+      this.om.getX(this.labels[this.labels.length - 1].position)
     )
   }
 
@@ -46,11 +43,11 @@ class LabelsContainer extends ViewTreeNode {
 
     const [firstLabel, lastLabel] = this.labels
 
-    const firstLabelX = firstLabel.position[this.x]
-    const lastLabelX = lastLabel.position[this.x]
+    const firstLabelX = this.om.getX(firstLabel.position)
+    const lastLabelX = this.om.getX(lastLabel.position)
 
-    const firstLabelWidth = firstLabel[this.longSide]
-    const lastLabelWidth = lastLabel[this.longSide]
+    const firstLabelWidth = this.om.getWidth(firstLabel)
+    const lastLabelWidth = this.om.getWidth(lastLabel)
 
     const isCollisionDetected =
       firstLabelX < lastLabelX + lastLabelWidth &&
@@ -60,9 +57,7 @@ class LabelsContainer extends ViewTreeNode {
   }
 
   private init(labels: LabelRenderData[]): void {
-    this.labels = [
-      ...labels.map(() => new Label(this.longSide, this.x, this.y)),
-    ]
+    this.labels = [...labels.map(() => new Label(this.om))]
     this.add(...this.labels, this.tempLabel)
 
     this.init = undefined

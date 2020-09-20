@@ -1,16 +1,13 @@
 import ViewTreeNode from '../utils/ViewTreeNode'
 import RulerSegment from '../model/RulerSegment'
 import RulerNode from './RulerNode'
+import OrientationManager from './OrientationManager'
 
 class Ruler extends ViewTreeNode {
   private nodes: RulerNode[] = []
   private ruler: RulerSegment[] = []
 
-  constructor(
-    private longSide: 'width' | 'height',
-    private x: 'x' | 'y',
-    private y: 'x' | 'y'
-  ) {
+  constructor(private om: OrientationManager) {
     super('div', 'tslider__ruler')
   }
 
@@ -30,9 +27,8 @@ class Ruler extends ViewTreeNode {
 
         node.setContent(segment.value)
 
-        const middle = node[this.longSide] / 2
-        // @ts-ignore
-        node.move({ [this.x]: segment.point - middle, [this.y]: 0 })
+        const middle = this.om.getWidth(node) / 2
+        node.move(this.om.getPoint({ x: segment.point - middle, y: 0 }))
       })
 
     this.ruler = ruler

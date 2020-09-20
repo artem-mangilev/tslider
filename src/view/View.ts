@@ -3,7 +3,6 @@ import Point from '../utils/Point'
 import Input from './Input'
 import Range from './Range'
 import ViewParams from './ViewParams'
-import { Axis } from '../utils/OrientationOptions'
 import ViewTreeNode from '../utils/ViewTreeNode'
 import RulerSegment from '../model/RulerSegment'
 import LabelsContainer from './LabelsContainer'
@@ -29,7 +28,6 @@ class View extends ViewTreeNode {
   private ruler: Ruler
 
   private orientation: Orientation
-  private x: Axis
 
   private isRulerClickable: boolean
   private showLabels: boolean
@@ -38,18 +36,20 @@ class View extends ViewTreeNode {
 
   constructor({
     targetInput,
-    orientationOption: { orientation, longSide, x, y },
+    orientation,
     isRulerClickable,
     showLabels,
     showRuler,
   }: ViewParams) {
     super('div', `tslider tslider_${orientation}`)
 
+    this.om = new OrientationManager(orientation)
+
     this.input = new Input(targetInput)
     this.handlesContainer = new HandlesContainer()
-    this.labelsContainer = new LabelsContainer(longSide, x, y)
-    this.range = new Range(longSide)
-    this.ruler = new Ruler(longSide, x, y)
+    this.labelsContainer = new LabelsContainer(this.om)
+    this.range = new Range(this.om)
+    this.ruler = new Ruler(this.om)
 
     this.input.after(this)
     this.add(
@@ -61,13 +61,10 @@ class View extends ViewTreeNode {
     )
 
     this.orientation = orientation
-    this.x = x
 
     this.isRulerClickable = isRulerClickable
     this.showLabels = showLabels
     this.showRuler = showRuler
-
-    this.om = new OrientationManager(orientation)
   }
 
   getTrackWidth(): number {
@@ -201,7 +198,8 @@ class View extends ViewTreeNode {
   }
 
   private getRangeMiddle(): number {
-    const position = this.range.position[this.x] - this.track.position[this.x]
+    const position =
+      this.om.getX(this.range.position) - this.om.getX(this.track.position)
     return position + this.om.getWidth(this.range) / 2
   }
 }

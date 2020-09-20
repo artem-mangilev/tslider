@@ -1,25 +1,21 @@
 import ViewTreeNode from '../utils/ViewTreeNode'
+import OrientationManager from './OrientationManager'
 
 export interface LabelRenderData {
-  position: number,
+  position: number
   value: string
 }
 
 class Label extends ViewTreeNode {
-  constructor(
-    private longSide: 'width' | 'height',
-    private x: 'x' | 'y',
-    private y: 'x' | 'y'
-  ) {
+  constructor(private om: OrientationManager) {
     super('div', 'tslider__label')
   }
 
   render(data: LabelRenderData): void {
     this.setContent(data.value)
 
-    const middle = this[this.longSide] / 2
-    // @ts-ignore
-    this.move({ [this.x]: data.position - middle, [this.y]: 0 })
+    const middle = this.om.getWidth(this) / 2
+    this.move(this.om.getPoint({ x: data.position - middle, y: 0 }))
   }
 }
 

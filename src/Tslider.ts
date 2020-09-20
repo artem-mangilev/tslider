@@ -1,11 +1,6 @@
 import Model from './model/Model'
 import { ModelEvents } from './model/ModelEvents'
 import ModelEventsHandler from './ModelEventsHandler'
-import { Orientation } from './utils/aliases'
-import {
-  OrientationOption,
-  OrientationOptions,
-} from './utils/OrientationOptions'
 import View from './view/View'
 import './plugin.scss'
 
@@ -29,7 +24,7 @@ class Tslider {
     inputValuesSeparator = ',',
   }: TsliderParams) {
     this.view = new View({
-      orientationOption: this.getOrientationOption(orientation),
+      orientation,
       targetInput,
       showLabels,
       showRuler,
@@ -125,27 +120,6 @@ class Tslider {
 
   onUpdate(handler: (value: string) => void): void {
     this.model.addUpdateHandler(handler)
-  }
-
-  private getOrientationOption(orientation: Orientation): OrientationOption {
-    const orientationOptions: OrientationOptions = {
-      horizontal: {
-        orientation: 'horizontal',
-        longSide: 'width',
-        shortSide: 'height',
-        x: 'x',
-        y: 'y',
-      },
-      vertical: {
-        orientation: 'vertical',
-        longSide: 'height',
-        shortSide: 'width',
-        x: 'y',
-        y: 'x',
-      },
-    }
-
-    return orientationOptions[orientation]
   }
 }
 

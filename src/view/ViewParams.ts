@@ -1,8 +1,8 @@
-import { OrientationOption } from '../utils/OrientationOptions'
+import { Orientation } from '../utils/aliases'
 
 export default interface ViewParams {
   targetInput: HTMLInputElement
-  orientationOption: OrientationOption
+  orientation: Orientation
   showLabels: boolean
   showRuler: boolean
   isRulerClickable: boolean
