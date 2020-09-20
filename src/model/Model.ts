@@ -172,6 +172,8 @@ class Model extends Subject {
 
     this.track.width = trackLength
 
+    this._ruler.update()
+
     this.notify(ModelEvents.Update)
   }
 
@@ -197,7 +199,7 @@ class Model extends Subject {
   }
 
   get ruler(): RulerSegment[] {
-    return this._ruler.getSegments()
+    return this._ruler.get()
   }
 
   get inputValue(): string {
