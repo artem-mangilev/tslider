@@ -1,5 +1,4 @@
 import Subject from '../utils/Subject'
-import ModelParams from './ModelParams'
 import { ModelEvents } from './ModelEvents'
 import TrackPointValidator from './TrackPointValidator'
 import RulerSegment from './RulerSegment'
@@ -10,14 +9,12 @@ import HandleX from './HandleX'
 import HandleY from './HandleY'
 import FillerX from './FillerX'
 import FillerY from './FillerY'
-import NearPointCalculator from './NearPointCalculator'
 import TransferHandle from './TransferHandle'
 import Input from './Input'
-import CollisionDetector from './CollisionDetector'
-import PrecisionFormatter from './PrecisionFormatter'
 import ValuesValidator from './ValuesValidator'
 import TransferFiller from './TransferFiller'
 import HandlesXContainer from './HandlesXContainer'
+import { ModelDependencies } from './ModelDependencyBuilder'
 
 class Model extends Subject {
   private validator: TrackPointValidator
@@ -32,52 +29,19 @@ class Model extends Subject {
   private valuesValidator: ValuesValidator
   private handlesXContainer: HandlesXContainer
 
-  constructor({
-    inputValuesSeparator: separator,
-    trackHeight: height,
-    trackWidth: width,
-    rulerSteps,
-    values,
-    step,
-    min,
-    max,
-  }: ModelParams) {
+  constructor(deps: ModelDependencies) {
     super()
 
-    this.input = new Input(separator, values.join(separator))
-
-    this.track = { width, height }
-
-    this.valuesValidator = new ValuesValidator(min, max, step)
-
-    this.converter = new ValuesToTrackPointConverter(
-      this.valuesValidator,
-      this.track,
-      new PrecisionFormatter()
-    )
-
-    const calculator = new NearPointCalculator()
-
-    this.validator = new TrackPointValidator(
-      this.converter,
-      this.track,
-      calculator
-    )
-
-    const handlesX = values.map((value) =>
-      this.validator.validatePoint(this.converter.toTrackPoint(value))
-    )
-    this.handlesXContainer = new HandlesXContainer(
-      handlesX,
-      new CollisionDetector(),
-      calculator
-    )
-    this.handleY = new HandleY(this.track.height)
-
-    this.fillerX = new FillerX(this.handlesXContainer.getAll())
-    this.fillerY = new FillerY()
-
-    this._ruler = new Ruler(this.track, this.converter, rulerSteps)
+    this.input = deps.input
+    this.track = deps.track
+    this.valuesValidator = deps.valuesValidator
+    this.converter = deps.converter
+    this.validator = deps.trackPointValidator
+    this.handlesXContainer = deps.handlesXContainer
+    this.handleY = deps.handleY
+    this.fillerX = deps.fillerX
+    this.fillerY = deps.fillerY
+    this._ruler = deps.ruler
   }
 
   setMinValue(min: number): void {

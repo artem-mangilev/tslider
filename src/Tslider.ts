@@ -3,6 +3,7 @@ import { ModelEvents } from './model/ModelEvents'
 import ModelEventsHandler from './ModelEventsHandler'
 import View from './view/View'
 import './plugin.scss'
+import ModelDependencyBuilder from './model/ModelDependencyBuilder'
 
 class Tslider {
   private view: View
@@ -33,7 +34,7 @@ class Tslider {
     })
 
     const values = [from, ...(to !== undefined ? [to] : [])]
-    this.model = new Model({
+    const modelParams = {
       max,
       min,
       step,
@@ -42,7 +43,10 @@ class Tslider {
       trackWidth: this.view.getTrackWidth(),
       trackHeight: this.view.getTrackHeight(),
       inputValuesSeparator,
-    })
+    }
+
+    const modelDeps = new ModelDependencyBuilder(modelParams)
+    this.model = new Model(modelDeps.build())
 
     this.handler = new ModelEventsHandler(this.view)
     this.model.attach(this.handler)
