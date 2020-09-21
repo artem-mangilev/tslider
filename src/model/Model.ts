@@ -13,7 +13,7 @@ import FillerY from './FillerY'
 import NearPointCalculator from './NearPointCalculator'
 import TransferHandle from './TransferHandle'
 import Input from './Input'
-import HandlesCollisionDetector from './HandlesCollisionDetector'
+import CollisionDetector from './CollisionDetector'
 import PrecisionFormatter from './PrecisionFormatter'
 import ValuesValidator from './ValuesValidator'
 import TransferFiller from './TransferFiller'
@@ -29,7 +29,6 @@ class Model extends Subject {
   private fillerX: FillerX
   private fillerY: FillerY
   private input: Input
-  private collisionDetector: HandlesCollisionDetector
   private handler: (value: string) => void
   private valuesValidator: ValuesValidator
   private handlesXContainer: HandlesXContainer
@@ -66,11 +65,13 @@ class Model extends Subject {
       calculator
     )
 
-    this.setHandlesX(values)
-    this.collisionDetector = new HandlesCollisionDetector(this.handlesX)
+    values.forEach((value) => {
+      const point = this.converter.toTrackPoint(value)
+      this.handlesX.push(new HandleX(this.validator.validatePoint(point)))
+    })
     this.handlesXContainer = new HandlesXContainer(
       this.handlesX,
-      this.collisionDetector,
+      new CollisionDetector(),
       calculator
     )
     this.handleY = new HandleY(this.track.height)
@@ -142,7 +143,7 @@ class Model extends Subject {
   }
 
   getFrom(): string {
-    return this.handleToValue(this.handlesX[0])
+    return this.handleToValue(this.handlesXContainer.getById(0))
   }
 
   setTo(value: number): void {
@@ -152,7 +153,8 @@ class Model extends Subject {
   }
 
   getTo(): string {
-    return this.handlesX[1] && this.handleToValue(this.handlesX[1])
+    const to = this.handlesXContainer.getById(1)
+    return to && this.handleToValue(to)
   }
 
   setHandle(point: number): void {
@@ -243,12 +245,7 @@ class Model extends Subject {
   private setHandlesX(values: number[]): void {
     values.forEach((value, i) => {
       const point = this.converter.toTrackPoint(value)
-
-      if (this.handlesX[i]) {
-        this.handlesX[i].setPosition(point)
-      } else {
-        this.handlesX[i] = new HandleX(this.validator.validatePoint(point))
-      }
+      this.handlesX[i].setPosition(point)
     })
   }
 

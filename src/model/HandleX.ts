@@ -1,6 +1,6 @@
-import HandleAxle from './HandleAxle'
+import PositionedElement from './PositionedElement'
 
-class HandleX implements HandleAxle {
+class HandleX implements PositionedElement {
   constructor(private position: number) {}
 
   getPosition(): number {

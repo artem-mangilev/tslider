@@ -1,18 +1,25 @@
-import HandlesCollisionDetector from './HandlesCollisionDetector'
+import CollisionDetector from './CollisionDetector'
 import HandleX from './HandleX'
 import NearPointCalculator from './NearPointCalculator'
 
 class HandlesXContainer {
   constructor(
     private handles: HandleX[],
-    private cd: HandlesCollisionDetector,
+    private cd: CollisionDetector,
     private calculator: NearPointCalculator
   ) {}
 
   setById(point: number, id: number): void {
-    if (this.handles[id]) {
-      const handle = this.handles[id]
+    const handle = this.handles[id]
+    if (handle) {
       this.setPosition(handle, point)
+    }
+  }
+
+  getById(id: number): HandleX {
+    const handle = this.handles[id]
+    if (handle) {
+      return handle
     }
   }
 
@@ -25,7 +32,7 @@ class HandlesXContainer {
     const oldPoint = handle.getPosition()
     handle.setPosition(position)
 
-    if (this.cd.doCollide()) {
+    if (this.cd.doCollide(this.handles)) {
       handle.setPosition(oldPoint)
     }
   }
