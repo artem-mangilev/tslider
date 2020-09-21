@@ -53,7 +53,7 @@ class Model extends Subject {
     this.converter = new ValuesToTrackPointConverter(
       this.valuesValidator,
       this.track,
-      new PrecisionFormatter(this.valuesValidator)
+      new PrecisionFormatter()
     )
 
     this.validator = new TrackPointValidator(

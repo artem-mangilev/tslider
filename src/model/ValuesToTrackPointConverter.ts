@@ -20,7 +20,10 @@ class ValuesToTrackPointConverter {
   }
 
   toFormattedValue(trackPoint: number): string {
-    return this.formatter.format(this.toValue(trackPoint))
+    return this.formatter.format(
+      this.values.getStep(),
+      this.toValue(trackPoint)
+    )
   }
 
   getNumberOfSteps(): number {
