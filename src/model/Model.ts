@@ -58,18 +58,20 @@ class Model extends Subject {
       new PrecisionFormatter()
     )
 
+    const calculator = new NearPointCalculator()
+
     this.validator = new TrackPointValidator(
       this.converter,
       this.track,
-      this.handlesX,
-      new NearPointCalculator()
+      calculator
     )
 
     this.setHandlesX(values)
     this.collisionDetector = new HandlesCollisionDetector(this.handlesX)
     this.handlesXContainer = new HandlesXContainer(
       this.handlesX,
-      this.collisionDetector
+      this.collisionDetector,
+      calculator
     )
     this.handleY = new HandleY(this.track.height)
 
@@ -154,7 +156,7 @@ class Model extends Subject {
   }
 
   setHandle(point: number): void {
-    this.setHandleById(point, this.validator.getNearestPointIndex(point))
+    this.handlesXContainer.setNear(this.validator.validatePoint(point))
 
     this.performSettersRoutine()
   }
@@ -170,7 +172,7 @@ class Model extends Subject {
       value = +value
 
       const point = this.converter.toTrackPoint(value)
-      this.setHandleById(point, this.validator.getNearestPointIndex(point))
+      this.handlesXContainer.setNear(this.validator.validatePoint(point))
 
       this.performSettersRoutine()
     }
