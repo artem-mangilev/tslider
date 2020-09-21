@@ -132,12 +132,10 @@ class Model extends Subject {
     return this.handleToValue(this.handlesX[0])
   }
 
-
   setTo(value: number): void {
     this.setValue('to', value)
   }
 
-  
   getTo(): string {
     return this.handlesX[1] && this.handleToValue(this.handlesX[1])
   }
@@ -176,7 +174,6 @@ class Model extends Subject {
     this.handler = handler
   }
 
-
   get filler(): TransferFiller {
     return {
       position: {
@@ -211,7 +208,7 @@ class Model extends Subject {
 
   private setInput(): void {
     this.input.setFromList(
-      this.handlesX.map((handle) => this.handleToValue(handle).toString())
+      this.handlesX.map((handle) => this.handleToValue(handle))
     )
   }
 
