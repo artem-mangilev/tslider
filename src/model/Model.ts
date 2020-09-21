@@ -17,6 +17,7 @@ import HandlesCollisionDetector from './HandlesCollisionDetector'
 import PrecisionFormatter from './PrecisionFormatter'
 import ValuesValidator from './ValuesValidator'
 import TransferFiller from './TransferFiller'
+import HandlesXContainer from './HandlesXContainer'
 
 class Model extends Subject {
   private validator: TrackPointValidator
@@ -31,6 +32,7 @@ class Model extends Subject {
   private collisionDetector: HandlesCollisionDetector
   private handler: (value: string) => void
   private valuesValidator: ValuesValidator
+  private handlesXContainer: HandlesXContainer
 
   constructor({
     inputValuesSeparator: separator,
@@ -64,12 +66,15 @@ class Model extends Subject {
     )
 
     this.setHandlesX(values)
+    this.collisionDetector = new HandlesCollisionDetector(this.handlesX)
+    this.handlesXContainer = new HandlesXContainer(
+      this.handlesX,
+      this.collisionDetector
+    )
     this.handleY = new HandleY(this.track.height)
 
     this.fillerX = new FillerX(this.handlesX)
     this.fillerY = new FillerY()
-
-    this.collisionDetector = new HandlesCollisionDetector(this.handlesX)
 
     this._ruler = new Ruler(this.track, this.converter, rulerSteps)
   }
@@ -126,6 +131,8 @@ class Model extends Subject {
 
   setFrom(value: number): void {
     this.setValue('from', value)
+
+    this.performSettersRoutine()
   }
 
   getFrom(): string {
@@ -134,6 +141,8 @@ class Model extends Subject {
 
   setTo(value: number): void {
     this.setValue('to', value)
+
+    this.performSettersRoutine()
   }
 
   getTo(): string {
@@ -142,10 +151,14 @@ class Model extends Subject {
 
   setHandle(point: number): void {
     this.setHandleById(point, this.validator.getNearestPointIndex(point))
+
+    this.performSettersRoutine()
   }
 
   setHandleByIndex(point: number, index: number): void {
     this.setHandleById(point, index)
+
+    this.performSettersRoutine()
   }
 
   setHandleByValue(value: number): void {
@@ -154,6 +167,8 @@ class Model extends Subject {
 
       const point = this.converter.toTrackPoint(value)
       this.setHandleById(point, this.validator.getNearestPointIndex(point))
+
+      this.performSettersRoutine()
     }
   }
 
@@ -232,34 +247,16 @@ class Model extends Subject {
   }
 
   private setValue(which: 'from' | 'to', value: number) {
-    const handle = which === 'from' ? this.handlesX[0] : this.handlesX[1]
-
-    if (handle && isFinite(value)) {
+    if (isFinite(value)) {
       value = +value
 
       const point = this.converter.toTrackPoint(value)
-      this.setHandlePosition(handle, point)
-
-      this.performSettersRoutine()
+      this.setHandleById(point, which === 'from' ? 0 : 1)
     }
   }
 
   private setHandleById(point: number, id: number): void {
-    if (!this.handlesX[id]) return
-
-    const handle = this.handlesX[id]
-    this.setHandlePosition(handle, point)
-
-    this.performSettersRoutine()
-  }
-
-  private setHandlePosition(handle: HandleX, point: number): void {
-    const oldPoint = handle.getPosition()
-    handle.setPosition(this.validator.validatePoint(point))
-
-    if (this.collisionDetector.doCollide()) {
-      handle.setPosition(oldPoint)
-    }
+    this.handlesXContainer.setById(this.validator.validatePoint(point), id)
   }
 
   private performSettersRoutine() {
