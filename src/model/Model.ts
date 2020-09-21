@@ -81,19 +81,7 @@ class Model extends Subject {
   }
 
   setMinValue(min: number): void {
-    if (isFinite(min)) {
-      min = +min
-
-      const values = this.getValues()
-      if (values.every((value) => value >= min)) {
-        this.valuesValidator.setMin(min)
-        this.setHandlesX(values)
-
-        this._ruler.update()
-
-        this.notify(ModelEvents.Update)
-      }
-    }
+    this.setMinOrMax('min', min)
   }
 
   getMinValue(): number {
@@ -101,19 +89,7 @@ class Model extends Subject {
   }
 
   setMaxValue(max: number): void {
-    if (isFinite(max)) {
-      max = +max
-
-      const values = this.getValues()
-      if (values.every((value) => value <= max)) {
-        this.valuesValidator.setMax(max)
-        this.setHandlesX(values)
-
-        this._ruler.update()
-
-        this.notify(ModelEvents.Update)
-      }
-    }
+    this.setMinOrMax('max', max)
   }
 
   getMaxValue(): number {
@@ -255,6 +231,22 @@ class Model extends Subject {
 
       const point = this.converter.toTrackPoint(value)
       this.setHandleById(point, which === 'from' ? 0 : 1)
+    }
+  }
+
+  private setMinOrMax(which: 'min' | 'max', value: number) {
+    if (isFinite(value)) {
+      value = +value
+
+      const values = this.getValues()
+      which === 'min'
+        ? this.valuesValidator.setMin(value)
+        : this.valuesValidator.setMax(value)
+      this.setHandlesX(values)
+
+      this._ruler.update()
+
+      this.notify(ModelEvents.Update)
     }
   }
 
