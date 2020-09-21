@@ -88,6 +88,8 @@ class Model extends Subject {
         this.valuesValidator.setMin(min)
         this.setHandlesX(values)
 
+        this._ruler.update()
+
         this.notify(ModelEvents.Update)
       }
     }
@@ -105,6 +107,8 @@ class Model extends Subject {
       if (values.every((value) => value <= max)) {
         this.valuesValidator.setMax(max)
         this.setHandlesX(values)
+
+        this._ruler.update()
 
         this.notify(ModelEvents.Update)
       }
