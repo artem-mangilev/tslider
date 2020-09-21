@@ -1,19 +1,19 @@
-import HandleX from './HandleX'
+import PositionedElement from './PositionedElement'
 
 class FillerX {
-  constructor(private handles: HandleX[]) {}
+  constructor(private elements: PositionedElement[]) {}
 
   private isRangeMode(): boolean {
-    return this.handles.length === 2
+    return this.elements.length === 2
   }
 
   getPosition(): number {
-    return this.isRangeMode() ? this.handles[0].getPosition() : 0
+    return this.isRangeMode() ? this.elements[0].getPosition() : 0
   }
 
   getLength(): number {
-    const first = this.handles[0]
-    const last = this.handles[this.handles.length - 1]
+    const first = this.elements[0]
+    const last = this.elements[this.elements.length - 1]
 
     return this.isRangeMode()
       ? last.getPosition() - first.getPosition()
