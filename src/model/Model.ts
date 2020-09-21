@@ -8,7 +8,6 @@ import Ruler from './Ruler'
 import Shape from '../utils/Shape'
 import HandleX from './HandleX'
 import HandleY from './HandleY'
-import Point from '../utils/Point'
 import FillerX from './FillerX'
 import FillerY from './FillerY'
 import NearPointCalculator from './NearPointCalculator'
@@ -17,6 +16,7 @@ import Input from './Input'
 import HandlesCollisionDetector from './HandlesCollisionDetector'
 import PrecisionFormatter from './PrecisionFormatter'
 import ValuesValidator from './ValuesValidator'
+import TransferFiller from './TransferFiller'
 
 class Model extends Subject {
   private validator: TrackPointValidator
@@ -174,14 +174,13 @@ class Model extends Subject {
     this.notify(ModelEvents.Update)
   }
 
-  get rangeLength(): number {
-    return this.fillerX.getLength()
-  }
-
-  get rangePosition(): Point {
+  get filler(): TransferFiller {
     return {
-      x: this.fillerX.getPosition(),
-      y: this.fillerY.getPosition(),
+      position: {
+        x: this.fillerX.getPosition(),
+        y: this.fillerY.getPosition(),
+      },
+      length: this.fillerX.getLength(),
     }
   }
 

@@ -25,15 +25,13 @@ class ModelEventsHandler implements Observer {
 
   private handleUpdate({
     handles,
-    rangePosition,
-    rangeLength,
+    filler,
     ruler,
     inputValue,
   }: Model): void {
     this.view.render({
       handles,
-      rangePosition,
-      rangeLength,
+      filler,
       ruler,
       inputValue,
     })

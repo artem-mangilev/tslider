@@ -9,12 +9,12 @@ import Ruler from './Ruler'
 import TransferHandle from '../model/TransferHandle'
 import HandlesContainer from './HandlesContainer'
 import OrientationManager from './OrientationManager'
+import TransferFiller from '../model/TransferFiller'
 
 export interface ViewRenderData {
   handles: TransferHandle[]
   inputValue: string
-  rangePosition: Point
-  rangeLength: number
+  filler: TransferFiller
   ruler: RulerSegment[]
 }
 
@@ -92,7 +92,7 @@ class View extends ViewTreeNode {
 
   render(data: ViewRenderData): void {
     this.renderHandles(data.handles.map((handle) => handle.position))
-    this.renderRange(data.rangePosition, data.rangeLength)
+    this.renderRange(data.filler)
     this.showLabels && this.renderLabels(data.handles)
     this.renderInput(data.inputValue)
     this.showRuler && this.renderRuler(data.ruler)
@@ -109,7 +109,7 @@ class View extends ViewTreeNode {
     this.input.setValue(data)
   }
 
-  private renderRange(position: Point, length: number): void {
+  private renderRange({ position, length }: TransferFiller): void {
     this.range.render({ position, length, track: this.track })
   }
 
