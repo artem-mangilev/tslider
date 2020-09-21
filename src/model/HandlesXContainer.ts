@@ -3,11 +3,15 @@ import HandleX from './HandleX'
 import NearPointCalculator from './NearPointCalculator'
 
 class HandlesXContainer {
+  private handles: HandleX[]
+
   constructor(
-    private handles: HandleX[],
+    positions: number[],
     private cd: CollisionDetector,
     private calculator: NearPointCalculator
-  ) {}
+  ) {
+    this.handles = positions.map((position) => new HandleX(position))
+  }
 
   setById(point: number, id: number): void {
     const handle = this.handles[id]
@@ -26,6 +30,10 @@ class HandlesXContainer {
   setNear(position: number): void {
     const near = this.findNear(position)
     this.setPosition(near, position)
+  }
+
+  getAll(): HandleX[] {
+    return this.handles
   }
 
   private setPosition(handle: HandleX, position: number): void {

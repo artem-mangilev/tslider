@@ -21,7 +21,6 @@ import HandlesXContainer from './HandlesXContainer'
 
 class Model extends Subject {
   private validator: TrackPointValidator
-  private handlesX: HandleX[] = []
   private converter: ValuesToTrackPointConverter
   private _ruler: Ruler
   private track: Shape
@@ -65,18 +64,17 @@ class Model extends Subject {
       calculator
     )
 
-    values.forEach((value) => {
-      const point = this.converter.toTrackPoint(value)
-      this.handlesX.push(new HandleX(this.validator.validatePoint(point)))
-    })
+    const handlesX = values.map((value) =>
+      this.validator.validatePoint(this.converter.toTrackPoint(value))
+    )
     this.handlesXContainer = new HandlesXContainer(
-      this.handlesX,
+      handlesX,
       new CollisionDetector(),
       calculator
     )
     this.handleY = new HandleY(this.track.height)
 
-    this.fillerX = new FillerX(this.handlesX)
+    this.fillerX = new FillerX(this.handlesXContainer.getAll())
     this.fillerY = new FillerY()
 
     this._ruler = new Ruler(this.track, this.converter, rulerSteps)
@@ -205,7 +203,7 @@ class Model extends Subject {
   }
 
   get handles(): TransferHandle[] {
-    return this.handlesX.map((handleX) => ({
+    return this.handlesXContainer.getAll().map((handleX) => ({
       position: {
         x: handleX.getPosition(),
         y: this.handleY.getPosition(),
@@ -228,7 +226,9 @@ class Model extends Subject {
 
   private setInput(): void {
     this.input.setFromList(
-      this.handlesX.map((handle) => this.handleToValue(handle))
+      this.handlesXContainer
+        .getAll()
+        .map((handle) => this.handleToValue(handle))
     )
   }
 
@@ -237,15 +237,15 @@ class Model extends Subject {
   }
 
   private getValues(): number[] {
-    return this.handlesX.map((handle) =>
-      this.converter.toValue(handle.getPosition())
-    )
+    return this.handlesXContainer
+      .getAll()
+      .map((handle) => this.converter.toValue(handle.getPosition()))
   }
 
   private setHandlesX(values: number[]): void {
     values.forEach((value, i) => {
       const point = this.converter.toTrackPoint(value)
-      this.handlesX[i].setPosition(point)
+      this.setHandleById(point, i)
     })
   }
 
