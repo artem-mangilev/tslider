@@ -158,12 +158,9 @@ class Model extends Subject {
   }
 
   resize(trackLength: number): void {
-    this.handlesX.forEach((handle) => {
-      const point = (trackLength / this.track.width) * handle.getPosition()
-      handle.setPosition(point)
-    })
-
+    const values = this.getValues()
     this.track.width = trackLength
+    this.setHandlesX(values)
 
     this._ruler.update()
 
