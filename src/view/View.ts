@@ -1,4 +1,3 @@
-import { Orientation } from '../utils/aliases'
 import Point from '../utils/Point'
 import Input from './Input'
 import Range from './Range'

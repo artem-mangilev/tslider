@@ -14,7 +14,7 @@ class HandlesContainer extends ViewTreeNode {
   }
 
   private init(positions: Point[]): void {
-    this.handles = [...positions.map(() => new Handle())]
+    this.handles = positions.map(() => new Handle())
     this.add(...this.handles)
 
     this.init = undefined
