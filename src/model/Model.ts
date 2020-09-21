@@ -157,10 +157,7 @@ class Model extends Subject {
       value = +value
 
       const point = this.converter.toTrackPoint(value)
-      const handle = this.handlesX[this.validator.getNearestPointIndex(point)]
-      handle.setPosition(this.validator.validatePoint(point))
-
-      this.performSettersRoutine()
+      this.setHandleById(point, this.validator.getNearestPointIndex(point))
     }
   }
 
