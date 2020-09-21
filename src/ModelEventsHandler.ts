@@ -17,10 +17,10 @@ class ModelEventsHandler implements Observer {
   }
 
   private handleInit(model: Model): void {
-    this.view.onTrackClick(model.updateHandle.bind(model))
-    this.view.onHandleDrag(model.updateHandleByIndex.bind(model))
+    this.view.onTrackClick(model.setHandle.bind(model))
+    this.view.onHandleDrag(model.setHandleByIndex.bind(model))
     this.view.onTrackLengthChanged(model.resize.bind(model))
-    this.view.onRulerClick(model.updateHandleByValue.bind(model))
+    this.view.onRulerClick(model.setHandleByValue.bind(model))
   }
 
   private handleUpdate({

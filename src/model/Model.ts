@@ -124,35 +124,33 @@ class Model extends Subject {
     return this.valuesValidator.getStep()
   }
 
-  addUpdateHandler(handler: (value: string) => void): void {
-    this.handler = handler
-  }
-
-  updateHandle(point: number): void {
-    this.setHandleById(point, this.validator.getNearestPointIndex(point))
-  }
-
-  updateHandleByIndex(point: number, index: number): void {
-    this.setHandleById(point, index)
-  }
-
   setFrom(value: number): void {
     this.setValue('from', value)
-  }
-
-  setTo(value: number): void {
-    this.setValue('to', value)
   }
 
   getFrom(): string {
     return this.handleToValue(this.handlesX[0])
   }
 
+
+  setTo(value: number): void {
+    this.setValue('to', value)
+  }
+
+  
   getTo(): string {
     return this.handlesX[1] && this.handleToValue(this.handlesX[1])
   }
 
-  updateHandleByValue(value: number): void {
+  setHandle(point: number): void {
+    this.setHandleById(point, this.validator.getNearestPointIndex(point))
+  }
+
+  setHandleByIndex(point: number, index: number): void {
+    this.setHandleById(point, index)
+  }
+
+  setHandleByValue(value: number): void {
     if (isFinite(value)) {
       value = +value
 
@@ -173,6 +171,11 @@ class Model extends Subject {
 
     this.notify(ModelEvents.Update)
   }
+
+  addUpdateHandler(handler: (value: string) => void): void {
+    this.handler = handler
+  }
+
 
   get filler(): TransferFiller {
     return {
