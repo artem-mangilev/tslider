@@ -165,11 +165,8 @@ class Model extends Subject {
   }
 
   private setInput(): void {
-    this.input.setFromList(
-      this.handlesXContainer
-        .getAll()
-        .map((handle) => this.handleToValue(handle))
-    )
+    const handles = this.handlesXContainer.getAll()
+    this.input.set(...handles.map((handle) => this.handleToValue(handle)))
   }
 
   private callHandler() {
