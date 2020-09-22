@@ -1,23 +1,23 @@
 import PositionedElement from './PositionedElement'
 
 class FillerX {
-  constructor(private elements: PositionedElement[]) {}
+  constructor(
+    private left: PositionedElement,
+    private right?: PositionedElement
+  ) {}
 
   private isRangeMode(): boolean {
-    return this.elements.length === 2
+    return !!this.right
   }
 
   getPosition(): number {
-    return this.isRangeMode() ? this.elements[0].getPosition() : 0
+    return this.isRangeMode() ? this.left.getPosition() : 0
   }
 
   getLength(): number {
-    const first = this.elements[0]
-    const last = this.elements[this.elements.length - 1]
-
     return this.isRangeMode()
-      ? last.getPosition() - first.getPosition()
-      : first.getPosition()
+      ? this.right.getPosition() - this.left.getPosition()
+      : this.left.getPosition()
   }
 }
 

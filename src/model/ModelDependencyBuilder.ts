@@ -122,7 +122,8 @@ class ModelDependencyBuilder {
   }
 
   private buildFillerX(container: HandlesXContainer): FillerX {
-    return new FillerX(container.getAll())
+    const [leftHandle, rightHandle] = container.getAll()
+    return new FillerX(leftHandle, rightHandle)
   }
 
   private buildFillerY(): FillerY {
