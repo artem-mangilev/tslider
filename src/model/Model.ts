@@ -65,13 +65,9 @@ class Model extends Subject {
   }
 
   setStep(step: number): void {
-    if (isFinite(step)) {
-      step = +step
+    this.valuesValidator.setStep(step)
 
-      this.valuesValidator.setStep(step)
-
-      this.notify(ModelEvents.Update)
-    }
+    this.notify(ModelEvents.Update)
   }
 
   getStep(): number {
@@ -203,17 +199,13 @@ class Model extends Subject {
   }
 
   private setMinOrMax(which: 'min' | 'max', value: number) {
-    if (isFinite(value)) {
-      value = +value
+    const values = this.getValues()
+    which === 'min'
+      ? this.valuesValidator.setMin(value)
+      : this.valuesValidator.setMax(value)
+    this.setHandlesX(values)
 
-      const values = this.getValues()
-      which === 'min'
-        ? this.valuesValidator.setMin(value)
-        : this.valuesValidator.setMax(value)
-      this.setHandlesX(values)
-
-      this._ruler.update()
-    }
+    this._ruler.update()
   }
 
   private setHandleById(point: number, id: number): void {

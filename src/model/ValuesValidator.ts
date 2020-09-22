@@ -5,22 +5,22 @@ class ValuesValidator {
 
   constructor(min: number, max: number, step: number) {
     if (this.validateMinMax(min, max)) {
-      this.min = min
-      this.max = max
+      this.min = +min
+      this.max = +max
     } else {
       throw new Error('Invalid min or max')
     }
 
     if (this.validateStep(step, max)) {
-      this.step = step
+      this.step = +step
     } else {
       throw new Error('Invalid step')
     }
   }
-  
+
   setMin(min: number): void {
     if (this.validateMinMax(min, this.max)) {
-      this.min = min
+      this.min = +min
     }
   }
 
@@ -30,7 +30,7 @@ class ValuesValidator {
 
   setMax(max: number): void {
     if (this.validateMinMax(this.min, max)) {
-      this.max = max
+      this.max = +max
     }
   }
 
@@ -40,7 +40,7 @@ class ValuesValidator {
 
   setStep(step: number): void {
     if (this.validateStep(step, this.max)) {
-      this.step = step
+      this.step = +step
     }
   }
 
@@ -49,11 +49,11 @@ class ValuesValidator {
   }
 
   private validateMinMax(min: number, max: number): boolean {
-    return min < max
+    return isFinite(min) && isFinite(max) && +min < +max
   }
 
   private validateStep(step: number, max: number): boolean {
-    return step <= max
+    return isFinite(step) && +step <= +max
   }
 }
 
