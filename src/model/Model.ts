@@ -13,7 +13,7 @@ import TransferHandle from './TransferHandle'
 import Input from './Input'
 import ValuesValidator from './ValuesValidator'
 import TransferFiller from './TransferFiller'
-import HandlesXContainer from './HandlesXContainer'
+import HandlesXContainer from './HandlesXDirector'
 import { ModelDependencies } from './ModelDependencyBuilder'
 
 class Model extends Subject {

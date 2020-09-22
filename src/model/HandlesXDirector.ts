@@ -2,7 +2,7 @@ import CollisionDetector from './CollisionDetector'
 import HandleX from './HandleX'
 import NearPointCalculator from './NearPointCalculator'
 
-class HandlesXContainer {
+class HandlesXDirector {
   private handles: HandleX[]
 
   constructor(
@@ -53,4 +53,4 @@ class HandlesXContainer {
   }
 }
 
-export default HandlesXContainer
+export default HandlesXDirector
