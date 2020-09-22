@@ -54,14 +54,6 @@ class Tslider {
     this.model.notify(ModelEvents.Init)
   }
 
-  setValues(from: number, to?: number): void {
-    this.model.setFrom(from)
-
-    if (to !== undefined) {
-      this.model.setTo(to)
-    }
-  }
-
   setFrom(from: number): void {
     this.model.setFrom(from)
   }
