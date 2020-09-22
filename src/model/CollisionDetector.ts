@@ -2,11 +2,13 @@ import PositionedElement from './PositionedElement'
 
 class CollisionDetector {
   doCollide(elements: PositionedElement[]): boolean {
-    if (elements.length === 1) return false
+    return !this.isSorted(elements)
+  }
 
-    if (elements.length === 2) {
-      return elements[0].getPosition() > elements[1].getPosition()
-    }
+  private isSorted(elements: PositionedElement[]) {
+    return elements.slice(1).every((elem, i) => {
+      return elements[i].getPosition() <= elem.getPosition()
+    })
   }
 }
 
