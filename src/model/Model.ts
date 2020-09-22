@@ -46,6 +46,8 @@ class Model extends Subject {
 
   setMinValue(min: number): void {
     this.setMinOrMax('min', min)
+
+    this.performSettersRoutine()
   }
 
   getMinValue(): number {
@@ -54,6 +56,8 @@ class Model extends Subject {
 
   setMaxValue(max: number): void {
     this.setMinOrMax('max', max)
+
+    this.performSettersRoutine()
   }
 
   getMaxValue(): number {
@@ -209,8 +213,6 @@ class Model extends Subject {
       this.setHandlesX(values)
 
       this._ruler.update()
-
-      this.notify(ModelEvents.Update)
     }
   }
 
