@@ -30,17 +30,14 @@ class TrackPointValidator {
   }
 
   validatePoint(point: number): number {
+    point = this.pointCalculator.fromSegment(point, this.stepSegment)
+
     if (this.isPointBeforeLeftBoundary(point)) {
       return this.leftBoundary
     } else if (this.isPointAfterRightBoundary(point)) {
       return this.rightBoundary
     }
-
-    return this.pointCalculator.fromSegment(
-      point,
-      this.stepSegment,
-      this.rightBoundary
-    )
+    return point
   }
 }
 

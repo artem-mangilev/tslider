@@ -3,12 +3,12 @@ class NearPointCalculator {
     return Math.abs(testingPoint - n1) < Math.abs(testingPoint - n2) ? n1 : n2
   }
 
-  fromSegment(point: number, segmentSize: number, limit: number): number {
+  fromSegment(point: number, segmentSize: number): number {
     const quotient = Math.floor(point / segmentSize)
     const low = segmentSize * quotient
     const high = segmentSize * (quotient + 1)
 
-    return this.getNear(low, high < limit ? high : limit, point)
+    return this.getNear(low, high, point)
   }
 
   fromGroup(point: number, pointsGroup: number[]): number {
