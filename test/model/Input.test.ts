@@ -4,28 +4,22 @@ import Input from '../../src/model/Input'
 
 describe(Input.name, () => {
   describe('constructor', () => {
-    it('should create initial value', () => {
-      const input = new Input(' - ', 'hello', 'world')
+    it('should set default separator if arg is not provided', () => {
+      const input = new Input()
 
-      expect(input.get()).to.equal('hello - world')
+      input.set('hello', 'world')
+
+      expect(input.get()).to.equal('helloworld')
     })
   })
 
-  describe('set', () => {
-    it('should set new value', () => {
-      const input = new Input(' - ', 'hello', 'world')
+  describe('set/get', () => {
+    it('should set value and then get it', () => {
+      const input = new Input(' - ')
 
       input.set('goodbye', 'world')
 
       expect(input.get()).to.equal('goodbye - world')
     })
   })
-
-  describe('get', () => [
-    it('should get value', () => {
-      const input = new Input(' - ', 'hello', 'world')
-
-      expect(input.get()).to.equal('hello - world')
-    })
-  ])
 })

@@ -65,10 +65,9 @@ class ModelDependencyBuilder {
   }
 
   private buildInput(): Input {
-    return new Input(
-      this.params.inputValuesSeparator,
-      ...this.params.values.map((value) => value.toString())
-    )
+    const input = new Input(this.params.inputValuesSeparator)
+    input.set(...this.params.values.map((value) => value.toString()))
+    return input
   }
 
   private buildTrack(): Shape {
