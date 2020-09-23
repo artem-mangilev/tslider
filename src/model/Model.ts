@@ -2,7 +2,7 @@ import Subject from '../utils/Subject'
 import { ModelEvents } from './ModelEvents'
 import TrackPointValidator from './TrackPointValidator'
 import RulerSegment from './RulerSegment'
-import ValuesToTrackPointConverter from './ValuesToTrackPointConverter'
+import ValuesToPointConverter from './ValuesToPointConverter'
 import Ruler from './Ruler'
 import Shape from '../utils/Shape'
 import HandleX from './HandleX'
@@ -18,7 +18,7 @@ import { ModelDependencies } from './ModelDependencyBuilder'
 
 class Model extends Subject {
   private validator: TrackPointValidator
-  private converter: ValuesToTrackPointConverter
+  private converter: ValuesToPointConverter
   private _ruler: Ruler
   private track: Shape
   private handleY: HandleY
@@ -114,7 +114,7 @@ class Model extends Subject {
     if (isFinite(value)) {
       value = +value
 
-      const point = this.converter.toTrackPoint(value)
+      const point = this.converter.toPoint(value)
       this.handlesXContainer.setNear(this.validator.validatePoint(point))
 
       this.performSettersRoutine()
@@ -187,7 +187,7 @@ class Model extends Subject {
 
   private setHandlesX(values: number[]): void {
     values.forEach((value, i) => {
-      const point = this.converter.toTrackPoint(value)
+      const point = this.converter.toPoint(value)
       this.setHandleById(point, i)
     })
   }
@@ -196,7 +196,7 @@ class Model extends Subject {
     if (isFinite(value)) {
       value = +value
 
-      const point = this.converter.toTrackPoint(value)
+      const point = this.converter.toPoint(value)
       this.setHandleById(point, which === 'from' ? 0 : 1)
     }
   }
