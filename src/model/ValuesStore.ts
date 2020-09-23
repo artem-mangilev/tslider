@@ -1,4 +1,12 @@
-class ValuesStore {
+export interface ValuesStoreGetters {
+  getMax(): number
+
+  getMin(): number
+  
+  getStep(): number
+}
+
+class ValuesStore implements ValuesStoreGetters {
   constructor(private min: number, private max: number, private step: number) {
     if (this.validateMinMax(min, max)) {
       this.min = +min

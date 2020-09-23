@@ -11,7 +11,7 @@ import PrecisionFormatter from './PrecisionFormatter'
 import Ruler from './Ruler'
 import TrackPointValidator from './TrackPointValidator'
 import ValuesToTrackPointConverter from './ValuesToTrackPointConverter'
-import ValuesStore from './ValuesStore'
+import ValuesStore, { ValuesStoreGetters } from './ValuesStore'
 
 export interface ModelDependencies {
   input: Input
@@ -83,18 +83,18 @@ class ModelDependencyBuilder {
   }
 
   private buildConverter(
-    validator: ValuesStore,
+    values: ValuesStoreGetters,
     track: Shape
   ): ValuesToTrackPointConverter {
     return new ValuesToTrackPointConverter(
-      validator,
+      values,
       track,
       new PrecisionFormatter()
     )
   }
 
   private buildTrackPointValidator(
-    values: ValuesStore,
+    values: ValuesStoreGetters,
     track: Shape,
     calculator: NearPointCalculator
   ): TrackPointValidator {

@@ -1,10 +1,10 @@
 import Shape from '../utils/Shape'
 import NearPointCalculator from './NearPointCalculator'
-import ValuesStore from './ValuesStore'
+import { ValuesStoreGetters } from './ValuesStore'
 
 class TrackPointValidator {
   constructor(
-    private values: ValuesStore,
+    private values: ValuesStoreGetters,
     private track: Shape,
     private pointCalculator: NearPointCalculator
   ) {}

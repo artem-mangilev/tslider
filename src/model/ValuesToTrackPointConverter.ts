@@ -1,10 +1,10 @@
 import Shape from '../utils/Shape'
 import PrecisionFormatter from './PrecisionFormatter'
-import ValuesStore from './ValuesStore'
+import { ValuesStoreGetters } from './ValuesStore'
 
 class ValuesToTrackPointConverter {
   constructor(
-    private values: ValuesStore,
+    private values: ValuesStoreGetters,
     private track: Shape,
     private formatter: PrecisionFormatter
   ) {}
