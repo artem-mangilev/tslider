@@ -1,21 +1,31 @@
 import { expect } from 'chai'
 import 'mocha'
-import ValuesToTrackPointConverter from '../../src/model/ValuesToTrackPointConverter'
 import Ruler from '../../src/model/Ruler'
 import Shape from '../../src/utils/Shape'
 
-// describe('Ruler', () => {
-//   describe('getSegments', () => {
-//     it('should return array of ruler segments', () => {
-//       const track: Shape = { width: 100, height: 10 }
-//       const converter = new ValuesToTrackPointConverter(5, 10, 1, track)
-//       const ruler = new Ruler(track, converter, 2)
+describe(Ruler.name, () => {
+  describe('constructor', () => {
+    it('should init with generated ruler segments', () => {
+      const shape: Shape = { width: 100, height: 10 }
+      const ruler = new Ruler(shape, 2)
 
-//       const segments = ruler.getSegments()
+      const segments = ruler.get()
 
-//       expect(segments[0]).to.eql({ point: 0, value: 5 })
-//       expect(segments[1]).to.eql({ point: 50, value: 7.5 })
-//       expect(segments[2]).to.eql({ point: 100, value: 10 })
-//     })
-//   })
-// })
+      expect(segments).to.eql([0, 50, 100])
+    })
+  })
+
+  describe('update/get', () => {
+    it('should update ruler and get it', () => {
+      const shape: Shape = { width: 100, height: 10 }
+      const ruler = new Ruler(shape, 2)
+
+      expect(ruler.get()).to.eql([0, 50, 100])
+
+      shape.width = 200
+      ruler.update()
+
+      expect(ruler.get()).to.eql([0, 100, 200])
+    })
+  })
+})
