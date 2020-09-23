@@ -1,31 +1,25 @@
-import RulerSegment from './RulerSegment'
-import ValuesToTrackPointConverter from './ValuesToTrackPointConverter'
 import Shape from '../utils/Shape'
 
 class Ruler {
-  private ruler: RulerSegment[]
+  private ruler: number[]
 
-  constructor(
-    private track: Shape,
-    private converter: ValuesToTrackPointConverter,
-    private steps: number
-  ) {
+  constructor(private track: Shape, private steps: number) {
     this.update()
   }
 
   update(): void {
-    const step = this.track.width / this.steps
+    const stepSize = this.getStepSize()
 
-    this.ruler = []
-
-    for (let current = 0; current <= this.track.width; current += step) {
-      const value = this.converter.toFormattedValue(current)
-      this.ruler.push({ point: current, value })
-    }
+    const rulerMarks = { length: this.steps + 1 }
+    this.ruler = Array.from(rulerMarks, (_, mark) => mark * stepSize)
   }
 
-  get(): RulerSegment[] {
+  get(): number[] {
     return this.ruler
+  }
+
+  private getStepSize() {
+    return this.track.width / this.steps
   }
 }
 

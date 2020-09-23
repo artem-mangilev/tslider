@@ -156,7 +156,10 @@ class Model extends Subject {
   }
 
   get ruler(): RulerSegment[] {
-    return this._ruler.get()
+    return this._ruler.get().map((point) => ({
+      point,
+      value: this.converter.toFormattedValue(point),
+    }))
   }
 
   get inputValue(): string {

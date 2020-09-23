@@ -48,7 +48,7 @@ class ModelDependencyBuilder {
     const handleY = this.buildHandleY()
     const fillerX = this.buildFillerX(handlesXContainer)
     const fillerY = this.buildFillerY()
-    const ruler = this.buildRuler(track, converter)
+    const ruler = this.buildRuler(track)
 
     return {
       input,
@@ -129,11 +129,8 @@ class ModelDependencyBuilder {
     return new FillerY()
   }
 
-  private buildRuler(
-    track: Shape,
-    converter: ValuesToTrackPointConverter
-  ): Ruler {
-    return new Ruler(track, converter, this.params.rulerSteps)
+  private buildRuler(track: Shape): Ruler {
+    return new Ruler(track, this.params.rulerSteps)
   }
 }
 
