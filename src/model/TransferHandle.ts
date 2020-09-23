@@ -1,6 +1,8 @@
 import Point from '../utils/Point'
 
-export default interface TransferHandle {
+interface TransferHandle {
   position: Point
   value: string
 }
+
+export default TransferHandle 
