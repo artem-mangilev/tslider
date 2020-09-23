@@ -1,33 +1,13 @@
 import Shape from '../utils/Shape'
 import NearPointCalculator from './NearPointCalculator'
-import ValuesToTrackPointConverter from './ValuesToTrackPointConverter'
+import ValuesStore from './ValuesStore'
 
 class TrackPointValidator {
   constructor(
-    private converter: ValuesToTrackPointConverter,
+    private values: ValuesStore,
     private track: Shape,
     private pointCalculator: NearPointCalculator
   ) {}
-
-  private isPointBeforeLeftBoundary(point: number): boolean {
-    return point <= this.leftBoundary
-  }
-
-  private isPointAfterRightBoundary(point: number): boolean {
-    return point >= this.rightBoundary
-  }
-
-  private get stepSegment(): number {
-    return this.track.width / this.converter.getNumberOfSteps()
-  }
-
-  private get leftBoundary(): number {
-    return 0
-  }
-
-  private get rightBoundary(): number {
-    return this.track.width
-  }
 
   validatePoint(point: number): number {
     point = this.pointCalculator.fromSegment(point, this.stepSegment)
@@ -38,6 +18,30 @@ class TrackPointValidator {
       return this.rightBoundary
     }
     return point
+  }
+
+  private isPointBeforeLeftBoundary(point: number): boolean {
+    return point <= this.leftBoundary
+  }
+
+  private isPointAfterRightBoundary(point: number): boolean {
+    return point >= this.rightBoundary
+  }
+
+  private get leftBoundary(): number {
+    return 0
+  }
+
+  private get rightBoundary(): number {
+    return this.track.width
+  }
+
+  private get stepSegment(): number {
+    return this.track.width / this.getNumberOfSteps()
+  }
+
+  private getNumberOfSteps(): number {
+    return (this.values.getMax() - this.values.getMin()) / this.values.getStep()
   }
 }
 

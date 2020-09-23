@@ -1,10 +1,10 @@
 import Shape from '../utils/Shape'
 import PrecisionFormatter from './PrecisionFormatter'
-import ValuesValidator from './ValuesValidator'
+import ValuesStore from './ValuesStore'
 
 class ValuesToTrackPointConverter {
   constructor(
-    private values: ValuesValidator,
+    private values: ValuesStore,
     private track: Shape,
     private formatter: PrecisionFormatter
   ) {}
@@ -24,10 +24,6 @@ class ValuesToTrackPointConverter {
       this.values.getStep(),
       this.toValue(trackPoint)
     )
-  }
-
-  getNumberOfSteps(): number {
-    return this.getMaxMinDiff() / this.values.getStep()
   }
 
   private getMaxMinDiff(): number {

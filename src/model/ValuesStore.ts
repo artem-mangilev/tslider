@@ -1,9 +1,5 @@
-class ValuesValidator {
-  private min: number
-  private max: number
-  private step: number
-
-  constructor(min: number, max: number, step: number) {
+class ValuesStore {
+  constructor(private min: number, private max: number, private step: number) {
     if (this.validateMinMax(min, max)) {
       this.min = +min
       this.max = +max
@@ -57,4 +53,4 @@ class ValuesValidator {
   }
 }
 
-export default ValuesValidator
+export default ValuesStore

@@ -11,12 +11,12 @@ import PrecisionFormatter from './PrecisionFormatter'
 import Ruler from './Ruler'
 import TrackPointValidator from './TrackPointValidator'
 import ValuesToTrackPointConverter from './ValuesToTrackPointConverter'
-import ValuesValidator from './ValuesValidator'
+import ValuesStore from './ValuesStore'
 
 export interface ModelDependencies {
   input: Input
   track: Shape
-  valuesValidator: ValuesValidator
+  valuesValidator: ValuesStore
   converter: ValuesToTrackPointConverter
   trackPointValidator: TrackPointValidator
   handlesXContainer: HandlesXContainer
@@ -32,11 +32,11 @@ class ModelDependencyBuilder {
   build(): ModelDependencies {
     const input = this.buildInput()
     const track = this.buildTrack()
-    const valuesValidator = this.buildValuesValidator()
+    const valuesValidator = this.buildValuesStore()
     const converter = this.buildConverter(valuesValidator, track)
     const calculator = this.buildCalculator()
     const trackPointValidator = this.buildTrackPointValidator(
-      converter,
+      valuesValidator,
       track,
       calculator
     )
@@ -74,12 +74,8 @@ class ModelDependencyBuilder {
     return { width: this.params.trackWidth, height: this.params.trackHeight }
   }
 
-  private buildValuesValidator(): ValuesValidator {
-    return new ValuesValidator(
-      this.params.min,
-      this.params.max,
-      this.params.step
-    )
+  private buildValuesStore(): ValuesStore {
+    return new ValuesStore(this.params.min, this.params.max, this.params.step)
   }
 
   private buildCalculator(): NearPointCalculator {
@@ -87,7 +83,7 @@ class ModelDependencyBuilder {
   }
 
   private buildConverter(
-    validator: ValuesValidator,
+    validator: ValuesStore,
     track: Shape
   ): ValuesToTrackPointConverter {
     return new ValuesToTrackPointConverter(
@@ -98,11 +94,11 @@ class ModelDependencyBuilder {
   }
 
   private buildTrackPointValidator(
-    converter: ValuesToTrackPointConverter,
+    values: ValuesStore,
     track: Shape,
     calculator: NearPointCalculator
   ): TrackPointValidator {
-    return new TrackPointValidator(converter, track, calculator)
+    return new TrackPointValidator(values, track, calculator)
   }
 
   private buildHandlesXContainer(

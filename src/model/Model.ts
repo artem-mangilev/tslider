@@ -11,7 +11,7 @@ import FillerX from './FillerX'
 import FillerY from './FillerY'
 import TransferHandle from './TransferHandle'
 import Input from './Input'
-import ValuesValidator from './ValuesValidator'
+import ValuesStore from './ValuesStore'
 import TransferFiller from './TransferFiller'
 import HandlesXContainer from './HandlesXDirector'
 import { ModelDependencies } from './ModelDependencyBuilder'
@@ -26,7 +26,7 @@ class Model extends Subject {
   private fillerY: FillerY
   private input: Input
   private handler: (value: string) => void
-  private valuesValidator: ValuesValidator
+  private valuesValidator: ValuesStore
   private handlesXContainer: HandlesXContainer
 
   constructor(deps: ModelDependencies) {
