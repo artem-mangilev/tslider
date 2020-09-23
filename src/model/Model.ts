@@ -47,6 +47,7 @@ class Model extends Subject {
   setMinValue(min: number): void {
     this.setMinOrMax('min', min)
 
+    this._ruler.update()
     this.performSettersRoutine()
   }
 
@@ -57,6 +58,7 @@ class Model extends Subject {
   setMaxValue(max: number): void {
     this.setMinOrMax('max', max)
 
+    this._ruler.update()
     this.performSettersRoutine()
   }
 
@@ -67,6 +69,7 @@ class Model extends Subject {
   setStep(step: number): void {
     this.valuesValidator.setStep(step)
 
+    this._ruler.update()
     this.notify(ModelEvents.Update)
   }
 
@@ -201,8 +204,6 @@ class Model extends Subject {
       ? this.valuesValidator.setMin(value)
       : this.valuesValidator.setMax(value)
     this.setHandlesX(values)
-
-    this._ruler.update()
   }
 
   private setHandleById(point: number, id: number): void {
