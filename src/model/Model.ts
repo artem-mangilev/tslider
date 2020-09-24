@@ -1,6 +1,6 @@
 import Subject from '../utils/Subject'
 import { ModelEvents } from './ModelEvents'
-import TrackPointValidator from './TrackPointValidator'
+import PointValidator from './PointValidator'
 import RulerSegment from './RulerSegment'
 import Ruler from './Ruler'
 import Shape from '../utils/Shape'
@@ -18,7 +18,7 @@ import PrecisionFormatter from './PrecisionFormatter'
 import NumberConverter from './NumberConverter'
 
 class Model extends Subject {
-  private validator: TrackPointValidator
+  private validator: PointValidator
   private _ruler: Ruler
   private track: Shape
   private handleY: HandleY
@@ -40,7 +40,7 @@ class Model extends Subject {
     this.valuesStore = deps.valuesStore
     this.valueToPointConverter = deps.valueToPointConverter
     this.pointToValueConverter = deps.pointToValueConverter
-    this.validator = deps.trackPointValidator
+    this.validator = deps.pointValidator
     this.handlesXContainer = deps.handlesXContainer
     this.handleY = deps.handleY
     this.fillerX = deps.fillerX
@@ -104,7 +104,7 @@ class Model extends Subject {
   }
 
   setHandle(point: number): void {
-    this.handlesXContainer.setNear(this.validator.validatePoint(point))
+    this.handlesXContainer.setNear(this.validator.validate(point))
 
     this.performSettersRoutine()
   }
@@ -120,7 +120,7 @@ class Model extends Subject {
       value = +value
 
       const point = this.valueToPointConverter.convert(value)
-      this.handlesXContainer.setNear(this.validator.validatePoint(point))
+      this.handlesXContainer.setNear(this.validator.validate(point))
 
       this.performSettersRoutine()
     }
@@ -215,7 +215,7 @@ class Model extends Subject {
   }
 
   private setHandleById(point: number, id: number): void {
-    this.handlesXContainer.setById(this.validator.validatePoint(point), id)
+    this.handlesXContainer.setById(this.validator.validate(point), id)
   }
 
   private performSettersRoutine() {

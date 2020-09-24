@@ -9,7 +9,7 @@ import ModelParams from './ModelParams'
 import NearPointCalculator from './NearPointCalculator'
 import PrecisionFormatter from './PrecisionFormatter'
 import Ruler from './Ruler'
-import TrackPointValidator from './TrackPointValidator'
+import PointValidator from './PointValidator'
 import ValuesStore, { ValuesStoreGetters } from './ValuesStore'
 import NumberConverter from './NumberConverter'
 import ValueToPointConverter from './ValueToPointConverter'
@@ -21,7 +21,7 @@ export interface ModelDependencies {
   valuesStore: ValuesStore
   valueToPointConverter: NumberConverter
   pointToValueConverter: NumberConverter
-  trackPointValidator: TrackPointValidator
+  pointValidator: PointValidator
   handlesXContainer: HandlesXContainer
   handleY: HandleY
   fillerX: FillerX
@@ -42,13 +42,13 @@ class ModelDependencyBuilder {
       track
     )
     const calculator = this.buildCalculator()
-    const trackPointValidator = this.buildTrackPointValidator(
+    const pointValidator = this.buildPointValidator(
       valuesStore,
       track,
       calculator
     )
     const handlesXContainer = this.buildHandlesXContainer(
-      trackPointValidator,
+      pointValidator,
       valueToPointConverter,
       calculator
     )
@@ -64,7 +64,7 @@ class ModelDependencyBuilder {
       valuesStore,
       valueToPointConverter,
       pointToValueConverter,
-      trackPointValidator,
+      pointValidator,
       handlesXContainer,
       handleY,
       fillerX,
@@ -102,21 +102,21 @@ class ModelDependencyBuilder {
     ]
   }
 
-  private buildTrackPointValidator(
+  private buildPointValidator(
     values: ValuesStoreGetters,
     track: Shape,
     calculator: NearPointCalculator
-  ): TrackPointValidator {
-    return new TrackPointValidator(values, track, calculator)
+  ): PointValidator {
+    return new PointValidator(values, track, calculator)
   }
 
   private buildHandlesXContainer(
-    validator: TrackPointValidator,
+    validator: PointValidator,
     valueToPointConverter: NumberConverter,
     calculator: NearPointCalculator
   ): HandlesXContainer {
     const handles = this.params.values.map((value) =>
-      validator.validatePoint(valueToPointConverter.convert(value))
+      validator.validate(valueToPointConverter.convert(value))
     )
     return new HandlesXContainer(handles, new CollisionDetector(), calculator)
   }

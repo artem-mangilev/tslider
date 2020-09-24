@@ -1,11 +1,11 @@
 import { expect } from 'chai'
 import 'mocha'
-import TrackPointValidator from '../../src/model/TrackPointValidator'
+import PointValidator from '../../src/model/PointValidator'
 import NearPointCalculator from '../../src/model/NearPointCalculator'
 import { ValuesStoreGetters } from '../../src/model/ValuesStore'
 import Shape from '../../src/utils/Shape'
 
-describe(TrackPointValidator.name, () => {
+describe(PointValidator.name, () => {
   describe('validatePoint', () => {
     it('should get valid point', () => {
       const values: ValuesStoreGetters = {
@@ -17,7 +17,7 @@ describe(TrackPointValidator.name, () => {
         width: 100,
         height: 10,
       }
-      const validator = new TrackPointValidator(
+      const validator = new PointValidator(
         values,
         track,
         new NearPointCalculator()
@@ -31,7 +31,7 @@ describe(TrackPointValidator.name, () => {
       ]
 
       data.forEach((piece) =>
-        expect(validator.validatePoint(piece.in)).to.equal(piece.out)
+        expect(validator.validate(piece.in)).to.equal(piece.out)
       )
     })
   })
