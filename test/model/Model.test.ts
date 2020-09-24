@@ -61,6 +61,43 @@ describe(Model.name, () => {
       expect(model.getTo()).to.equal('5')
     })
   })
+
+  describe('setHandle/handles', () => {
+    it('should set handle by position and get correct related data', () => {
+      model.setHandle(100)
+
+      expect(model.handles[1].position.x).to.equal(100)
+      expect(model.handles[1].value).to.equal('10')
+    })
+  })
+
+  describe('setHandleByIndex/handles', () => {
+    it('should set handle by index and get correct related data', () => {
+      model.setHandleByIndex(100, 1)
+
+      expect(model.handles[1].position.x).to.equal(100)
+      expect(model.handles[1].value).to.equal('10')
+    })
+  })
+
+  describe('setHandleByValue/handles', () => {
+    it('should set handle by index and get correct related data', () => {
+      model.setHandleByValue(10)
+
+      expect(model.handles[1].position.x).to.equal(100)
+      expect(model.handles[1].value).to.equal('10')
+    })
+  })
+
+  describe('resize/handles', () => {
+    it('should resize the track and get correct related data', () => {
+      expect(model.handles[1].position.x).to.equal(30)
+
+      model.resize(200)
+
+      expect(model.handles[1].position.x).to.equal(60)
+    })
+  })
 })
 
 // describe('Model', () => {
