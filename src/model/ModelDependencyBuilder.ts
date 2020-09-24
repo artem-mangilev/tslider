@@ -10,14 +10,17 @@ import NearPointCalculator from './NearPointCalculator'
 import PrecisionFormatter from './PrecisionFormatter'
 import Ruler from './Ruler'
 import TrackPointValidator from './TrackPointValidator'
-import ValuesToPointConverter from './ValuesToPointConverter'
 import ValuesStore, { ValuesStoreGetters } from './ValuesStore'
+import NumberConverter from './NumberConverter'
+import ValueToPointConverter from './ValueToPointConverter'
+import PointToValueConverter from './PointToValueConverter'
 
 export interface ModelDependencies {
   input: Input
   track: Shape
   valuesStore: ValuesStore
-  converter: ValuesToPointConverter
+  valueToPointConverter: NumberConverter
+  pointToValueConverter: NumberConverter
   trackPointValidator: TrackPointValidator
   handlesXContainer: HandlesXContainer
   handleY: HandleY
@@ -34,7 +37,14 @@ class ModelDependencyBuilder {
     const input = this.buildInput()
     const track = this.buildTrack()
     const valuesStore = this.buildValuesStore()
-    const converter = this.buildConverter(valuesStore, track)
+    const valueToPointConverter = this.buildValueToPointConverter(
+      valuesStore,
+      track
+    )
+    const pointToValueConverter = this.buildPointToValueConverter(
+      valuesStore,
+      track
+    )
     const calculator = this.buildCalculator()
     const trackPointValidator = this.buildTrackPointValidator(
       valuesStore,
@@ -43,7 +53,7 @@ class ModelDependencyBuilder {
     )
     const handlesXContainer = this.buildHandlesXContainer(
       trackPointValidator,
-      converter,
+      valueToPointConverter,
       calculator
     )
     const handleY = this.buildHandleY()
@@ -56,7 +66,8 @@ class ModelDependencyBuilder {
       input,
       track,
       valuesStore,
-      converter,
+      valueToPointConverter,
+      pointToValueConverter,
       trackPointValidator,
       handlesXContainer,
       handleY,
@@ -85,11 +96,18 @@ class ModelDependencyBuilder {
     return new NearPointCalculator()
   }
 
-  private buildConverter(
+  private buildValueToPointConverter(
     values: ValuesStoreGetters,
     track: Shape
-  ): ValuesToPointConverter {
-    return new ValuesToPointConverter(values, track)
+  ): NumberConverter {
+    return new ValueToPointConverter(values, track)
+  }
+
+  private buildPointToValueConverter(
+    values: ValuesStoreGetters,
+    track: Shape
+  ): NumberConverter {
+    return new PointToValueConverter(values, track)
   }
 
   private buildTrackPointValidator(
@@ -102,11 +120,11 @@ class ModelDependencyBuilder {
 
   private buildHandlesXContainer(
     validator: TrackPointValidator,
-    converter: ValuesToPointConverter,
+    valueToPointConverter: NumberConverter,
     calculator: NearPointCalculator
   ): HandlesXContainer {
     const handles = this.params.values.map((value) =>
-      validator.validatePoint(converter.toPoint(value))
+      validator.validatePoint(valueToPointConverter.convert(value))
     )
     return new HandlesXContainer(handles, new CollisionDetector(), calculator)
   }

@@ -1,17 +1,13 @@
 import Shape from '../utils/Shape'
+import NumberConverter from './NumberConverter'
 import { ValuesStoreGetters } from './ValuesStore'
 
-class ValuesToPointConverter {
+class ValueToPointConverter implements NumberConverter {
   constructor(private values: ValuesStoreGetters, private shape: Shape) {}
 
-  toPoint(value: number): number {
+  convert(value: number): number {
     const ratio = (value - this.values.getMin()) / this.getMaxMinDiff()
     return ratio * this.shape.width
-  }
-
-  toValue(point: number): number {
-    const ratio = point / this.shape.width
-    return ratio * this.getMaxMinDiff() + this.values.getMin()
   }
 
   private getMaxMinDiff(): number {
@@ -19,4 +15,4 @@ class ValuesToPointConverter {
   }
 }
 
-export default ValuesToPointConverter
+export default ValueToPointConverter

@@ -1,6 +1,5 @@
 import { expect } from 'chai'
 import 'mocha'
-import ValuesToPointConverter from '../../src/model/ValuesToPointConverter'
 
 describe('ValuesToPointConverter', () => {
   // let converter: ValuesToPointConverter, length: number

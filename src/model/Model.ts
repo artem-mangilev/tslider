@@ -2,7 +2,6 @@ import Subject from '../utils/Subject'
 import { ModelEvents } from './ModelEvents'
 import TrackPointValidator from './TrackPointValidator'
 import RulerSegment from './RulerSegment'
-import ValuesToPointConverter from './ValuesToPointConverter'
 import Ruler from './Ruler'
 import Shape from '../utils/Shape'
 import HandleX from './HandleX'
@@ -16,10 +15,10 @@ import TransferFiller from './TransferFiller'
 import HandlesXContainer from './HandlesXDirector'
 import { ModelDependencies } from './ModelDependencyBuilder'
 import PrecisionFormatter from './PrecisionFormatter'
+import NumberConverter from './NumberConverter'
 
 class Model extends Subject {
   private validator: TrackPointValidator
-  private converter: ValuesToPointConverter
   private _ruler: Ruler
   private track: Shape
   private handleY: HandleY
@@ -30,6 +29,8 @@ class Model extends Subject {
   private valuesStore: ValuesStore
   private handlesXContainer: HandlesXContainer
   private formatter: PrecisionFormatter
+  private valueToPointConverter: NumberConverter
+  private pointToValueConverter: NumberConverter
 
   constructor(deps: ModelDependencies) {
     super()
@@ -37,7 +38,8 @@ class Model extends Subject {
     this.input = deps.input
     this.track = deps.track
     this.valuesStore = deps.valuesStore
-    this.converter = deps.converter
+    this.valueToPointConverter = deps.valueToPointConverter
+    this.pointToValueConverter = deps.pointToValueConverter
     this.validator = deps.trackPointValidator
     this.handlesXContainer = deps.handlesXContainer
     this.handleY = deps.handleY
@@ -117,7 +119,7 @@ class Model extends Subject {
     if (isFinite(value)) {
       value = +value
 
-      const point = this.converter.toPoint(value)
+      const point = this.valueToPointConverter.convert(value)
       this.handlesXContainer.setNear(this.validator.validatePoint(point))
 
       this.performSettersRoutine()
@@ -185,12 +187,12 @@ class Model extends Subject {
   private getValues(): number[] {
     return this.handlesXContainer
       .getAll()
-      .map((handle) => this.converter.toValue(handle.getPosition()))
+      .map((handle) => this.pointToValueConverter.convert(handle.getPosition()))
   }
 
   private setHandlesX(values: number[]): void {
     values.forEach((value, i) => {
-      const point = this.converter.toPoint(value)
+      const point = this.valueToPointConverter.convert(value)
       this.setHandleById(point, i)
     })
   }
@@ -199,7 +201,7 @@ class Model extends Subject {
     if (isFinite(value)) {
       value = +value
 
-      const point = this.converter.toPoint(value)
+      const point = this.valueToPointConverter.convert(value)
       this.setHandleById(point, which === 'from' ? 0 : 1)
     }
   }
@@ -225,7 +227,7 @@ class Model extends Subject {
   private getFormattedValue(point: number): string {
     return this.formatter.format(
       this.valuesStore.getStep(),
-      this.converter.toValue(point)
+      this.pointToValueConverter.convert(point)
     )
   }
 }
