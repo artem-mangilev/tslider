@@ -16,7 +16,7 @@ import ValuesStore, { ValuesStoreGetters } from './ValuesStore'
 export interface ModelDependencies {
   input: Input
   track: Shape
-  valuesValidator: ValuesStore
+  valuesStore: ValuesStore
   converter: ValuesToPointConverter
   trackPointValidator: TrackPointValidator
   handlesXContainer: HandlesXContainer
@@ -24,6 +24,7 @@ export interface ModelDependencies {
   fillerX: FillerX
   fillerY: FillerY
   ruler: Ruler
+  formatter: PrecisionFormatter
 }
 
 class ModelDependencyBuilder {
@@ -32,11 +33,11 @@ class ModelDependencyBuilder {
   build(): ModelDependencies {
     const input = this.buildInput()
     const track = this.buildTrack()
-    const valuesValidator = this.buildValuesStore()
-    const converter = this.buildConverter(valuesValidator, track)
+    const valuesStore = this.buildValuesStore()
+    const converter = this.buildConverter(valuesStore, track)
     const calculator = this.buildCalculator()
     const trackPointValidator = this.buildTrackPointValidator(
-      valuesValidator,
+      valuesStore,
       track,
       calculator
     )
@@ -49,11 +50,12 @@ class ModelDependencyBuilder {
     const fillerX = this.buildFillerX(handlesXContainer)
     const fillerY = this.buildFillerY()
     const ruler = this.buildRuler(track)
+    const formatter = this.buildFormatter()
 
     return {
       input,
       track,
-      valuesValidator,
+      valuesStore,
       converter,
       trackPointValidator,
       handlesXContainer,
@@ -61,6 +63,7 @@ class ModelDependencyBuilder {
       fillerX,
       fillerY,
       ruler,
+      formatter,
     }
   }
 
@@ -86,7 +89,7 @@ class ModelDependencyBuilder {
     values: ValuesStoreGetters,
     track: Shape
   ): ValuesToPointConverter {
-    return new ValuesToPointConverter(values, track, new PrecisionFormatter())
+    return new ValuesToPointConverter(values, track)
   }
 
   private buildTrackPointValidator(
@@ -123,6 +126,10 @@ class ModelDependencyBuilder {
 
   private buildRuler(track: Shape): Ruler {
     return new Ruler(track, this.params.rulerSteps)
+  }
+
+  private buildFormatter(): PrecisionFormatter {
+    return new PrecisionFormatter()
   }
 }
 

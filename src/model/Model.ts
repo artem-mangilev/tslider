@@ -15,6 +15,7 @@ import ValuesStore from './ValuesStore'
 import TransferFiller from './TransferFiller'
 import HandlesXContainer from './HandlesXDirector'
 import { ModelDependencies } from './ModelDependencyBuilder'
+import PrecisionFormatter from './PrecisionFormatter'
 
 class Model extends Subject {
   private validator: TrackPointValidator
@@ -26,15 +27,16 @@ class Model extends Subject {
   private fillerY: FillerY
   private input: Input
   private handler: (value: string) => void
-  private valuesValidator: ValuesStore
+  private valuesStore: ValuesStore
   private handlesXContainer: HandlesXContainer
+  private formatter: PrecisionFormatter
 
   constructor(deps: ModelDependencies) {
     super()
 
     this.input = deps.input
     this.track = deps.track
-    this.valuesValidator = deps.valuesValidator
+    this.valuesStore = deps.valuesStore
     this.converter = deps.converter
     this.validator = deps.trackPointValidator
     this.handlesXContainer = deps.handlesXContainer
@@ -42,6 +44,7 @@ class Model extends Subject {
     this.fillerX = deps.fillerX
     this.fillerY = deps.fillerY
     this._ruler = deps.ruler
+    this.formatter = deps.formatter
   }
 
   setMinValue(min: number): void {
@@ -52,7 +55,7 @@ class Model extends Subject {
   }
 
   getMinValue(): number {
-    return this.valuesValidator.getMin()
+    return this.valuesStore.getMin()
   }
 
   setMaxValue(max: number): void {
@@ -63,18 +66,18 @@ class Model extends Subject {
   }
 
   getMaxValue(): number {
-    return this.valuesValidator.getMax()
+    return this.valuesStore.getMax()
   }
 
   setStep(step: number): void {
-    this.valuesValidator.setStep(step)
+    this.valuesStore.setStep(step)
 
     this._ruler.update()
     this.notify(ModelEvents.Update)
   }
 
   getStep(): number {
-    return this.valuesValidator.getStep()
+    return this.valuesStore.getStep()
   }
 
   setFrom(value: number): void {
@@ -158,7 +161,7 @@ class Model extends Subject {
   get ruler(): RulerSegment[] {
     return this._ruler.get().map((point) => ({
       point,
-      value: this.converter.toFormattedValue(point),
+      value: this.getFormattedValue(point),
     }))
   }
 
@@ -167,7 +170,7 @@ class Model extends Subject {
   }
 
   private handleToValue(handle: HandleX): string {
-    return this.converter.toFormattedValue(handle.getPosition())
+    return this.getFormattedValue(handle.getPosition())
   }
 
   private setInput(): void {
@@ -204,8 +207,8 @@ class Model extends Subject {
   private setMinOrMax(which: 'min' | 'max', value: number) {
     const values = this.getValues()
     which === 'min'
-      ? this.valuesValidator.setMin(value)
-      : this.valuesValidator.setMax(value)
+      ? this.valuesStore.setMin(value)
+      : this.valuesStore.setMax(value)
     this.setHandlesX(values)
   }
 
@@ -217,6 +220,13 @@ class Model extends Subject {
     this.setInput()
     this.callHandler()
     this.notify(ModelEvents.Update)
+  }
+
+  private getFormattedValue(point: number): string {
+    return this.formatter.format(
+      this.valuesStore.getStep(),
+      this.converter.toValue(point)
+    )
   }
 }
 
