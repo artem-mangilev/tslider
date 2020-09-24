@@ -37,11 +37,7 @@ class ModelDependencyBuilder {
     const input = this.buildInput()
     const track = this.buildTrack()
     const valuesStore = this.buildValuesStore()
-    const valueToPointConverter = this.buildValueToPointConverter(
-      valuesStore,
-      track
-    )
-    const pointToValueConverter = this.buildPointToValueConverter(
+    const [valueToPointConverter, pointToValueConverter] = this.buildConverters(
       valuesStore,
       track
     )
@@ -96,18 +92,14 @@ class ModelDependencyBuilder {
     return new NearPointCalculator()
   }
 
-  private buildValueToPointConverter(
+  private buildConverters(
     values: ValuesStoreGetters,
     track: Shape
-  ): NumberConverter {
-    return new ValueToPointConverter(values, track)
-  }
-
-  private buildPointToValueConverter(
-    values: ValuesStoreGetters,
-    track: Shape
-  ): NumberConverter {
-    return new PointToValueConverter(values, track)
+  ): NumberConverter[] {
+    return [
+      new ValueToPointConverter(values, track),
+      new PointToValueConverter(values, track),
+    ]
   }
 
   private buildTrackPointValidator(
