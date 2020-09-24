@@ -1,6 +1,67 @@
 import { expect } from 'chai'
 import 'mocha'
 import Model from '../../src/model/Model'
+import ModelDependencyBuilder from '../../src/model/ModelDependencyBuilder'
+import ModelParams from '../../src/model/ModelParams'
+
+describe(Model.name, () => {
+  let model: Model
+
+  beforeEach(() => {
+    const params: ModelParams = {
+      min: 0,
+      max: 10,
+      step: 1,
+      rulerSteps: 5,
+      values: [2, 3],
+      trackWidth: 100,
+      trackHeight: 10,
+      inputValuesSeparator: ',',
+    }
+    const builder = new ModelDependencyBuilder(params)
+    model = new Model(builder.build())
+  })
+
+  describe('setMinValue/getMinValue', () => {
+    it('should set min value and get it', () => {
+      model.setMinValue(2)
+
+      expect(model.getMinValue()).to.equal('2')
+    })
+  })
+
+  describe('setMaxValue/getMaxValue', () => {
+    it('should set max value and get it', () => {
+      model.setMaxValue(15)
+
+      expect(model.getMaxValue()).to.equal('15')
+    })
+  })
+
+  describe('setStep/getStep', () => {
+    it('should set step and get it', () => {
+      model.setStep(5)
+
+      expect(model.getStep()).to.equal('5')
+    })
+  })
+
+  describe('setFrom/getFrom', () => {
+    it('should set from value and get it', () => {
+      model.setFrom(1)
+
+      expect(model.getFrom()).to.equal('1')
+    })
+  })
+
+  describe('setTo/getTo', () => {
+    it('should set to value and get it', () => {
+      model.setTo(5)
+
+      expect(model.getTo()).to.equal('5')
+    })
+  })
+})
 
 // describe('Model', () => {
 //   describe('updateHandlesByValues in pick single value mode', () => {
