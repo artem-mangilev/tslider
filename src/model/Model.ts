@@ -163,7 +163,7 @@ class Model extends Subject {
   get ruler(): RulerSegment[] {
     return this._ruler.get().map((point) => ({
       point,
-      value: this.getFormattedValue(point),
+      value: this.getFormattedValueFromPoint(point),
     }))
   }
 
@@ -172,7 +172,7 @@ class Model extends Subject {
   }
 
   private handleToValue(handle: HandleX): string {
-    return this.getFormattedValue(handle.getPosition())
+    return this.getFormattedValueFromPoint(handle.getPosition())
   }
 
   private setInput(): void {
@@ -224,11 +224,8 @@ class Model extends Subject {
     this.notify(ModelEvents.Update)
   }
 
-  private getFormattedValue(point: number): string {
-    return this.formatter.format(
-      this.valuesStore.getStep(),
-      this.pointToValueConverter.convert(point)
-    )
+  private getFormattedValueFromPoint(point: number): string {
+    return this.formatValue(this.pointToValueConverter.convert(point))
   }
 
   private formatValue(value: number): string {
