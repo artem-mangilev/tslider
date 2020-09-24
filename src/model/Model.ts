@@ -56,8 +56,8 @@ class Model extends Subject {
     this.performSettersRoutine()
   }
 
-  getMinValue(): number {
-    return this.valuesStore.getMin()
+  getMinValue(): string {
+    return this.formatValue(this.valuesStore.getMin())
   }
 
   setMaxValue(max: number): void {
@@ -67,8 +67,8 @@ class Model extends Subject {
     this.performSettersRoutine()
   }
 
-  getMaxValue(): number {
-    return this.valuesStore.getMax()
+  getMaxValue(): string {
+    return this.formatValue(this.valuesStore.getMax())
   }
 
   setStep(step: number): void {
@@ -78,8 +78,8 @@ class Model extends Subject {
     this.notify(ModelEvents.Update)
   }
 
-  getStep(): number {
-    return this.valuesStore.getStep()
+  getStep(): string {
+    return this.formatValue(this.valuesStore.getStep())
   }
 
   setFrom(value: number): void {
@@ -229,6 +229,10 @@ class Model extends Subject {
       this.valuesStore.getStep(),
       this.pointToValueConverter.convert(point)
     )
+  }
+
+  private formatValue(value: number): string {
+    return this.formatter.format(this.valuesStore.getStep(), value)
   }
 }
 

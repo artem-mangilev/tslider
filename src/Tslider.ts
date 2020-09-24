@@ -78,11 +78,11 @@ class Tslider {
     this.model.setMaxValue(max)
   }
 
-  getMin(): number {
+  getMin(): string {
     return this.model.getMinValue()
   }
 
-  getMax(): number {
+  getMax(): string {
     return this.model.getMaxValue()
   }
 
@@ -90,7 +90,7 @@ class Tslider {
     this.model.setStep(step)
   }
 
-  getStep(): number {
+  getStep(): string {
     return this.model.getStep()
   }
 
