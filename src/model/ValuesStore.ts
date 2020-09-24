@@ -2,28 +2,23 @@ export interface ValuesStoreGetters {
   getMax(): number
 
   getMin(): number
-  
+
   getStep(): number
 }
 
 class ValuesStore implements ValuesStoreGetters {
   constructor(private min: number, private max: number, private step: number) {
-    if (this.validateMinMax(min, max)) {
+    if (this.isMinMaxValid(min, max) && this.isStepValid(step, max)) {
       this.min = +min
       this.max = +max
-    } else {
-      throw new Error('Invalid min or max')
-    }
-
-    if (this.validateStep(step, max)) {
       this.step = +step
     } else {
-      throw new Error('Invalid step')
+      throw new Error('Min must be < than max, step must be <= than max')
     }
   }
 
   setMin(min: number): void {
-    if (this.validateMinMax(min, this.max)) {
+    if (this.isMinMaxValid(min, this.max)) {
       this.min = +min
     }
   }
@@ -33,7 +28,7 @@ class ValuesStore implements ValuesStoreGetters {
   }
 
   setMax(max: number): void {
-    if (this.validateMinMax(this.min, max)) {
+    if (this.isMinMaxValid(this.min, max)) {
       this.max = +max
     }
   }
@@ -43,7 +38,7 @@ class ValuesStore implements ValuesStoreGetters {
   }
 
   setStep(step: number): void {
-    if (this.validateStep(step, this.max)) {
+    if (this.isStepValid(step, this.max)) {
       this.step = +step
     }
   }
@@ -52,12 +47,16 @@ class ValuesStore implements ValuesStoreGetters {
     return this.step
   }
 
-  private validateMinMax(min: number, max: number): boolean {
-    return isFinite(min) && isFinite(max) && +min < +max
+  private isMinMaxValid(min: number, max: number): boolean {
+    return this.isNumeric(min, max) && +min < +max
   }
 
-  private validateStep(step: number, max: number): boolean {
-    return isFinite(step) && +step <= +max
+  private isStepValid(step: number, max: number): boolean {
+    return this.isNumeric(step) && +step <= +max
+  }
+
+  private isNumeric(...args: (number | string)[]): boolean {
+    return args.every((arg) => isFinite(<number>arg))
   }
 }
 
