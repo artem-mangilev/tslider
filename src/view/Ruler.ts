@@ -6,39 +6,25 @@ import ViewComponent from './ViewComponent'
 
 class Ruler implements ViewComponent {
   element = new ViewTreeNode('div', 'tslider__ruler')
-  
+
   private nodes: RulerNode[] = []
   private ruler: RulerSegment[] = []
 
   constructor(private om: OrientationManager) {}
 
   private init(ruler: RulerSegment[]) {
-    ruler.forEach(() => this.nodes.push(new RulerNode()))
+    ruler.forEach(() => this.nodes.push(new RulerNode(this.om)))
     this.element.add(...this.nodes.map((node) => node.element))
 
     this.init = undefined
   }
 
-  render(ruler: RulerSegment[]) {
+  render(ruler: RulerSegment[]): void {
     this.init && this.init(ruler)
 
     this.element.shouldRender(this.ruler, ruler) &&
       ruler.forEach((segment, i) => {
-        const node = this.nodes[i]
-
-        node.element.setContent(segment.value)
-
-        const point = this.om.decodePoint(
-          { x: segment.point, y: 0 },
-          this.element
-        )
-        const middle = this.om.getWidth(node.element) / 2
-        const alignedPoint = this.om.getPoint({
-          x: this.om.getX(point) - middle,
-          y: this.om.getY(point),
-        })
-
-        node.element.move(alignedPoint)
+        this.nodes[i].render({ segment, parent: this })
       })
 
     this.ruler = ruler
