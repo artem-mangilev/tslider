@@ -15,7 +15,7 @@ class HandlesContainer extends ViewTreeNode {
 
   private init(positions: Point[]): void {
     this.handles = positions.map(() => new Handle())
-    this.add(...this.handles)
+    this.add(...this.handles.map((handle) => handle.element))
 
     this.init = undefined
   }
@@ -24,7 +24,7 @@ class HandlesContainer extends ViewTreeNode {
     this.init && this.init(positions)
 
     if (this.shouldRender(this.data, positions)) {
-      positions.forEach((position, i) => this.handles[i].move(position))
+      positions.forEach((position, i) => this.handles[i].render(position))
     }
 
     this.data = positions
@@ -32,8 +32,10 @@ class HandlesContainer extends ViewTreeNode {
 
   onHandleDrag(handler: HandleDragHandler): void {
     const mouseDownOrTouchHandler = (e: MouseEventOrTouch) => {
-      const handle = new ViewTreeNode(<HTMLElement>e.target).find(this.handles)
-      const index = this.handles.indexOf(handle)
+      const handle = new ViewTreeNode(<HTMLElement>e.target).find(
+        this.handles.map((handle) => handle.element)
+      )
+      const index = this.handles.map((handle) => handle.element).indexOf(handle)
       handle?.onDrag((e: MouseEvent) =>
         handler({ x: e.clientX, y: e.clientY }, index)
       )

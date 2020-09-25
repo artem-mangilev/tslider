@@ -1,18 +1,17 @@
 import Point from '../utils/Point'
 import ViewTreeNode from '../utils/ViewTreeNode'
+import ViewComponent from './ViewComponent'
 
-class Handle extends ViewTreeNode {
-  constructor() {
-    super('div', 'tslider__handle')
-  }
+class Handle implements ViewComponent {
+  element = new ViewTreeNode('div', 'tslider__handle')
 
-  move(position: Point): void {
-    const middle = this.width / 2
+  render(position: Point): void {
+    const middle = this.element.width / 2
 
-    this.$elem.css(
-      'transform',
-      `translate(${position.x - middle}px, ${position.y - middle}px)`
-    )
+    this.element.move({
+      x: position.x - middle,
+      y: position.y - middle,
+    })
   }
 }
 
