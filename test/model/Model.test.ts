@@ -1,5 +1,11 @@
-import { expect } from 'chai'
 import 'mocha'
+import * as chai from 'chai'
+import * as sinon from 'sinon'
+import * as sinonChai from 'sinon-chai'
+chai.should()
+chai.use(sinonChai)
+const { expect } = chai
+
 import Model from '../../src/model/Model'
 import ModelDependencyBuilder from '../../src/model/ModelDependencyBuilder'
 import ModelParams from '../../src/model/ModelParams'
@@ -119,6 +125,17 @@ describe(Model.name, () => {
   describe('inputValue', () => {
     it('should get input value', () => {
       expect(model.inputValue).to.equal('2,3')
+    })
+  })
+
+  describe('addUpdateHandler', () => {
+    it('should set handler which will trigger after updates', () => {
+      const callback = sinon.spy()
+
+      model.addUpdateHandler(callback)
+      model.setHandleByValue(5)
+
+      expect(callback).to.have.been.calledWith('2,5')
     })
   })
 })
