@@ -10,6 +10,7 @@ import TransferHandle from '../model/TransferHandle'
 import HandlesContainer from './HandlesContainer'
 import OrientationManager from './OrientationManager'
 import TransferFiller from '../model/TransferFiller'
+import ViewComponent from './ViewComponent'
 
 export interface ViewRenderData {
   handles: TransferHandle[]
@@ -18,9 +19,13 @@ export interface ViewRenderData {
   ruler: RulerSegment[]
 }
 
-class View extends ViewTreeNode {
+class View implements ViewComponent {
+  element: ViewTreeNode
+
   private input: Input
-  private track: ViewTreeNode = new ViewTreeNode('div', 'tslider__track')
+  private track: ViewComponent = {
+    element: new ViewTreeNode('div', 'tslider__track'),
+  }
   private range: Range
   private labelsContainer: LabelsContainer
   private handlesContainer: HandlesContainer
@@ -38,7 +43,7 @@ class View extends ViewTreeNode {
     showLabels,
     showRuler,
   }: ViewParams) {
-    super('div', `tslider tslider_${orientation}`)
+    this.element = new ViewTreeNode('div', `tslider tslider_${orientation}`)
 
     this.om = new OrientationManager(orientation)
 
@@ -48,13 +53,13 @@ class View extends ViewTreeNode {
     this.range = new Range(this.om)
     this.ruler = new Ruler(this.om)
 
-    this.input.after(this)
-    this.add(
-      this.labelsContainer,
-      this.track,
-      this.range,
-      this.handlesContainer,
-      this.ruler
+    this.input.element.after(this.element)
+    this.element.add(
+      this.labelsContainer.element,
+      this.track.element,
+      this.range.element,
+      this.handlesContainer.element,
+      this.ruler.element
     )
 
     this.isRulerClickable = isRulerClickable
@@ -63,20 +68,20 @@ class View extends ViewTreeNode {
   }
 
   getTrackWidth(): number {
-    return this.om.getWidth(this.track)
+    return this.om.getWidth(this.track.element)
   }
 
   getTrackHeight(): number {
-    return this.om.getHeight(this.track)
+    return this.om.getHeight(this.track.element)
   }
 
   toggleLabels(show: boolean): void {
     this.showLabels = show
 
     if (show) {
-      this.labelsContainer.show()
+      this.labelsContainer.element.show()
     } else {
-      this.labelsContainer.hide()
+      this.labelsContainer.element.hide()
     }
   }
 
@@ -84,9 +89,9 @@ class View extends ViewTreeNode {
     this.showRuler = show
 
     if (show) {
-      this.ruler.show()
+      this.ruler.element.show()
     } else {
-      this.ruler.hide()
+      this.ruler.element.hide()
     }
   }
 
@@ -101,7 +106,9 @@ class View extends ViewTreeNode {
   // TODO: if both handles at max point, drag doesn't work
   private renderHandles(positions: Point[]): void {
     this.handlesContainer.render(
-      positions.map((position) => this.om.decodePoint(position, this.track))
+      positions.map((position) =>
+        this.om.decodePoint(position, this.track.element)
+      )
     )
   }
 
@@ -110,12 +117,12 @@ class View extends ViewTreeNode {
   }
 
   private renderRange({ position, length }: TransferFiller): void {
-    this.range.render({ position, length, track: this.track })
+    this.range.render({ position, length, track: this.track.element })
   }
 
   private renderLabels(handles: TransferHandle[]): void {
     const labels = handles.map(({ position, value }) => ({
-      position: this.om.getX(this.om.decodePoint(position, this.track)),
+      position: this.om.getX(this.om.decodePoint(position, this.track.element)),
       value,
     }))
 
@@ -130,7 +137,7 @@ class View extends ViewTreeNode {
     const possibleTargets = [this.track, this.range, this.handlesContainer]
 
     possibleTargets.forEach((target) => {
-      target.onClick(this.createTrackClickHandler(handler))
+      target.element.onClick(this.createTrackClickHandler(handler))
     })
   }
 
@@ -144,15 +151,15 @@ class View extends ViewTreeNode {
   onHandleDrag(handler: (point: number, id: number) => void): void {
     this.handlesContainer.onHandleDrag((point, id) => {
       const position = this.om.encodePoint(
-        this.getLocalMousePosition(point.x, point.y, this.track),
-        this.track
+        this.getLocalMousePosition(point.x, point.y, this.track.element),
+        this.track.element
       )
       handler(position.x, id)
     })
   }
 
   onTrackLengthChanged(handler: (length: number) => void): void {
-    this.onResize((size) => handler(this.om.getWidth(size)))
+    this.element.onResize((size) => handler(this.om.getWidth(size)))
   }
 
   private getLocalMousePosition(
@@ -168,8 +175,8 @@ class View extends ViewTreeNode {
   ): (event: MouseEvent) => void {
     return ({ clientX, clientY }) => {
       const position = this.om.encodePoint(
-        this.getLocalMousePosition(clientX, clientY, this.track),
-        this.track
+        this.getLocalMousePosition(clientX, clientY, this.track.element),
+        this.track.element
       )
       handler(position.x)
     }
@@ -177,8 +184,9 @@ class View extends ViewTreeNode {
 
   private getRangeMiddle(): number {
     const position =
-      this.om.getX(this.range.position) - this.om.getX(this.track.position)
-    return position + this.om.getWidth(this.range) / 2
+      this.om.getX(this.range.element.position) -
+      this.om.getX(this.track.element.position)
+    return position + this.om.getWidth(this.range.element) / 2
   }
 }
 

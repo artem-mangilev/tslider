@@ -1,21 +1,19 @@
 import ViewTreeNode, { MouseEventOrTouch } from '../utils/ViewTreeNode'
 import Point from '../utils/Point'
 import Handle from './Handle'
+import ViewComponent from './ViewComponent'
 
 type HandleDragHandler = (point: Point, id: number) => void
 
-class HandlesContainer extends ViewTreeNode {
+class HandlesContainer implements ViewComponent {
+  element = new ViewTreeNode('div', 'tslider__handles')
   private handles: Handle[] = []
 
   private data: Point[]
 
-  constructor() {
-    super('div', 'tslider__handles')
-  }
-
   private init(positions: Point[]): void {
     this.handles = positions.map(() => new Handle())
-    this.add(...this.handles.map((handle) => handle.element))
+    this.element.add(...this.handles.map((handle) => handle.element))
 
     this.init = undefined
   }
@@ -23,7 +21,7 @@ class HandlesContainer extends ViewTreeNode {
   render(positions: Point[]): void {
     this.init && this.init(positions)
 
-    if (this.shouldRender(this.data, positions)) {
+    if (this.element.shouldRender(this.data, positions)) {
       positions.forEach((position, i) => this.handles[i].render(position))
     }
 
@@ -41,8 +39,8 @@ class HandlesContainer extends ViewTreeNode {
       )
     }
 
-    this.onMouseDown(mouseDownOrTouchHandler)
-    this.onTouch(mouseDownOrTouchHandler)
+    this.element.onMouseDown(mouseDownOrTouchHandler)
+    this.element.onTouch(mouseDownOrTouchHandler)
   }
 }
 

@@ -95,7 +95,7 @@ class Tslider {
   }
 
   getInstance(): HTMLElement {
-    return this.view.getElement()
+    return this.view.element.getElement()
   }
 
   showLabels(): void {
