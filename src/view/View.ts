@@ -78,6 +78,7 @@ class View implements ViewComponent {
   toggleLabels(show: boolean): void {
     this.showLabels = show
 
+    // TODO: maybe put this to labels container
     if (show) {
       this.labelsContainer.element.show()
     } else {
@@ -88,6 +89,7 @@ class View implements ViewComponent {
   toggleRuler(show: boolean): void {
     this.showRuler = show
 
+    // TODO: maybe put this to ruler
     if (show) {
       this.ruler.element.show()
     } else {

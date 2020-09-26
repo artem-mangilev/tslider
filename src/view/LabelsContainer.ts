@@ -37,6 +37,7 @@ class LabelsContainer implements ViewComponent {
     )
   }
 
+  // TODO: exctract this method 
   private doLabelsCollide(): boolean {
     if (this.labels.length === 1) {
       return false
