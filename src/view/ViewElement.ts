@@ -1,9 +1,5 @@
 import Point from '../utils/Point'
 
-export interface RenderPermitter {
-  shouldRerender(currentState: any, newState: any): boolean
-}
-
 // TODO: maybe split this to several interfaces?
 export interface ViewElement {
   width: number
@@ -24,7 +20,7 @@ export interface ViewElement {
 }
 
 class HTMLViewElement implements ViewElement {
-  private $elem: JQuery<HTMLElement>
+  $elem: JQuery<HTMLElement>
 
   constructor(element: string | HTMLElement, className?: string) {
     if (element instanceof HTMLElement) {
@@ -100,19 +96,3 @@ class HTMLViewElement implements ViewElement {
 }
 
 export default HTMLViewElement
-
-export interface ViewElementEvents {
-  listen(...elements: ViewElement[]): void
-
-  click(handler: (e: ViewElementEvent) => void): void
-  mouseDown(handler: (e: ViewElementEvent) => void): void
-  touch(handler: (touch: ViewElementEvent) => void): void
-  drag(handler: (e: ViewElementEvent) => void): void
-  resize(handler: (size: ViewElementEvent) => void): void
-  focusout(handler: (e: ViewElementEvent) => void): void
-}
-
-export interface ViewElementEvent {
-  target: ViewElement
-  point: Point
-}
