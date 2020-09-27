@@ -13,10 +13,10 @@ global.$ = $
 //     it('should change handle position on screen', () => {
 //       const handle = new Handle()
 
-//       handle.move({ x: 5, y: 5 })
+//       handle.render({ x: 5, y: 5 })
 
 //       const doesPositionChanged =
-//         handle.$elem.css('transform') === 'translate(5px, 5px)'
+//         $('.tslider__handle').css('transform') === 'translate(5px, 5px)'
 //       expect(doesPositionChanged).to.be.true
 //     })
 //   })
