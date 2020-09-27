@@ -3,14 +3,17 @@ import RulerSegment from '../model/RulerSegment'
 import RulerNode from './RulerNode'
 import OrientationManager from './OrientationManager'
 import ViewComponent from './ViewComponent'
+import { RenderPermitter } from './RenderPermitter'
 
 class Ruler implements ViewComponent {
   element = new ViewTreeNode('div', 'tslider__ruler')
 
   private nodes: RulerNode[] = []
-  private ruler: RulerSegment[] = []
 
-  constructor(private om: OrientationManager) {}
+  constructor(
+    private om: OrientationManager,
+    private permitter: RenderPermitter
+  ) {}
 
   private init(ruler: RulerSegment[]) {
     ruler.forEach(() => this.nodes.push(new RulerNode(this.om)))
@@ -22,12 +25,10 @@ class Ruler implements ViewComponent {
   render(ruler: RulerSegment[]): void {
     this.init && this.init(ruler)
 
-    this.element.shouldRender(this.ruler, ruler) &&
+    this.permitter.shouldRerender(ruler) &&
       ruler.forEach((segment, i) => {
         this.nodes[i].render({ segment, parent: this })
       })
-
-    this.ruler = ruler
   }
 
   onClick(handler: (e: MouseEvent) => void): void {

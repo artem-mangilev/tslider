@@ -1,5 +1,6 @@
 import ViewTreeNode from '../utils/ViewTreeNode'
 import OrientationManager from './OrientationManager'
+import { RenderPermitter } from './RenderPermitter'
 import ViewComponent from './ViewComponent'
 
 export interface LabelRenderData {
@@ -9,19 +10,19 @@ export interface LabelRenderData {
 
 class Label implements ViewComponent {
   element = new ViewTreeNode('div', 'tslider__label')
-  private data: LabelRenderData
 
-  constructor(private om: OrientationManager) {}
+  constructor(
+    private om: OrientationManager,
+    private permitter: RenderPermitter
+  ) {}
 
   render(data: LabelRenderData): void {
-    if (this.element.shouldRender(this.data, data)) {
+    if (this.permitter.shouldRerender(data)) {
       this.element.setContent(data.value)
 
       const middle = this.om.getWidth(this.element) / 2
       this.element.move(this.om.getPoint({ x: data.position - middle, y: 0 }))
     }
-
-    this.data = data
   }
 }
 

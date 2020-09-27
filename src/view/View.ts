@@ -11,6 +11,7 @@ import HandlesContainer from './HandlesContainer'
 import OrientationManager from './OrientationManager'
 import TransferFiller from '../model/TransferFiller'
 import ViewComponent from './ViewComponent'
+import RenderStatePermitter from './RenderPermitter'
 
 export interface ViewRenderData {
   handles: TransferHandle[]
@@ -48,10 +49,13 @@ class View implements ViewComponent {
     this.om = new OrientationManager(orientation)
 
     this.input = new Input(targetInput)
-    this.handlesContainer = new HandlesContainer()
-    this.labelsContainer = new LabelsContainer(this.om)
+    this.handlesContainer = new HandlesContainer(new RenderStatePermitter())
+    this.labelsContainer = new LabelsContainer(
+      this.om,
+      new RenderStatePermitter()
+    )
     this.range = new Range(this.om)
-    this.ruler = new Ruler(this.om)
+    this.ruler = new Ruler(this.om, new RenderStatePermitter())
 
     this.input.element.after(this.element)
     this.element.add(

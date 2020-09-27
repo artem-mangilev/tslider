@@ -1,4 +1,3 @@
-import { equals } from './equals'
 import Point from './Point'
 import Shape from './Shape'
 import { throttle } from './throttle'
@@ -90,10 +89,6 @@ export default class ViewTreeNode {
 
   after(node: ViewTreeNode): void {
     this.$elem.after(node.$elem)
-  }
-
-  shouldRender(currentState: any, newState: any): boolean {
-    return !equals(currentState, newState)
   }
 
   onClick(handler: (e: Event) => void): void {

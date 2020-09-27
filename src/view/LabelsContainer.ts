@@ -1,6 +1,7 @@
 import ViewTreeNode from '../utils/ViewTreeNode'
 import Label, { LabelRenderData } from './Label'
 import OrientationManager from './OrientationManager'
+import RenderStatePermitter, { RenderPermitter } from './RenderPermitter'
 import ViewComponent from './ViewComponent'
 
 export interface LabelsContainerRenderData {
@@ -13,11 +14,12 @@ class LabelsContainer implements ViewComponent {
 
   private labels: Label[] = []
   private tempLabel: Label
-
-  private data: LabelsContainerRenderData
-
-  constructor(private om: OrientationManager) {
-    this.tempLabel = new Label(om)
+  
+  constructor(
+    private om: OrientationManager,
+    private permitter: RenderPermitter
+  ) {
+    this.tempLabel = new Label(om, new RenderStatePermitter())
   }
 
   private showTempLabel() {
@@ -37,7 +39,7 @@ class LabelsContainer implements ViewComponent {
     )
   }
 
-  // TODO: exctract this method 
+  // TODO: exctract this method
   private doLabelsCollide(): boolean {
     if (this.labels.length === 1) {
       return false
@@ -59,7 +61,9 @@ class LabelsContainer implements ViewComponent {
   }
 
   private init(labels: LabelRenderData[]): void {
-    this.labels = [...labels.map(() => new Label(this.om))]
+    this.labels = [
+      ...labels.map(() => new Label(this.om, new RenderStatePermitter())),
+    ]
     this.element.add(
       ...this.labels.map((label) => label.element),
       this.tempLabel.element
@@ -71,7 +75,7 @@ class LabelsContainer implements ViewComponent {
   render(data: LabelsContainerRenderData): void {
     this.init && this.init(data.labels)
 
-    if (this.element.shouldRender(this.data, data)) {
+    if (this.permitter.shouldRerender(data)) {
       this.renderLabels(data.labels)
 
       if (this.doLabelsCollide() && this.isLabelsHaveDifferentPosition()) {
@@ -81,8 +85,6 @@ class LabelsContainer implements ViewComponent {
         this.hideTempLabel()
       }
     }
-
-    this.data = data
   }
 
   private renderLabels(labels: LabelRenderData[]) {
