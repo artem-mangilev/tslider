@@ -2,7 +2,8 @@ import {
   ViewElementObserver,
   ViewElementEventHandler,
 } from './ViewElementObserver'
-import HTMLViewElement, { ViewElement } from './ViewElement'
+import { ViewElement } from './ViewElement'
+import HTMLViewElement from "./HTMLViewElement"
 
 class HTMLViewElementClickObserver implements ViewElementObserver {
   private targets: ViewElement[]

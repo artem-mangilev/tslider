@@ -11,7 +11,8 @@ import OrientationManager from './OrientationManager'
 import TransferFiller from '../model/TransferFiller'
 import ViewComponent from './ViewComponent'
 import RenderStatePermitter from './RenderPermitter'
-import HTMLViewElement, { ViewElement } from './ViewElement'
+import { ViewElement } from './ViewElement'
+import HTMLViewElement from "./HTMLViewElement"
 import HTMLViewElementDragObserver from './HTMLViewElementDragObserver'
 import HTMLViewElementClickObserver from './HTMLViewElementClickObserver'
 import HTMLViewElementResizeObserver from './HTMLViewElementResizeObserver'
@@ -167,6 +168,13 @@ class View implements ViewComponent {
     })
   }
 
+  onTrackLengthChanged(handler: (length: number) => void): void {
+    const observer = new HTMLViewElementResizeObserver()
+    observer.listen(this.element)
+    observer.bind((e) => handler(this.om.getWidth(e.target)))
+  }
+
+
   onRulerClick(handler: (value: string) => void): void {
     this.ruler.onClick(handler)
   }
@@ -179,12 +187,6 @@ class View implements ViewComponent {
       )
       handler(position.x, id)
     })
-  }
-
-  onTrackLengthChanged(handler: (length: number) => void): void {
-    const observer = new HTMLViewElementResizeObserver()
-    observer.listen(this.element)
-    observer.bind((e) => handler(this.om.getWidth(e.target)))
   }
 
   private getLocalMousePosition(

@@ -2,7 +2,8 @@ import Point from '../utils/Point'
 import Handle from './Handle'
 import ViewComponent from './ViewComponent'
 import { RenderPermitter } from './RenderPermitter'
-import HTMLViewElement, { ViewElement } from './ViewElement'
+import { ViewElement } from './ViewElement'
+import HTMLViewElement from "./HTMLViewElement"
 import { ViewElementObserver } from './ViewElementObserver'
 
 type HandleDragHandler = (point: Point, id: number) => void

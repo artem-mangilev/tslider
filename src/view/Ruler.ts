@@ -3,7 +3,8 @@ import RulerNode from './RulerNode'
 import OrientationManager from './OrientationManager'
 import ViewComponent from './ViewComponent'
 import { RenderPermitter } from './RenderPermitter'
-import HTMLViewElement, { ViewElement } from './ViewElement'
+import { ViewElement } from './ViewElement'
+import HTMLViewElement from "./HTMLViewElement"
 import HTMLViewElementClickObserver from './HTMLViewElementClickObserver'
 
 class Ruler implements ViewComponent {

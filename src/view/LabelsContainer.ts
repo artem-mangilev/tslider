@@ -2,7 +2,8 @@ import Label, { LabelRenderData } from './Label'
 import OrientationManager from './OrientationManager'
 import RenderStatePermitter, { RenderPermitter } from './RenderPermitter'
 import ViewComponent from './ViewComponent'
-import HTMLViewElement, { ViewElement } from './ViewElement'
+import { ViewElement } from './ViewElement'
+import HTMLViewElement from "./HTMLViewElement"
 
 export interface LabelsContainerRenderData {
   labels: LabelRenderData[]
