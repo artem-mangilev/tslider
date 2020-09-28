@@ -51,14 +51,6 @@ export default class ViewTreeNode {
     return this
   }
 
-  oneOf(nodes: ViewTreeNode[]): boolean {
-    return !!nodes.find((node) => node.$elem[0] === this.$elem[0])
-  }
-
-  find(nodes: ViewTreeNode[]): ViewTreeNode {
-    return nodes.find((node) => node.$elem[0] === this.$elem[0])
-  }
-
   move(position: Point): void {
     this.$elem.css('transform', `translate(${position.x}px, ${position.y}px)`)
   }
@@ -95,16 +87,6 @@ export default class ViewTreeNode {
     this.$elem.on('click', handler)
   }
 
-  onMouseDown(handler: (e: Event) => void): void {
-    this.$elem.on('mousedown', handler)
-  }
-
-  onTouch(handler: (touch: Touch) => void): void {
-    this.$elem.on('touchstart', (e) => {
-      handler(e.touches[0])
-    })
-  }
-
   onDrag(handler: (e: MouseEventOrTouch) => void): void {
     const $root = $('html')
 
@@ -132,9 +114,5 @@ export default class ViewTreeNode {
     })
 
     ro.observe(this.$elem[0])
-  }
-
-  onFocusout(handler: (e: Event) => void): void {
-    this.$elem.on('focusout', handler)
   }
 }

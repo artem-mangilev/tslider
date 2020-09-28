@@ -1,4 +1,4 @@
-import ViewTreeNode, { MouseEventOrTouch } from '../utils/ViewTreeNode'
+import ViewTreeNode from '../utils/ViewTreeNode'
 import Point from '../utils/Point'
 import Handle from './Handle'
 import ViewComponent from './ViewComponent'
