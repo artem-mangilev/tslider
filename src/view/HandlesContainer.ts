@@ -28,20 +28,11 @@ class HandlesContainer implements ViewComponent {
   }
 
   onHandleDrag(handler: HandleDragHandler): void {
-    const mouseDownOrTouchHandler = (e: MouseEventOrTouch) => {
-      const handle = new ViewTreeNode(<HTMLElement>e.target).find(
-        this.handles.map((handle) => handle.element)
-      )
-
-      const index = this.handles.map((handle) => handle.element).indexOf(handle)
-
-      handle?.onDrag((e: MouseEvent) =>
+    this.handles.forEach((handle, index) => {
+      handle.element.onDrag((e: MouseEvent) => {
         handler({ x: e.clientX, y: e.clientY }, index)
-      )
-    }
-    // TODO: maybe it's possible to listen drag event without these events?
-    this.element.onMouseDown(mouseDownOrTouchHandler)
-    this.element.onTouch(mouseDownOrTouchHandler)
+      })
+    })
   }
 }
 
