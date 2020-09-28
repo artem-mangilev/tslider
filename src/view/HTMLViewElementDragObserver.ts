@@ -12,36 +12,33 @@ class HTMLViewElementDragObserver implements ViewElementObserver {
   }
 
   bind(handler: ViewElementEventHandler): void {
-    this.targets.forEach((target, index) =>
-      this.bindHandler(target, index, handler)
-    )
+    this.targets.forEach((target, index) => {
+      this.bindMouseOrTouchHandler('mouse', target, index, handler)
+      this.bindMouseOrTouchHandler('touch', target, index, handler)
+    })
   }
 
-  private bindHandler(
+  private bindMouseOrTouchHandler(
+    which: 'mouse' | 'touch',
     target: ViewElement,
     index: number,
     handler: ViewElementEventHandler
   ): void {
     if (target instanceof HTMLViewElement) {
+      const start = which === 'mouse' ? 'mousedown' : 'touchstart'
+      const move = which === 'mouse' ? 'mousemove' : 'touchmove'
+      const end = which === 'mouse' ? 'mouseup' : 'touchend'
+
       const $root = $('html')
-
-      $root.on('mousedown', (e) => {
+      $root.on(start, (e) => {
         e.target === target.$elem[0] &&
-          $root.on('mousemove', (e) => {
-            const point = { x: e.clientX, y: e.clientY }
-            handler({ target, targetIndex: index, point })
+          $root.on(move, (e) => {
+            const x = which === 'mouse' ? e.clientX : e.touches[0].clientX
+            const y = which === 'mouse' ? e.clientY : e.touches[0].clientY
+            handler({ target, targetIndex: index, point: { x, y } })
           })
       })
-      $root.on('mouseup', () => $root.off('mousemove'))
-
-      $root.on('touchstart', (e) => {
-        e.target === target.$elem[0] &&
-          $root.on('touchmove', (e) => {
-            const point = { x: e.clientX, y: e.clientY }
-            handler({ target, targetIndex: index, point })
-          })
-      })
-      $root.on('touchend', () => $root.off('touchmove'))
+      $root.on(end, () => $root.off(move))
     }
   }
 }
