@@ -3,7 +3,7 @@ import OrientationManager from './OrientationManager'
 import RenderStatePermitter, { RenderPermitter } from './RenderPermitter'
 import ViewComponent from './ViewComponent'
 import { ViewElement } from './ViewElement'
-import HTMLViewElement from "./HTMLViewElement"
+import HTMLViewElement from './HTMLViewElement'
 
 export interface LabelsContainerRenderData {
   labels: LabelRenderData[]
@@ -65,16 +65,11 @@ class LabelsContainer implements ViewComponent {
   }
 
   private init(labels: LabelRenderData[]): void {
-    this.labels = [
-      ...labels.map(
-        () =>
-          new Label(
-            new HTMLViewElement('div', 'tslider__label'),
-            this.om,
-            new RenderStatePermitter()
-          )
-      ),
-    ]
+    this.labels = labels.map(() => {
+      const element = new HTMLViewElement('div', 'tslider__label')
+      return new Label(element, this.om, new RenderStatePermitter())
+    })
+
     this.element.add(
       ...this.labels.map((label) => label.element),
       this.tempLabel.element

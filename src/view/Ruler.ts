@@ -4,7 +4,7 @@ import OrientationManager from './OrientationManager'
 import ViewComponent from './ViewComponent'
 import { RenderPermitter } from './RenderPermitter'
 import { ViewElement } from './ViewElement'
-import HTMLViewElement from "./HTMLViewElement"
+import HTMLViewElement from './HTMLViewElement'
 import HTMLViewElementClickObserver from './HTMLViewElementClickObserver'
 
 class Ruler implements ViewComponent {
@@ -19,14 +19,11 @@ class Ruler implements ViewComponent {
   ) {}
 
   private init(ruler: RulerSegment[]) {
-    ruler.forEach(() =>
-      this.nodes.push(
-        new RulerNode(
-          new HTMLViewElement('span', 'tslider__ruler-node'),
-          this.om
-        )
-      )
-    )
+    ruler.forEach(() => {
+      const element = new HTMLViewElement('span', 'tslider__ruler-node')
+      const node = new RulerNode(element, this.om)
+      this.nodes.push(node)
+    })
     this.element.add(...this.nodes.map((node) => node.element))
 
     this.init = undefined
@@ -36,9 +33,9 @@ class Ruler implements ViewComponent {
     this.init && this.init(ruler)
 
     this.permitter.shouldRerender(ruler) &&
-      ruler.forEach((segment, i) => {
+      ruler.forEach((segment, i) =>
         this.nodes[i].render({ segment, parent: this })
-      })
+      )
   }
 
   onClick(handler: (value: string) => void): void {
