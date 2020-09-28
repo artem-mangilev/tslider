@@ -25,12 +25,8 @@ class HTMLViewElement implements ViewElement {
   constructor(element: string | HTMLElement, className?: string) {
     if (element instanceof HTMLElement) {
       this.$elem = $(element)
-    }
-
-    if (typeof element === 'string') {
-      this.$elem = $(`<${element}>`, {
-        class: className,
-      })
+    } else if (typeof element === 'string') {
+      this.$elem = $(`<${element}>`, { class: className })
     }
   }
 
