@@ -32,12 +32,7 @@ class Ruler implements ViewComponent {
   }
 
   onClick(handler: (e: MouseEvent) => void): void {
-    this.element.onClick((e) => {
-      const node = new ViewTreeNode(<HTMLElement>e.target)
-
-      if (node.oneOf(this.nodes.map((node) => node.element)))
-        handler(<MouseEvent>e)
-    })
+    this.nodes.forEach((node) => node.element.onClick(handler))
   }
 }
 
