@@ -12,17 +12,20 @@ class HTMLViewElementClickObserver implements ViewElementObserver {
   }
 
   bind(handler: ViewElementEventHandler): void {
-    this.targets.forEach((target) => this.bindHandler(target, handler))
+    this.targets.forEach((target, index) =>
+      this.bindHandler(target, index, handler)
+    )
   }
 
   private bindHandler(
     target: ViewElement,
+    index: number,
     handler: ViewElementEventHandler
   ): void {
     if (target instanceof HTMLViewElement) {
       target.$elem.on('click', (e) => {
         const point = { x: e.clientX, y: e.clientY }
-        handler({ target, point })
+        handler({ target, targetIndex: index, point })
       })
     }
   }

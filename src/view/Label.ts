@@ -1,7 +1,7 @@
-import ViewTreeNode from '../utils/ViewTreeNode'
 import OrientationManager from './OrientationManager'
 import { RenderPermitter } from './RenderPermitter'
 import ViewComponent from './ViewComponent'
+import { ViewElement } from './ViewElement'
 
 export interface LabelRenderData {
   position: number
@@ -9,9 +9,8 @@ export interface LabelRenderData {
 }
 
 class Label implements ViewComponent {
-  element = new ViewTreeNode('div', 'tslider__label')
-
   constructor(
+    public element: ViewElement,
     private om: OrientationManager,
     private permitter: RenderPermitter
   ) {}

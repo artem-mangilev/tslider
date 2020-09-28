@@ -13,8 +13,8 @@ class HTMLViewElementResizeObserver implements ViewElementObserver {
 
   bind(handler: ViewElementEventHandler): void {
     const ro = new ResizeObserver((entries) => {
-      entries.forEach((_, i) => {
-        handler({ target: this.targets[i] })
+      entries.forEach((_, index) => {
+        handler({ target: this.targets[index], targetIndex: index })
       })
     })
 

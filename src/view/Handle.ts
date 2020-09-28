@@ -1,9 +1,9 @@
 import Point from '../utils/Point'
-import ViewTreeNode from '../utils/ViewTreeNode'
 import ViewComponent from './ViewComponent'
+import { ViewElement } from './ViewElement'
 
 class Handle implements ViewComponent {
-  element = new ViewTreeNode('div', 'tslider__handle')
+  constructor(public element: ViewElement) {}
 
   render(position: Point): void {
     const middle = this.element.width / 2

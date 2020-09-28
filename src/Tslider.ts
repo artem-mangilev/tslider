@@ -4,6 +4,7 @@ import ModelEventsHandler from './ModelEventsHandler'
 import View from './view/View'
 import './plugin.scss'
 import ModelDependencyBuilder from './model/ModelDependencyBuilder'
+import HTMLViewElement from './view/ViewElement'
 
 class Tslider {
   private view: View
@@ -95,7 +96,9 @@ class Tslider {
   }
 
   getInstance(): HTMLElement {
-    return this.view.element.getElement()
+    if (this.view.element instanceof HTMLViewElement) {
+      return this.view.element.getElement()
+    }
   }
 
   showLabels(): void {

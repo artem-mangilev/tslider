@@ -11,17 +11,17 @@ const $ = require('jquery')(window)
 
 global.$ = $
 
-describe('Input', () => {
-  describe('setValue', () => {
-    it('should set value', () => {
-      const $input: JQuery = $('<input/>', {
-        type: 'text',
-      })
-      const input = new Input(<HTMLInputElement>$input[0])
+// describe('Input', () => {
+//   describe('setValue', () => {
+//     it('should set value', () => {
+//       const $input: JQuery = $('<input/>', {
+//         type: 'text',
+//       })
+//       const input = new Input(<HTMLInputElement>$input[0])
 
-      input.setValue('test val')
+//       input.setValue('test val')
 
-      expect($input.val()).to.equal('test val')
-    })
-  })
-})
+//       expect($input.val()).to.equal('test val')
+//     })
+//   })
+// })

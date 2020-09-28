@@ -2,7 +2,6 @@ import Point from '../utils/Point'
 import Input from './Input'
 import Range from './Range'
 import ViewParams from './ViewParams'
-import ViewTreeNode from '../utils/ViewTreeNode'
 import RulerSegment from '../model/RulerSegment'
 import LabelsContainer from './LabelsContainer'
 import Ruler from './Ruler'
@@ -12,6 +11,10 @@ import OrientationManager from './OrientationManager'
 import TransferFiller from '../model/TransferFiller'
 import ViewComponent from './ViewComponent'
 import RenderStatePermitter from './RenderPermitter'
+import HTMLViewElement, { ViewElement } from './ViewElement'
+import HTMLViewElementDragObserver from './HTMLViewElementDragObserver'
+import HTMLViewElementClickObserver from './HTMLViewElementClickObserver'
+import HTMLViewElementResizeObserver from './HTMLViewElementResizeObserver'
 
 export interface ViewRenderData {
   handles: TransferHandle[]
@@ -21,11 +24,11 @@ export interface ViewRenderData {
 }
 
 class View implements ViewComponent {
-  element: ViewTreeNode
+  element: ViewElement
 
   private input: Input
   private track: ViewComponent = {
-    element: new ViewTreeNode('div', 'tslider__track'),
+    element: new HTMLViewElement('div', 'tslider__track'),
   }
   private range: Range
   private labelsContainer: LabelsContainer
@@ -43,18 +46,28 @@ class View implements ViewComponent {
     showLabels,
     showRuler,
   }: ViewParams) {
-    this.element = new ViewTreeNode('div', `tslider tslider_${orientation}`)
+    this.element = new HTMLViewElement('div', `tslider tslider_${orientation}`)
 
     this.om = new OrientationManager(orientation)
 
-    this.input = new Input(targetInput)
-    this.handlesContainer = new HandlesContainer(new RenderStatePermitter())
+    this.input = new Input(new HTMLViewElement(targetInput))
+    this.handlesContainer = new HandlesContainer(
+      new HTMLViewElement('div', 'tslider__handles'),
+      new HTMLViewElementDragObserver(),
+      new RenderStatePermitter()
+    )
     this.labelsContainer = new LabelsContainer(
+      new HTMLViewElement('div', 'tslider__labels'),
       this.om,
       new RenderStatePermitter()
     )
-    this.range = new Range(this.om)
+    this.range = new Range(
+      new HTMLViewElement('div', 'tslider__range'),
+      this.om
+    )
     this.ruler = new Ruler(
+      new HTMLViewElement('div', 'tslider__ruler'),
+      new HTMLViewElementClickObserver(),
       this.om,
       new RenderStatePermitter(),
       isRulerClickable
@@ -143,16 +156,19 @@ class View implements ViewComponent {
 
   onTrackClick(handler: (point: number) => void): void {
     const possibleTargets = [this.track, this.range, this.handlesContainer]
-
-    possibleTargets.forEach((target) => {
-      target.element.onClick(this.createTrackClickHandler(handler))
+    const observer = new HTMLViewElementClickObserver()
+    observer.listen(...possibleTargets.map((target) => target.element))
+    observer.bind((e) => {
+      const position = this.om.encodePoint(
+        this.getLocalMousePosition(e.point.x, e.point.y, this.track.element),
+        this.track.element
+      )
+      handler(position.x)
     })
   }
 
   onRulerClick(handler: (value: string) => void): void {
-    this.ruler.onClick(({ target }) => {
-      handler(new ViewTreeNode(<HTMLElement>target).getContent())
-    })
+    this.ruler.onClick(handler)
   }
 
   onHandleDrag(handler: (point: number, id: number) => void): void {
@@ -166,27 +182,17 @@ class View implements ViewComponent {
   }
 
   onTrackLengthChanged(handler: (length: number) => void): void {
-    this.element.onResize((size) => handler(this.om.getWidth(size)))
+    const observer = new HTMLViewElementResizeObserver()
+    observer.listen(this.element)
+    observer.bind((e) => handler(this.om.getWidth(e.target)))
   }
 
   private getLocalMousePosition(
     mouseX: number,
     mouseY: number,
-    { position: { x, y } }: ViewTreeNode
+    { position: { x, y } }: ViewElement
   ): Point {
     return { x: mouseX - x, y: mouseY - y }
-  }
-
-  private createTrackClickHandler(
-    handler: (point: number) => void
-  ): (event: MouseEvent) => void {
-    return ({ clientX, clientY }) => {
-      const position = this.om.encodePoint(
-        this.getLocalMousePosition(clientX, clientY, this.track.element),
-        this.track.element
-      )
-      handler(position.x)
-    }
   }
 
   private getRangeMiddle(): number {

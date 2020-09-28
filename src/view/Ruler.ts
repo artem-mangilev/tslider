@@ -1,23 +1,31 @@
-import ViewTreeNode from '../utils/ViewTreeNode'
 import RulerSegment from '../model/RulerSegment'
 import RulerNode from './RulerNode'
 import OrientationManager from './OrientationManager'
 import ViewComponent from './ViewComponent'
 import { RenderPermitter } from './RenderPermitter'
+import HTMLViewElement, { ViewElement } from './ViewElement'
+import HTMLViewElementClickObserver from './HTMLViewElementClickObserver'
 
 class Ruler implements ViewComponent {
-  element = new ViewTreeNode('div', 'tslider__ruler')
-
   private nodes: RulerNode[] = []
 
   constructor(
+    public element: ViewElement,
+    private clickObserver: HTMLViewElementClickObserver,
     private om: OrientationManager,
     private permitter: RenderPermitter,
     private clickable: boolean
   ) {}
 
   private init(ruler: RulerSegment[]) {
-    ruler.forEach(() => this.nodes.push(new RulerNode(this.om)))
+    ruler.forEach(() =>
+      this.nodes.push(
+        new RulerNode(
+          new HTMLViewElement('span', 'tslider__ruler-node'),
+          this.om
+        )
+      )
+    )
     this.element.add(...this.nodes.map((node) => node.element))
 
     this.init = undefined
@@ -32,9 +40,11 @@ class Ruler implements ViewComponent {
       })
   }
 
-  onClick(handler: (e: MouseEvent) => void): void {
-    this.clickable &&
-      this.nodes.forEach((node) => node.element.onClick(handler))
+  onClick(handler: (value: string) => void): void {
+    if (this.clickable) {
+      this.clickObserver.listen(...this.nodes.map((node) => node.element))
+      this.clickObserver.bind((e) => handler(e.target.getContent()))
+    }
   }
 }
 

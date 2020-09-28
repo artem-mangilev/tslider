@@ -1,8 +1,8 @@
-import ViewTreeNode from '../utils/ViewTreeNode'
 import Point from '../utils/Point'
 import OrientationManager from './OrientationManager'
 import Shape from '../utils/Shape'
 import ViewComponent from './ViewComponent'
+import { ViewElement } from './ViewElement'
 
 export interface RangeRenderData {
   position: Point
@@ -11,11 +11,9 @@ export interface RangeRenderData {
 }
 
 class Range implements ViewComponent {
-  element = new ViewTreeNode('div', 'tslider__range')
+  constructor(public element: ViewElement, private om: OrientationManager) {}
 
-  constructor(private om: OrientationManager) {}
-
-  render(data: RangeRenderData) {
+  render(data: RangeRenderData): void {
     if (this.om.isVertical()) {
       data.position.x = data.position.x + data.length
     }

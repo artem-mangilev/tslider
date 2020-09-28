@@ -1,7 +1,7 @@
 import RulerSegment from '../model/RulerSegment'
-import ViewTreeNode from '../utils/ViewTreeNode'
 import OrientationManager from './OrientationManager'
 import ViewComponent from './ViewComponent'
+import { ViewElement } from './ViewElement'
 
 export interface RulerNodeRenderData {
   segment: RulerSegment
@@ -9,9 +9,7 @@ export interface RulerNodeRenderData {
 }
 
 class RulerNode implements ViewComponent {
-  element = new ViewTreeNode('span', 'tslider__ruler-node')
-
-  constructor(private om: OrientationManager) {}
+  constructor(public element: ViewElement, private om: OrientationManager) {}
 
   render(data: RulerNodeRenderData): void {
     this.element.setContent(data.segment.value)

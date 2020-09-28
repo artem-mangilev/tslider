@@ -1,7 +1,7 @@
-import ViewTreeNode from '../utils/ViewTreeNode'
+import { ViewElement } from './ViewElement'
 
 interface ViewComponent {
-  element: ViewTreeNode
+  element: ViewElement
 }
 
 export default ViewComponent

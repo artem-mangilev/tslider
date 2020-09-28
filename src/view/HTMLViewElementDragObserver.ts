@@ -12,11 +12,14 @@ class HTMLViewElementDragObserver implements ViewElementObserver {
   }
 
   bind(handler: ViewElementEventHandler): void {
-    this.targets.forEach((target) => this.bindHandler(target, handler))
+    this.targets.forEach((target, index) =>
+      this.bindHandler(target, index, handler)
+    )
   }
 
   private bindHandler(
     target: ViewElement,
+    index: number,
     handler: ViewElementEventHandler
   ): void {
     if (target instanceof HTMLViewElement) {
@@ -26,7 +29,7 @@ class HTMLViewElementDragObserver implements ViewElementObserver {
         e.target === target.$elem[0] &&
           $root.on('mousemove', (e) => {
             const point = { x: e.clientX, y: e.clientY }
-            handler({ target, point })
+            handler({ target, targetIndex: index, point })
           })
       })
       $root.on('mouseup', () => $root.off('mousemove'))
@@ -35,7 +38,7 @@ class HTMLViewElementDragObserver implements ViewElementObserver {
         e.target === target.$elem[0] &&
           $root.on('touchmove', (e) => {
             const point = { x: e.clientX, y: e.clientY }
-            handler({ target, point })
+            handler({ target, targetIndex: index, point })
           })
       })
       $root.on('touchend', () => $root.off('touchmove'))

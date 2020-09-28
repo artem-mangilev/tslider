@@ -1,8 +1,8 @@
-import ViewTreeNode from '../utils/ViewTreeNode'
 import Label, { LabelRenderData } from './Label'
 import OrientationManager from './OrientationManager'
 import RenderStatePermitter, { RenderPermitter } from './RenderPermitter'
 import ViewComponent from './ViewComponent'
+import HTMLViewElement, { ViewElement } from './ViewElement'
 
 export interface LabelsContainerRenderData {
   labels: LabelRenderData[]
@@ -10,16 +10,19 @@ export interface LabelsContainerRenderData {
 }
 
 class LabelsContainer implements ViewComponent {
-  element = new ViewTreeNode('div', 'tslider__labels')
-
   private labels: Label[] = []
   private tempLabel: Label
-  
+
   constructor(
+    public element: ViewElement,
     private om: OrientationManager,
     private permitter: RenderPermitter
   ) {
-    this.tempLabel = new Label(om, new RenderStatePermitter())
+    this.tempLabel = new Label(
+      new HTMLViewElement('div', 'tslider__label'),
+      om,
+      new RenderStatePermitter()
+    )
   }
 
   private showTempLabel() {
@@ -62,7 +65,14 @@ class LabelsContainer implements ViewComponent {
 
   private init(labels: LabelRenderData[]): void {
     this.labels = [
-      ...labels.map(() => new Label(this.om, new RenderStatePermitter())),
+      ...labels.map(
+        () =>
+          new Label(
+            new HTMLViewElement('div', 'tslider__label'),
+            this.om,
+            new RenderStatePermitter()
+          )
+      ),
     ]
     this.element.add(
       ...this.labels.map((label) => label.element),

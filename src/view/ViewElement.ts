@@ -17,6 +17,7 @@ export interface ViewElement {
   hide(): void
 
   setAttribute(name: string, value: string): void
+  getAttribute(name: string): string
 }
 
 class HTMLViewElement implements ViewElement {
@@ -88,6 +89,14 @@ class HTMLViewElement implements ViewElement {
 
   setAttribute(name: string, value: string): void {
     this.$elem.attr(name, value)
+  }
+
+  getAttribute(name: string): string {
+    return this.$elem.attr(name)
+  }
+
+  getElement(): HTMLElement {
+    return this.$elem[0]
   }
 }
 

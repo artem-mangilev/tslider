@@ -1,19 +1,25 @@
-import ViewTreeNode from '../utils/ViewTreeNode'
 import Point from '../utils/Point'
 import Handle from './Handle'
 import ViewComponent from './ViewComponent'
 import { RenderPermitter } from './RenderPermitter'
+import HTMLViewElement, { ViewElement } from './ViewElement'
+import { ViewElementObserver } from './ViewElementObserver'
 
 type HandleDragHandler = (point: Point, id: number) => void
 
 class HandlesContainer implements ViewComponent {
-  element = new ViewTreeNode('div', 'tslider__handles')
   private handles: Handle[] = []
 
-  constructor(private permitter: RenderPermitter) {}
+  constructor(
+    public element: ViewElement,
+    private dragObserver: ViewElementObserver,
+    private permitter: RenderPermitter
+  ) {}
 
   private init(positions: Point[]): void {
-    this.handles = positions.map(() => new Handle())
+    this.handles = positions.map(
+      () => new Handle(new HTMLViewElement('div', 'tslider__handle'))
+    )
     this.element.add(...this.handles.map((handle) => handle.element))
 
     this.init = undefined
@@ -28,11 +34,8 @@ class HandlesContainer implements ViewComponent {
   }
 
   onHandleDrag(handler: HandleDragHandler): void {
-    this.handles.forEach((handle, index) => {
-      handle.element.onDrag((e: MouseEvent) => {
-        handler({ x: e.clientX, y: e.clientY }, index)
-      })
-    })
+    this.dragObserver.listen(...this.handles.map((handle) => handle.element))
+    this.dragObserver.bind((e) => handler(e.point, e.targetIndex))
   }
 }
 
