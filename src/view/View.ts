@@ -32,7 +32,6 @@ class View implements ViewComponent {
   private handlesContainer: HandlesContainer
   private ruler: Ruler
 
-  private isRulerClickable: boolean
   private showLabels: boolean
   private showRuler: boolean
   private om: OrientationManager
@@ -55,7 +54,11 @@ class View implements ViewComponent {
       new RenderStatePermitter()
     )
     this.range = new Range(this.om)
-    this.ruler = new Ruler(this.om, new RenderStatePermitter())
+    this.ruler = new Ruler(
+      this.om,
+      new RenderStatePermitter(),
+      isRulerClickable
+    )
 
     this.input.element.after(this.element)
     this.element.add(
@@ -66,7 +69,6 @@ class View implements ViewComponent {
       this.ruler.element
     )
 
-    this.isRulerClickable = isRulerClickable
     this.showLabels = showLabels
     this.showRuler = showRuler
   }
@@ -148,10 +150,9 @@ class View implements ViewComponent {
   }
 
   onRulerClick(handler: (value: string) => void): void {
-    this.isRulerClickable &&
-      this.ruler.onClick(({ target }) => {
-        handler(new ViewTreeNode(<HTMLElement>target).getContent())
-      })
+    this.ruler.onClick(({ target }) => {
+      handler(new ViewTreeNode(<HTMLElement>target).getContent())
+    })
   }
 
   onHandleDrag(handler: (point: number, id: number) => void): void {

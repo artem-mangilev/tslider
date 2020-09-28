@@ -12,7 +12,8 @@ class Ruler implements ViewComponent {
 
   constructor(
     private om: OrientationManager,
-    private permitter: RenderPermitter
+    private permitter: RenderPermitter,
+    private clickable: boolean
   ) {}
 
   private init(ruler: RulerSegment[]) {
@@ -32,7 +33,8 @@ class Ruler implements ViewComponent {
   }
 
   onClick(handler: (e: MouseEvent) => void): void {
-    this.nodes.forEach((node) => node.element.onClick(handler))
+    this.clickable &&
+      this.nodes.forEach((node) => node.element.onClick(handler))
   }
 }
 
