@@ -13,6 +13,7 @@ import HTMLViewElementClickObserver from './HTMLViewElementClickObserver'
 import View from './View'
 import ViewComponent from './ViewComponent'
 import Handle from './Handle'
+import Label from './Label'
 
 class ViewBuilder {
   constructor(private params: ViewParams) {}
@@ -40,11 +41,27 @@ class ViewBuilder {
       new RenderStatePermitter(),
       handles
     )
+    const labels = Array.from(
+      { length: this.params.handles },
+      () =>
+        new Label(
+          new HTMLViewElement('div', 'tslider__label'),
+          orientationManager,
+          new RenderStatePermitter()
+        )
+    )
+    const tempLabel = new Label(
+      new HTMLViewElement('div', 'tslider__handle'),
+      orientationManager,
+      new RenderStatePermitter()
+    )
     const labelsContainer = new LabelsContainer(
       new HTMLViewElement('div', 'tslider__labels'),
       orientationManager,
       new RenderStatePermitter(),
-      new ShapeCollisionDetector()
+      new ShapeCollisionDetector(),
+      labels,
+      tempLabel
     )
     const range = new Range(
       new HTMLViewElement('div', 'tslider__range'),

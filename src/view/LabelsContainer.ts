@@ -1,9 +1,8 @@
-import Label, { LabelRenderData } from './Label'
+import { LabelRenderData } from './Label'
 import OrientationManager from './OrientationManager'
-import RenderStatePermitter, { RenderPermitter } from './RenderPermitter'
+import { RenderPermitter } from './RenderPermitter'
 import ViewComponent from './ViewComponent'
 import { ViewElement } from './ViewElement'
-import HTMLViewElement from './HTMLViewElement'
 import { CollisionDetector } from '../utils/CollisionDetector'
 
 export interface LabelsContainerRenderData {
@@ -12,24 +11,17 @@ export interface LabelsContainerRenderData {
 }
 
 class LabelsContainer implements ViewComponent {
-  private labels: Label[] = []
-  private tempLabel: Label
-
   constructor(
     public element: ViewElement,
     private om: OrientationManager,
     private permitter: RenderPermitter,
-    private cd: CollisionDetector
-  ) {
-    this.tempLabel = new Label(
-      new HTMLViewElement('div', 'tslider__label'),
-      om,
-      new RenderStatePermitter()
-    )
-  }
+    private cd: CollisionDetector,
+    private labels: ViewComponent[],
+    private tempLabel: ViewComponent
+  ) {}
 
   render(data: LabelsContainerRenderData): void {
-    this.init && this.init(data.labels)
+    this.init && this.init()
 
     if (this.permitter.shouldRerender(data)) {
       this.renderLabels(data.labels)
@@ -37,12 +29,7 @@ class LabelsContainer implements ViewComponent {
     }
   }
 
-  private init(labels: LabelRenderData[]): void {
-    this.labels = labels.map(() => {
-      const element = new HTMLViewElement('div', 'tslider__label')
-      return new Label(element, this.om, new RenderStatePermitter())
-    })
-
+  private init(): void {
     this.element.add(
       ...this.labels.map((label) => label.element),
       this.tempLabel.element
