@@ -4,7 +4,8 @@ import ModelEventsHandler from './ModelEventsHandler'
 import View from './view/View'
 import './plugin.scss'
 import ModelDependencyBuilder from './model/ModelDependencyBuilder'
-import HTMLViewElement from "./view/HTMLViewElement"
+import HTMLViewElement from './view/HTMLViewElement'
+import ViewBuilder from './view/ViewBuilder'
 
 class Tslider {
   private view: View
@@ -25,14 +26,15 @@ class Tslider {
     showLabels = true,
     inputValuesSeparator = ',',
   }: TsliderParams) {
-    this.view = new View({
+    const viewParams = {
       orientation,
       targetInput,
       showLabels,
       showRuler,
       isRulerClickable,
       inputValuesSeparator,
-    })
+    }
+    this.view = new ViewBuilder(viewParams).build()
 
     const values = [from, ...(to !== undefined ? [to] : [])]
     const modelParams = {

@@ -1,7 +1,6 @@
 import Point from '../utils/Point'
 import Input from './Input'
 import Range from './Range'
-import ViewParams from './ViewParams'
 import RulerSegment from '../model/RulerSegment'
 import LabelsContainer from './LabelsContainer'
 import Ruler from './Ruler'
@@ -10,13 +9,10 @@ import HandlesContainer from './HandlesContainer'
 import OrientationManager from './OrientationManager'
 import TransferFiller from '../model/TransferFiller'
 import ViewComponent from './ViewComponent'
-import RenderStatePermitter from './RenderPermitter'
 import { ViewElement } from './ViewElement'
-import HTMLViewElement from './HTMLViewElement'
-import HTMLViewElementDragObserver from './HTMLViewElementDragObserver'
 import HTMLViewElementClickObserver from './HTMLViewElementClickObserver'
 import HTMLViewElementResizeObserver from './HTMLViewElementResizeObserver'
-import ShapeCollisionDetector from '../utils/ShapeCollisionDetector'
+import ViewDependencies from './ViewDependencies'
 
 export interface ViewRenderData {
   handles: TransferHandle[]
@@ -29,52 +25,37 @@ class View implements ViewComponent {
   element: ViewElement
 
   private input: Input
-  private track: ViewComponent = {
-    element: new HTMLViewElement('div', 'tslider__track'),
-  }
+  private track: ViewComponent
   private range: Range
   private labelsContainer: LabelsContainer
   private handlesContainer: HandlesContainer
   private ruler: Ruler
-
   private showLabels: boolean
   private showRuler: boolean
   private om: OrientationManager
 
   constructor({
-    targetInput,
-    orientation,
-    isRulerClickable,
+    element,
+    input,
+    track,
+    handlesContainer,
+    labelsContainer,
+    range,
+    ruler,
+    om,
     showLabels,
     showRuler,
-  }: ViewParams) {
-    this.element = new HTMLViewElement('div', `tslider tslider_${orientation}`)
-
-    this.om = new OrientationManager(orientation)
-
-    this.input = new Input(new HTMLViewElement(targetInput))
-    this.handlesContainer = new HandlesContainer(
-      new HTMLViewElement('div', 'tslider__handles'),
-      new HTMLViewElementDragObserver(),
-      new RenderStatePermitter()
-    )
-    this.labelsContainer = new LabelsContainer(
-      new HTMLViewElement('div', 'tslider__labels'),
-      this.om,
-      new RenderStatePermitter(),
-      new ShapeCollisionDetector()
-    )
-    this.range = new Range(
-      new HTMLViewElement('div', 'tslider__range'),
-      this.om
-    )
-    this.ruler = new Ruler(
-      new HTMLViewElement('div', 'tslider__ruler'),
-      new HTMLViewElementClickObserver(),
-      this.om,
-      new RenderStatePermitter(),
-      isRulerClickable
-    )
+  }: ViewDependencies) {
+    this.element = element
+    this.om = om
+    this.input = input
+    this.track = track
+    this.handlesContainer = handlesContainer
+    this.labelsContainer = labelsContainer
+    this.range = range
+    this.ruler = ruler
+    this.showLabels = showLabels
+    this.showRuler = showRuler
 
     this.input.element.after(this.element)
     this.element.add(
@@ -84,9 +65,6 @@ class View implements ViewComponent {
       this.handlesContainer.element,
       this.ruler.element
     )
-
-    this.showLabels = showLabels
-    this.showRuler = showRuler
   }
 
   getTrackWidth(): number {
