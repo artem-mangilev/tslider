@@ -28,6 +28,49 @@ class LabelsContainer implements ViewComponent {
     )
   }
 
+  render(data: LabelsContainerRenderData): void {
+    this.init && this.init(data.labels)
+
+    if (this.permitter.shouldRerender(data)) {
+      this.renderLabels(data.labels)
+      this.renderTempLabelIfNeeded(data.labels, data.rangeMiddle)
+    }
+  }
+
+  private init(labels: LabelRenderData[]): void {
+    this.labels = labels.map(() => {
+      const element = new HTMLViewElement('div', 'tslider__label')
+      return new Label(element, this.om, new RenderStatePermitter())
+    })
+
+    this.element.add(
+      ...this.labels.map((label) => label.element),
+      this.tempLabel.element
+    )
+
+    this.init = undefined
+  }
+
+  private renderLabels(labels: LabelRenderData[]) {
+    labels.forEach(({ position, value }, i) =>
+      this.labels[i].render({ position, value })
+    )
+  }
+
+  private renderTempLabelIfNeeded(
+    labels: LabelRenderData[],
+    rangeMiddle: number
+  ) {
+    if (this.doLabelsCollide() && this.isLabelsHaveDifferentPosition()) {
+      this.showTempLabel()
+
+      const value = labels.map((label) => label.value).join(' - ')
+      this.tempLabel.render({ position: rangeMiddle, value })
+    } else {
+      this.hideTempLabel()
+    }
+  }
+
   private showTempLabel() {
     this.labels.map((label) => label.element.hide())
     this.tempLabel.element.show()
@@ -50,46 +93,6 @@ class LabelsContainer implements ViewComponent {
       this.labels.length === 2 &&
       this.cd.doCollide(this.labels[0].element, this.labels[1].element)
     )
-  }
-
-  private init(labels: LabelRenderData[]): void {
-    this.labels = labels.map(() => {
-      const element = new HTMLViewElement('div', 'tslider__label')
-      return new Label(element, this.om, new RenderStatePermitter())
-    })
-
-    this.element.add(
-      ...this.labels.map((label) => label.element),
-      this.tempLabel.element
-    )
-
-    this.init = undefined
-  }
-
-  render(data: LabelsContainerRenderData): void {
-    this.init && this.init(data.labels)
-
-    if (this.permitter.shouldRerender(data)) {
-      this.renderLabels(data.labels)
-
-      if (this.doLabelsCollide() && this.isLabelsHaveDifferentPosition()) {
-        this.showTempLabel()
-        this.renderTempLabel(data.labels, data.rangeMiddle)
-      } else {
-        this.hideTempLabel()
-      }
-    }
-  }
-
-  private renderLabels(labels: LabelRenderData[]) {
-    labels.forEach(({ position, value }, i) =>
-      this.labels[i].render({ position, value })
-    )
-  }
-
-  private renderTempLabel(labels: LabelRenderData[], rangeMiddle: number) {
-    const value = labels.map((label) => label.value).join(' - ')
-    this.tempLabel.render({ position: rangeMiddle, value })
   }
 }
 
