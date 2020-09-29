@@ -4,6 +4,7 @@ import RenderStatePermitter, { RenderPermitter } from './RenderPermitter'
 import ViewComponent from './ViewComponent'
 import { ViewElement } from './ViewElement'
 import HTMLViewElement from './HTMLViewElement'
+import { CollisionDetector } from '../utils/CollisionDetector'
 
 export interface LabelsContainerRenderData {
   labels: LabelRenderData[]
@@ -17,7 +18,8 @@ class LabelsContainer implements ViewComponent {
   constructor(
     public element: ViewElement,
     private om: OrientationManager,
-    private permitter: RenderPermitter
+    private permitter: RenderPermitter,
+    private cd: CollisionDetector
   ) {
     this.tempLabel = new Label(
       new HTMLViewElement('div', 'tslider__label'),
@@ -43,25 +45,11 @@ class LabelsContainer implements ViewComponent {
     )
   }
 
-  // TODO: exctract this method
   private doLabelsCollide(): boolean {
-    if (this.labels.length === 1) {
-      return false
-    }
-
-    const [firstLabel, lastLabel] = this.labels
-
-    const firstLabelX = this.om.getX(firstLabel.element.position)
-    const lastLabelX = this.om.getX(lastLabel.element.position)
-
-    const firstLabelWidth = this.om.getWidth(firstLabel.element)
-    const lastLabelWidth = this.om.getWidth(lastLabel.element)
-
-    const isCollisionDetected =
-      firstLabelX < lastLabelX + lastLabelWidth &&
-      firstLabelX + firstLabelWidth > lastLabelX
-
-    return isCollisionDetected
+    return (
+      this.labels.length === 2 &&
+      this.cd.doCollide(this.labels[0].element, this.labels[1].element)
+    )
   }
 
   private init(labels: LabelRenderData[]): void {

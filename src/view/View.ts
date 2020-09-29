@@ -12,10 +12,11 @@ import TransferFiller from '../model/TransferFiller'
 import ViewComponent from './ViewComponent'
 import RenderStatePermitter from './RenderPermitter'
 import { ViewElement } from './ViewElement'
-import HTMLViewElement from "./HTMLViewElement"
+import HTMLViewElement from './HTMLViewElement'
 import HTMLViewElementDragObserver from './HTMLViewElementDragObserver'
 import HTMLViewElementClickObserver from './HTMLViewElementClickObserver'
 import HTMLViewElementResizeObserver from './HTMLViewElementResizeObserver'
+import ShapeCollisionDetector from '../utils/ShapeCollisionDetector'
 
 export interface ViewRenderData {
   handles: TransferHandle[]
@@ -60,7 +61,8 @@ class View implements ViewComponent {
     this.labelsContainer = new LabelsContainer(
       new HTMLViewElement('div', 'tslider__labels'),
       this.om,
-      new RenderStatePermitter()
+      new RenderStatePermitter(),
+      new ShapeCollisionDetector()
     )
     this.range = new Range(
       new HTMLViewElement('div', 'tslider__range'),
@@ -173,7 +175,6 @@ class View implements ViewComponent {
     observer.listen(this.element)
     observer.bind((e) => handler(this.om.getWidth(e.target)))
   }
-
 
   onRulerClick(handler: (value: string) => void): void {
     this.ruler.onClick(handler)
