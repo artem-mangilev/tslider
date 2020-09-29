@@ -14,7 +14,7 @@ class HandlesContainer implements ViewComponent {
   constructor(
     public element: ViewElement,
     private dragObserver: ViewElementObserver,
-    private permitter: RenderPermitter
+    private permitter: RenderPermitter,
   ) {}
 
   private init(positions: Point[]): void {

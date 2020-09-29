@@ -6,7 +6,7 @@ class Input implements ViewComponent {
     this.element.setAttribute('type', 'hidden')
   }
 
-  setValue(value: string): void {
+  render(value: string): void {
     this.element.setAttribute('value', value)
   }
 

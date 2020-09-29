@@ -25,6 +25,7 @@ class ViewBuilder {
     const input = new Input(new HTMLViewElement(this.params.targetInput))
     const track: ViewComponent = {
       element: new HTMLViewElement('div', 'tslider__track'),
+      render() { return }
     }
     const handlesContainer = new HandlesContainer(
       new HTMLViewElement('div', 'tslider__handles'),

@@ -115,7 +115,7 @@ class View implements ViewComponent {
   }
 
   private renderInput(data: string): void {
-    this.input.setValue(data)
+    this.input.render(data)
   }
 
   private renderRange({ position, length }: TransferFiller): void {
