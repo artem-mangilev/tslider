@@ -41,8 +41,8 @@ class ViewBuilder {
       new RenderStatePermitter(),
       handles
     )
-    const labels = Array.from(
-      { length: this.params.handles },
+    const [tempLabel, ...labels] = Array.from(
+      { length: this.params.handles + 1 },
       () =>
         new Label(
           new HTMLViewElement('div', 'tslider__label'),
@@ -50,18 +50,13 @@ class ViewBuilder {
           new RenderStatePermitter()
         )
     )
-    const tempLabel = new Label(
-      new HTMLViewElement('div', 'tslider__handle'),
-      orientationManager,
-      new RenderStatePermitter()
-    )
     const labelsContainer = new LabelsContainer(
       new HTMLViewElement('div', 'tslider__labels'),
       orientationManager,
       new RenderStatePermitter(),
       new ShapeCollisionDetector(),
-      labels,
-      tempLabel
+      tempLabel,
+      labels
     )
     const range = new Range(
       new HTMLViewElement('div', 'tslider__range'),

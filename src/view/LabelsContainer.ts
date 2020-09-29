@@ -16,8 +16,8 @@ class LabelsContainer implements ViewComponent {
     private om: OrientationManager,
     private permitter: RenderPermitter,
     private cd: CollisionDetector,
+    private tempLabel: ViewComponent,
     private labels: ViewComponent[],
-    private tempLabel: ViewComponent
   ) {}
 
   render(data: LabelsContainerRenderData): void {
