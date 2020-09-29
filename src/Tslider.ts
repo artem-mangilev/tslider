@@ -26,6 +26,8 @@ class Tslider {
     showLabels = true,
     inputValuesSeparator = ',',
   }: TsliderParams) {
+    const values = [from, ...(to !== undefined ? [to] : [])]
+
     const viewParams = {
       orientation,
       targetInput,
@@ -33,10 +35,10 @@ class Tslider {
       showRuler,
       isRulerClickable,
       inputValuesSeparator,
+      handles: values.length
     }
     this.view = new ViewBuilder(viewParams).build()
 
-    const values = [from, ...(to !== undefined ? [to] : [])]
     const modelParams = {
       max,
       min,

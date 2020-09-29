@@ -7,4 +7,5 @@ export default interface ViewParams {
   showRuler: boolean
   isRulerClickable: boolean
   inputValuesSeparator: string
+  handles: number
 }

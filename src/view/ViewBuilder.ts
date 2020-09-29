@@ -12,6 +12,7 @@ import Ruler from './Ruler'
 import HTMLViewElementClickObserver from './HTMLViewElementClickObserver'
 import View from './View'
 import ViewComponent from './ViewComponent'
+import Handle from './Handle'
 
 class ViewBuilder {
   constructor(private params: ViewParams) {}
@@ -25,12 +26,19 @@ class ViewBuilder {
     const input = new Input(new HTMLViewElement(this.params.targetInput))
     const track: ViewComponent = {
       element: new HTMLViewElement('div', 'tslider__track'),
-      render() { return }
+      render() {
+        return
+      },
     }
+    const handles = Array.from(
+      { length: this.params.handles },
+      () => new Handle(new HTMLViewElement('div', 'tslider__handle'))
+    )
     const handlesContainer = new HandlesContainer(
       new HTMLViewElement('div', 'tslider__handles'),
       new HTMLViewElementDragObserver(),
-      new RenderStatePermitter()
+      new RenderStatePermitter(),
+      handles
     )
     const labelsContainer = new LabelsContainer(
       new HTMLViewElement('div', 'tslider__labels'),
