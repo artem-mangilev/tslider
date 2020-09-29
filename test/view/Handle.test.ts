@@ -1,23 +1,52 @@
 import { expect } from 'chai'
 import 'mocha'
-import { JSDOM } from 'jsdom'
+import Point from '../../src/utils/Point'
 import Handle from '../../src/view/Handle'
-const { window } = new JSDOM('')
-const $ = require('jquery')(window)
+import { ViewElement } from '../../src/view/ViewElement'
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-global.$ = $
+describe('Handle', () => {
+  describe('render', () => {
+    it('should render properly', () => {
+      class Element implements ViewElement {
+        position: Point = { x: 0, y: 0 }
+        width = 10
+        move(point: Point) {
+          this.position = point
+        }
 
-// describe('Handle', () => {
-//   describe('move', () => {
-//     it('should change handle position on screen', () => {
-//       const handle = new Handle()
+        // non-used
+        height = 0
+        add() {
+          return
+        }
+        after() {
+          return
+        }
+        setContent() {
+          return
+        }
+        getContent() {
+          return ''
+        }
+        show() {
+          return
+        }
+        hide() {
+          return
+        }
+        setAttribute() {
+          return
+        }
+        getAttribute() {
+          return ''
+        }
+      }
+      const element = new Element()
+      const handle = new Handle(element)
 
-//       handle.render({ x: 5, y: 5 })
+      handle.render({ x: 50, y: 50 })
 
-//       const doesPositionChanged =
-//         $('.tslider__handle').css('transform') === 'translate(5px, 5px)'
-//       expect(doesPositionChanged).to.be.true
-//     })
-//   })
-// })
+      expect(element.position).to.eql({ x: 45, y: 45 })
+    })
+  })
+})
