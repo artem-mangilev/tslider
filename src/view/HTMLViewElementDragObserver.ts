@@ -31,12 +31,13 @@ class HTMLViewElementDragObserver implements ViewElementObserver {
       const end = which === 'mouse' ? 'mouseup' : 'touchend'
 
       const $root = $('html')
-      $root.on(start, `.${target.className}`, () => {
-        $root.on(move, (e) => {
-          const x = which === 'mouse' ? e.clientX : e.touches[0].clientX
-          const y = which === 'mouse' ? e.clientY : e.touches[0].clientY
-          handler({ target, targetIndex: index, point: { x, y } })
-        })
+      $root.on(start, (e) => {
+        e.target === target.$elem[0] &&
+          $root.on(move, (e) => {
+            const x = which === 'mouse' ? e.clientX : e.touches[0].clientX
+            const y = which === 'mouse' ? e.clientY : e.touches[0].clientY
+            handler({ target, targetIndex: index, point: { x, y } })
+          })
       })
       $root.on(end, () => $root.off(move))
     }

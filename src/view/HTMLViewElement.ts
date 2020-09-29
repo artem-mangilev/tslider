@@ -3,15 +3,12 @@ import { ViewElement } from './ViewElement'
 
 class HTMLViewElement implements ViewElement {
   $elem: JQuery<HTMLElement>
-  className: string
 
   constructor(element: string | HTMLElement, className?: string) {
     if (element instanceof HTMLElement) {
       this.$elem = $(element)
-      this.className = element.className
     } else if (typeof element === 'string') {
       this.$elem = $(`<${element}>`, { class: className })
-      this.className = className
     }
   }
 
