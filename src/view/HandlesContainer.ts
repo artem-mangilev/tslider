@@ -12,17 +12,11 @@ class HandlesContainer implements ViewComponent {
     private dragObserver: ViewElementObserver,
     private permitter: RenderPermitter,
     private handles: ViewComponent[]
-  ) {}
-
-  private init(): void {
+  ) {
     this.element.add(...this.handles.map((handle) => handle.element))
-
-    this.init = undefined
   }
 
   render(positions: Point[]): void {
-    this.init && this.init()
-
     if (this.permitter.shouldRerender(positions)) {
       positions.forEach((position, i) => this.handles[i].render(position))
     }

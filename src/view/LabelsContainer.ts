@@ -16,24 +16,18 @@ class LabelsContainer implements ViewComponent {
     private cd: CollisionDetector,
     private tempLabel: ViewComponent,
     private labels: ViewComponent[]
-  ) {}
-
-  render(data: LabelsContainerRenderData): void {
-    this.init && this.init()
-
-    if (this.permitter.shouldRerender(data)) {
-      this.renderLabels(data.labels)
-      this.renderTempLabelIfNeeded(data.labels, data.rangeMiddle)
-    }
-  }
-
-  private init(): void {
+  ) {
     this.element.add(
       ...this.labels.map((label) => label.element),
       this.tempLabel.element
     )
+  }
 
-    this.init = undefined
+  render(data: LabelsContainerRenderData): void {
+    if (this.permitter.shouldRerender(data)) {
+      this.renderLabels(data.labels)
+      this.renderTempLabelIfNeeded(data.labels, data.rangeMiddle)
+    }
   }
 
   private renderLabels(labels: LabelRenderData[]) {

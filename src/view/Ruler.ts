@@ -13,17 +13,11 @@ class Ruler implements ViewComponent {
     private clickable: boolean,
     private om: OrientationManager,
     private nodes: ViewComponent[]
-  ) {}
-
-  private init() {
+  ) {
     this.element.add(...this.nodes.map((node) => node.element))
-
-    this.init = undefined
   }
 
   render(ruler: RulerSegment[]): void {
-    this.init && this.init()
-
     if (!this.permitter.shouldRerender(ruler)) return
 
     if (this.om.isVertical()) {
