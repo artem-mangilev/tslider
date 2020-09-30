@@ -1,5 +1,4 @@
 import { LabelRenderData } from './Label'
-import OrientationManager from './OrientationManager'
 import { RenderPermitter } from './RenderPermitter'
 import ViewComponent from './ViewComponent'
 import { ViewElement } from './ViewElement'
@@ -13,11 +12,10 @@ export interface LabelsContainerRenderData {
 class LabelsContainer implements ViewComponent {
   constructor(
     public element: ViewElement,
-    private om: OrientationManager,
     private permitter: RenderPermitter,
     private cd: CollisionDetector,
     private tempLabel: ViewComponent,
-    private labels: ViewComponent[],
+    private labels: ViewComponent[]
   ) {}
 
   render(data: LabelsContainerRenderData): void {
@@ -48,11 +46,14 @@ class LabelsContainer implements ViewComponent {
     labels: LabelRenderData[],
     rangeMiddle: number
   ) {
-    if (this.doLabelsCollide() && this.isLabelsHaveDifferentPosition()) {
+    if (this.doLabelsCollide()) {
       this.showTempLabel()
 
-      const value = labels.map((label) => label.value).join(' - ')
-      this.tempLabel.render({ position: rangeMiddle, value })
+      const values = labels.map((label) => label.value)
+      this.tempLabel.render({
+        position: rangeMiddle,
+        value: this.getTempLabelValue(values),
+      })
     } else {
       this.hideTempLabel()
     }
@@ -68,18 +69,18 @@ class LabelsContainer implements ViewComponent {
     this.tempLabel.element.hide()
   }
 
-  private isLabelsHaveDifferentPosition() {
-    return (
-      this.om.getX(this.labels[0].element.position) !==
-      this.om.getX(this.labels[this.labels.length - 1].element.position)
-    )
-  }
-
   private doLabelsCollide(): boolean {
     return (
       this.labels.length === 2 &&
       this.cd.doCollide(this.labels[0].element, this.labels[1].element)
     )
+  }
+
+  private getTempLabelValue(values: string[]): string {
+    if (values.every((value) => value === values[0])) {
+      return values[0]
+    }
+    return values.join(' - ')
   }
 }
 

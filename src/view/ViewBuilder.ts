@@ -53,7 +53,6 @@ class ViewBuilder {
     )
     const labelsContainer = new LabelsContainer(
       new HTMLViewElement('div', 'tslider__labels'),
-      orientationManager,
       new RenderStatePermitter(),
       new ShapeCollisionDetector(),
       tempLabel,
