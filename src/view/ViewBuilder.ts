@@ -74,6 +74,7 @@ class ViewBuilder {
       new HTMLViewElementClickObserver(),
       new RenderStatePermitter(),
       this.params.isRulerClickable,
+      orientationManager,
       rulerNodes
     )
 

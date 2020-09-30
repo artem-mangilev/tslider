@@ -3,6 +3,7 @@ import ViewComponent from './ViewComponent'
 import { RenderPermitter } from './RenderPermitter'
 import { ViewElement } from './ViewElement'
 import HTMLViewElementClickObserver from './HTMLViewElementClickObserver'
+import OrientationManager from './OrientationManager'
 
 class Ruler implements ViewComponent {
   constructor(
@@ -10,6 +11,7 @@ class Ruler implements ViewComponent {
     private clickObserver: HTMLViewElementClickObserver,
     private permitter: RenderPermitter,
     private clickable: boolean,
+    private om: OrientationManager,
     private nodes: ViewComponent[]
   ) {}
 
@@ -22,10 +24,16 @@ class Ruler implements ViewComponent {
   render(ruler: RulerSegment[]): void {
     this.init && this.init()
 
-    this.permitter.shouldRerender(ruler) &&
-      ruler.forEach((segment, i) =>
-        this.nodes[i].render({ segment, parent: this })
-      )
+    if (!this.permitter.shouldRerender(ruler)) return
+
+    if (this.om.isVertical()) {
+      ruler = ruler.map(({ point }, i, array) => {
+        const value = array[array.length - i - 1].value
+        return { point, value }
+      })
+    }
+
+    ruler.forEach((segment, i) => this.nodes[i].render({ segment }))
   }
 
   onClick(handler: (value: string) => void): void {
