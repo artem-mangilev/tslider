@@ -27,14 +27,6 @@ class OrientationManager {
     }
   }
 
-  setHeight(shape: Shape, height: number): void {
-    if (this.isHorizontal()) {
-      shape.height = height
-    } else {
-      shape.width = height
-    }
-  }
-
   getX(point: Point): number {
     if (this.isHorizontal()) {
       return point.x
