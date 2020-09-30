@@ -1,36 +1,26 @@
 import RulerSegment from '../model/RulerSegment'
-import RulerNode from './RulerNode'
-import OrientationManager from './OrientationManager'
 import ViewComponent from './ViewComponent'
 import { RenderPermitter } from './RenderPermitter'
 import { ViewElement } from './ViewElement'
-import HTMLViewElement from './HTMLViewElement'
 import HTMLViewElementClickObserver from './HTMLViewElementClickObserver'
 
 class Ruler implements ViewComponent {
-  private nodes: RulerNode[] = []
-
   constructor(
     public element: ViewElement,
     private clickObserver: HTMLViewElementClickObserver,
-    private om: OrientationManager,
     private permitter: RenderPermitter,
-    private clickable: boolean
+    private clickable: boolean,
+    private nodes: ViewComponent[]
   ) {}
 
-  private init(ruler: RulerSegment[]) {
-    ruler.forEach(() => {
-      const element = new HTMLViewElement('span', 'tslider__ruler-node')
-      const node = new RulerNode(element, this.om)
-      this.nodes.push(node)
-    })
+  private init() {
     this.element.add(...this.nodes.map((node) => node.element))
 
     this.init = undefined
   }
 
   render(ruler: RulerSegment[]): void {
-    this.init && this.init(ruler)
+    this.init && this.init()
 
     this.permitter.shouldRerender(ruler) &&
       ruler.forEach((segment, i) =>

@@ -35,7 +35,8 @@ class Tslider {
       showRuler,
       isRulerClickable,
       inputValuesSeparator,
-      handles: values.length
+      handles: values.length,
+      rulerSteps
     }
     this.view = new ViewBuilder(viewParams).build()
 

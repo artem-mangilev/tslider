@@ -14,6 +14,7 @@ import View from './View'
 import ViewComponent from './ViewComponent'
 import Handle from './Handle'
 import Label from './Label'
+import RulerNode from './RulerNode'
 
 class ViewBuilder {
   constructor(private params: ViewParams) {}
@@ -62,12 +63,19 @@ class ViewBuilder {
       new HTMLViewElement('div', 'tslider__range'),
       orientationManager
     )
+    const rulerNodes = Array.from(
+      { length: this.params.rulerSteps + 1 },
+      () => {
+        const element = new HTMLViewElement('span', 'tslider__ruler-node')
+        return new RulerNode(element, orientationManager)
+      }
+    )
     const ruler = new Ruler(
       new HTMLViewElement('div', 'tslider__ruler'),
       new HTMLViewElementClickObserver(),
-      orientationManager,
       new RenderStatePermitter(),
-      this.params.isRulerClickable
+      this.params.isRulerClickable,
+      rulerNodes
     )
 
     return new View({
