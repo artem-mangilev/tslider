@@ -1,8 +1,5 @@
 import Point from '../utils/Point'
-import Input from './Input'
-import Range from './Range'
 import RulerSegment from '../model/RulerSegment'
-import LabelsContainer from './LabelsContainer'
 import Ruler from './Ruler'
 import TransferHandle from '../model/TransferHandle'
 import HandlesContainer from './HandlesContainer'
@@ -24,10 +21,10 @@ export interface ViewRenderData {
 class View implements ViewComponent {
   element: ViewElement
 
-  private input: Input
+  private input: ViewComponent
   private track: ViewComponent
-  private range: Range
-  private labelsContainer: LabelsContainer
+  private range: ViewComponent
+  private labelsContainer: ViewComponent
   private handlesContainer: HandlesContainer
   private ruler: Ruler
   private showLabels: boolean
