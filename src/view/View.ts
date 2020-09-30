@@ -97,12 +97,13 @@ class View implements ViewComponent {
     }
   }
 
-  render(data: ViewRenderData): void {
-    this.renderHandles(data.handles.map((handle) => handle.position))
-    this.renderRange(data.filler)
-    this.showLabels && this.renderLabels(data.handles)
-    this.renderInput(data.inputValue)
-    this.showRuler && this.renderRuler(data.ruler)
+  render({ handles, filler, inputValue, ruler }: ViewRenderData): void {
+    this.renderHandles(handles.map((handle) => handle.position))
+    const { position, length } = filler
+    this.range.render({ position, length, track: this.track.element })
+    this.showLabels && this.renderLabels(handles)
+    this.input.render(inputValue)
+    this.showRuler && this.ruler.render(ruler)
   }
 
   // TODO: if both handles at max point, drag doesn't work
@@ -114,14 +115,6 @@ class View implements ViewComponent {
     )
   }
 
-  private renderInput(data: string): void {
-    this.input.render(data)
-  }
-
-  private renderRange({ position, length }: TransferFiller): void {
-    this.range.render({ position, length, track: this.track.element })
-  }
-
   private renderLabels(handles: TransferHandle[]): void {
     const labels = handles.map(({ position, value }) => ({
       position: this.om.getX(this.om.decodePoint(position, this.track.element)),
@@ -129,10 +122,6 @@ class View implements ViewComponent {
     }))
 
     this.labelsContainer.render({ labels, rangeMiddle: this.getRangeMiddle() })
-  }
-
-  private renderRuler(ruler: RulerSegment[]): void {
-    this.ruler.render(ruler)
   }
 
   onTrackClick(handler: (point: number) => void): void {
