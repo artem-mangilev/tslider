@@ -9,6 +9,8 @@ import ViewComponent from './ViewComponent'
 import { ViewElement } from './ViewElement'
 import ViewDependencies from './ViewDependencies'
 import Track from './Track'
+import Subject from '../utils/Subject'
+import { ViewEvents } from './ViewEvents'
 
 export interface ViewRenderData {
   handles: TransferHandle[]
@@ -17,9 +19,8 @@ export interface ViewRenderData {
   ruler: RulerSegment[]
 }
 
-class View implements ViewComponent {
+class View extends Subject implements ViewComponent {
   element: ViewElement
-
   private input: ViewComponent
   private track: Track
   private range: ViewComponent
@@ -29,6 +30,11 @@ class View implements ViewComponent {
   private showLabels: boolean
   private showRuler: boolean
   private om: OrientationManager
+
+  trackPoint: number
+  trackLength: number
+  rulerValue: string
+  handle: { point: number; id: number }
 
   constructor({
     element,
@@ -42,6 +48,8 @@ class View implements ViewComponent {
     showLabels,
     showRuler,
   }: ViewDependencies) {
+    super()
+
     this.element = element
     this.om = om
     this.input = input
@@ -123,27 +131,33 @@ class View implements ViewComponent {
     this.labelsContainer.render({ labels, rangeMiddle })
   }
 
-  onTrackClick(handler: (point: number) => void): void {
+  bindEvents(): void {
     this.track.onClick((point) => {
-      handler(this.om.encodePoint(point, this.track.element).x)
+      this.trackPoint = this.om.encodePoint(point, this.track.element).x
+
+      this.notify(ViewEvents.TrackClick)
     })
-  }
 
-  onTrackLengthChanged(handler: (length: number) => void): void {
-    this.track.onResize((size) => handler(this.om.getWidth(size)))
-  }
+    this.track.onResize((size) => {
+      this.trackLength = this.om.getWidth(size)
 
-  onRulerClick(handler: (value: string) => void): void {
-    this.ruler.onClick(handler)
-  }
+      this.notify(ViewEvents.TrackLengthChanged)
+    })
 
-  onHandleDrag(handler: (point: number, id: number) => void): void {
+    this.ruler.onClick((value) => {
+      this.rulerValue = value
+
+      this.notify(ViewEvents.RulerClick)
+    })
+
     this.handlesContainer.onHandleDrag((point, id) => {
       const position = this.om.encodePoint(
         this.getLocalMousePosition(point.x, point.y, this.track.element),
         this.track.element
       )
-      handler(position.x, id)
+      this.handle = { point: position.x, id }
+
+      this.notify(ViewEvents.HandleDrag)
     })
   }
 

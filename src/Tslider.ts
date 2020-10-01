@@ -6,11 +6,11 @@ import './plugin.scss'
 import ModelDependencyBuilder from './model/ModelDependencyBuilder'
 import HTMLViewElement from './view/HTMLViewElement'
 import ViewBuilder from './view/ViewBuilder'
+import ViewEventsHandler from './ViewEventsHandler'
 
 class Tslider {
   private view: View
   private model: Model
-  private handler: ModelEventsHandler
 
   constructor({
     targetInput,
@@ -54,8 +54,11 @@ class Tslider {
     const modelDeps = new ModelDependencyBuilder(modelParams)
     this.model = new Model(modelDeps.build())
 
-    this.handler = new ModelEventsHandler(this.view)
-    this.model.attach(this.handler)
+    const modelEventsHandler = new ModelEventsHandler(this.view)
+    this.model.attach(modelEventsHandler)
+
+    const viewEventsHandler = new ViewEventsHandler(this.model)
+    this.view.attach(viewEventsHandler)
 
     this.model.notify(ModelEvents.Init)
   }

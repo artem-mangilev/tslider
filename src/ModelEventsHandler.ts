@@ -19,11 +19,7 @@ class ModelEventsHandler implements Observer {
   private handleInit(model: Model): void {
     const { handles, filler, ruler, inputValue } = model
     this.view.render({ handles, filler, ruler, inputValue })
-
-    this.view.onTrackClick(model.setHandle.bind(model))
-    this.view.onHandleDrag(model.setHandleByIndex.bind(model))
-    this.view.onTrackLengthChanged(model.resize.bind(model))
-    this.view.onRulerClick(model.setHandleByValue.bind(model))
+    this.view.bindEvents()
   }
 
   private handleUpdate({ handles, filler, ruler, inputValue }: Model): void {
