@@ -11,10 +11,11 @@ import Range from './Range'
 import Ruler from './Ruler'
 import HTMLViewElementClickObserver from './HTMLComponentClickObserver'
 import View from './View'
-import ViewComponent from './ViewComponent'
 import Handle from './Handle'
 import Label from './Label'
 import RulerNode from './RulerNode'
+import Track from './Track'
+import HTMLComponentResizeObserver from './HTMLComponentResizeObserver'
 
 class ViewBuilder {
   constructor(private params: ViewParams) {}
@@ -26,12 +27,6 @@ class ViewBuilder {
     )
     const orientationManager = new OrientationManager(this.params.orientation)
     const input = new Input(new HTMLViewElement(this.params.targetInput))
-    const track: ViewComponent = {
-      element: new HTMLViewElement('div', 'tslider__track'),
-      render() {
-        return
-      },
-    }
     const handles = Array.from(
       { length: this.params.handles },
       () => new Handle(new HTMLViewElement('div', 'tslider__handle'))
@@ -76,6 +71,13 @@ class ViewBuilder {
       this.params.isRulerClickable,
       orientationManager,
       rulerNodes
+    )
+    const track = new Track(
+      new HTMLViewElement('div', 'tslider__track'),
+      new HTMLViewElementClickObserver(),
+      new HTMLComponentResizeObserver(),
+      range,
+      handlesContainer
     )
 
     return new View({

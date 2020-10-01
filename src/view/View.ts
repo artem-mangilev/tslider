@@ -7,9 +7,8 @@ import OrientationManager from './OrientationManager'
 import TransferFiller from '../model/TransferFiller'
 import ViewComponent from './ViewComponent'
 import { ViewElement } from './ViewElement'
-import HTMLComponentClickObserver from './HTMLComponentClickObserver'
-import HTMLComponentResizeObserver from './HTMLComponentResizeObserver'
 import ViewDependencies from './ViewDependencies'
+import Track from './Track'
 
 export interface ViewRenderData {
   handles: TransferHandle[]
@@ -22,7 +21,7 @@ class View implements ViewComponent {
   element: ViewElement
 
   private input: ViewComponent
-  private track: ViewComponent
+  private track: Track
   private range: ViewComponent
   private labelsContainer: ViewComponent
   private handlesContainer: HandlesContainer
@@ -122,21 +121,13 @@ class View implements ViewComponent {
   }
 
   onTrackClick(handler: (point: number) => void): void {
-    const observer = new HTMLComponentClickObserver()
-    observer.listen(this.track, this.range, this.handlesContainer)
-    observer.bind((e) => {
-      const position = this.om.encodePoint(
-        this.getLocalMousePosition(e.point.x, e.point.y, this.track.element),
-        this.track.element
-      )
-      handler(position.x)
+    this.track.onClick((point) => {
+      handler(this.om.encodePoint(point, this.track.element).x)
     })
   }
 
   onTrackLengthChanged(handler: (length: number) => void): void {
-    const observer = new HTMLComponentResizeObserver()
-    observer.listen(this)
-    observer.bind((e) => handler(this.om.getWidth(e.target.element)))
+    this.track.onResize((size) => handler(this.om.getWidth(size)))
   }
 
   onRulerClick(handler: (value: string) => void): void {
