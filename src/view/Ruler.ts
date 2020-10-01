@@ -2,13 +2,13 @@ import RulerSegment from '../model/RulerSegment'
 import ViewComponent from './ViewComponent'
 import { RenderPermitter } from './RenderPermitter'
 import { ViewElement } from './ViewElement'
-import HTMLViewElementClickObserver from './HTMLViewElementClickObserver'
+import HTMLComponentClickObserver from './HTMLComponentClickObserver'
 import OrientationManager from './OrientationManager'
 
 class Ruler implements ViewComponent {
   constructor(
     public element: ViewElement,
-    private clickObserver: HTMLViewElementClickObserver,
+    private clickObserver: HTMLComponentClickObserver,
     private permitter: RenderPermitter,
     private clickable: boolean,
     private om: OrientationManager,
@@ -32,8 +32,8 @@ class Ruler implements ViewComponent {
 
   onClick(handler: (value: string) => void): void {
     if (this.clickable) {
-      this.clickObserver.listen(...this.nodes.map((node) => node.element))
-      this.clickObserver.bind((e) => handler(e.target.getContent()))
+      this.clickObserver.listen(...this.nodes)
+      this.clickObserver.bind((e) => handler(e.target.element.getContent()))
     }
   }
 }
