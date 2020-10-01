@@ -71,10 +71,8 @@ class LabelsContainer implements ViewComponent {
   }
 
   private getTempLabelValue(values: string[]): string {
-    if (values.every((value) => value === values[0])) {
-      return values[0]
-    }
-    return values.join(' - ')
+    const valuesAreSame = values.every((value) => value === values[0])
+    return valuesAreSame ? values[0] : values.join(' - ')
   }
 }
 
