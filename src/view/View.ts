@@ -97,7 +97,7 @@ class View implements ViewComponent {
     this.renderHandles(handles.map((handle) => handle.position))
     const { position, length } = filler
     this.range.render({ position, length, track: this.track.element })
-    this.showLabels && this.renderLabels(handles)
+    this.showLabels && this.renderLabels(handles, filler)
     this.input.render(inputValue)
     this.showRuler && this.ruler.render(ruler)
   }
@@ -111,13 +111,16 @@ class View implements ViewComponent {
     )
   }
 
-  private renderLabels(handles: TransferHandle[]): void {
+  private renderLabels(
+    handles: TransferHandle[],
+    filler: TransferFiller
+  ): void {
     const labels = handles.map(({ position, value }) => ({
       position: this.om.getX(this.om.decodePoint(position, this.track.element)),
       value,
     }))
-
-    this.labelsContainer.render({ labels, rangeMiddle: this.getRangeMiddle() })
+    const rangeMiddle = filler.position.x + filler.length / 2
+    this.labelsContainer.render({ labels, rangeMiddle })
   }
 
   onTrackClick(handler: (point: number) => void): void {
@@ -150,13 +153,6 @@ class View implements ViewComponent {
     { position: { x, y } }: ViewElement
   ): Point {
     return { x: mouseX - x, y: mouseY - y }
-  }
-
-  private getRangeMiddle(): number {
-    const position =
-      this.om.getX(this.range.element.position) -
-      this.om.getX(this.track.element.position)
-    return position + this.om.getWidth(this.range.element) / 2
   }
 }
 
