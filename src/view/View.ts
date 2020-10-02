@@ -33,30 +33,19 @@ class View extends Subject implements ViewComponent {
   rulerValue: string
   handle: { point: number; id: number }
 
-  constructor({
-    element,
-    input,
-    track,
-    handlesContainer,
-    labelsContainer,
-    range,
-    ruler,
-    om,
-    showLabels,
-    showRuler,
-  }: ViewDependencies) {
+  constructor(deps: ViewDependencies) {
     super()
 
-    this.element = element
-    this.om = om
-    this.input = input
-    this.track = track
-    this.handlesContainer = handlesContainer
-    this.labelsContainer = labelsContainer
-    this.range = range
-    this.ruler = ruler
-    this.showLabels = showLabels
-    this.showRuler = showRuler
+    this.element = deps.element
+    this.om = deps.om
+    this.input = deps.input
+    this.track = deps.track
+    this.handlesContainer = deps.handlesContainer
+    this.labelsContainer = deps.labelsContainer
+    this.range = deps.range
+    this.ruler = deps.ruler
+    this.showLabels = deps.showLabels
+    this.showRuler = deps.showRuler
 
     this.input.element.after(this.element)
     this.element.add(
@@ -132,7 +121,7 @@ class View extends Subject implements ViewComponent {
     } else {
       rangeMiddle = filler.position.x + filler.length / 2
     }
-    
+
     this.labelsContainer.render({ labels, rangeMiddle })
   }
 
