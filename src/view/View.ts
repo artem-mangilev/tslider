@@ -87,7 +87,12 @@ class View extends Subject implements ViewComponent {
   }
 
   render({ handles, filler, inputValue, ruler }: ViewRenderData): void {
-    this.renderHandles(handles.map((handle) => handle.position))
+    handles = handles.map(({ position, value }) => ({
+      position: this.om.decodePoint(position, this.track.element),
+      value,
+    }))
+
+    this.handlesContainer.render(handles.map((handle) => handle.position))
     const { position, length } = filler
     this.range.render({ position, length, track: this.track.element })
     this.showLabels && this.renderLabels(handles, filler)
@@ -95,21 +100,12 @@ class View extends Subject implements ViewComponent {
     this.showRuler && this.ruler.render(ruler)
   }
 
-  // TODO: if both handles at max point, drag doesn't work
-  private renderHandles(positions: Point[]): void {
-    this.handlesContainer.render(
-      positions.map((position) =>
-        this.om.decodePoint(position, this.track.element)
-      )
-    )
-  }
-
   private renderLabels(
     handles: TransferHandle[],
     filler: TransferFiller
   ): void {
     const labels = handles.map(({ position, value }) => ({
-      position: this.om.getX(this.om.decodePoint(position, this.track.element)),
+      position: this.om.getX(position),
       value,
     }))
 

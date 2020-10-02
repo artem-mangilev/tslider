@@ -16,8 +16,7 @@ class ModelEventsHandler implements Observer {
     }
   }
 
-  private handleInit(model: Model): void {
-    const { handles, filler, ruler, inputValue } = model
+  private handleInit({ handles, filler, ruler, inputValue }: Model): void {
     this.view.render({ handles, filler, ruler, inputValue })
     this.view.bindEvents()
   }
