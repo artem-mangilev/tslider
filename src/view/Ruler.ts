@@ -4,6 +4,7 @@ import { RenderPermitter } from './RenderPermitter'
 import { ViewElement } from './ViewElement'
 import HTMLViewElementClickObserver from './HTMLViewElementClickObserver'
 import OrientationManager from './OrientationManager'
+import { ViewElementEventHandler } from './ViewElementObserver'
 
 class Ruler implements ViewComponent {
   constructor(
@@ -30,10 +31,10 @@ class Ruler implements ViewComponent {
     ruler.forEach((segment, i) => this.nodes[i].render({ segment }))
   }
 
-  onClick(handler: (value: string) => void): void {
+  onClick(handler: ViewElementEventHandler): void {
     if (this.clickable) {
       this.clickObserver.listen(...this.nodes.map((node) => node.element))
-      this.clickObserver.bind((e) => handler(e.target.getContent()))
+      this.clickObserver.bind(handler)
     }
   }
 }

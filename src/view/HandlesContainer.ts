@@ -2,9 +2,10 @@ import Point from '../utils/Point'
 import ViewComponent from './ViewComponent'
 import { RenderPermitter } from './RenderPermitter'
 import { ViewElement } from './ViewElement'
-import { ViewElementObserver } from './ViewElementObserver'
-
-type HandleDragHandler = (point: Point, id: number) => void
+import {
+  ViewElementEventHandler,
+  ViewElementObserver,
+} from './ViewElementObserver'
 
 class HandlesContainer implements ViewComponent {
   constructor(
@@ -22,9 +23,9 @@ class HandlesContainer implements ViewComponent {
     }
   }
 
-  onDrag(handler: HandleDragHandler): void {
+  onDrag(handler: ViewElementEventHandler): void {
     this.dragObserver.listen(...this.handles.map((handle) => handle.element))
-    this.dragObserver.bind((e) => handler(e.point, e.targetIndex))
+    this.dragObserver.bind(handler)
   }
 }
 
