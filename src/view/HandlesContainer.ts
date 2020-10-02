@@ -22,7 +22,7 @@ class HandlesContainer implements ViewComponent {
     }
   }
 
-  onHandleDrag(handler: HandleDragHandler): void {
+  onDrag(handler: HandleDragHandler): void {
     this.dragObserver.listen(...this.handles.map((handle) => handle.element))
     this.dragObserver.bind((e) => handler(e.point, e.targetIndex))
   }

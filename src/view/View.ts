@@ -150,7 +150,7 @@ class View extends Subject implements ViewComponent {
       this.notify(ViewEvents.RulerClick)
     })
 
-    this.handlesContainer.onHandleDrag((point, id) => {
+    this.handlesContainer.onDrag((point, id) => {
       const position = this.om.encodePoint(
         this.getLocalMousePosition(point.x, point.y, this.track.element),
         this.track.element
