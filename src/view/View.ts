@@ -29,7 +29,6 @@ class View extends Subject implements ViewComponent {
   private om: OrientationManager
 
   trackPoint: number
-  trackLength: number
   rulerValue: string
   handle: { point: number; id: number }
 
@@ -147,9 +146,7 @@ class View extends Subject implements ViewComponent {
       this.notify(ViewEvents.HandleDrag)
     })
 
-    this.track.onResize((e) => {
-      this.trackLength = this.om.getWidth(e.target)
-
+    this.track.onResize(() => {
       this.notify(ViewEvents.TrackLengthChanged)
     })
 

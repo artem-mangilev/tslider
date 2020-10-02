@@ -16,7 +16,7 @@ class ViewEventsHandler implements Observer {
     }
 
     if (event === ViewEvents.TrackLengthChanged) {
-      this.model.resize(state.trackLength)
+      this.model.resize(state.getTrackWidth())
     }
 
     if (event === ViewEvents.RulerClick) {
