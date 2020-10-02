@@ -124,7 +124,15 @@ class View extends Subject implements ViewComponent {
       position: this.om.getX(this.om.decodePoint(position, this.track.element)),
       value,
     }))
-    const rangeMiddle = filler.position.x + filler.length / 2
+
+    let rangeMiddle
+    if (this.om.isVertical()) {
+      rangeMiddle =
+        this.track.element.height - filler.position.x + filler.length / 2
+    } else {
+      rangeMiddle = filler.position.x + filler.length / 2
+    }
+    
     this.labelsContainer.render({ labels, rangeMiddle })
   }
 
