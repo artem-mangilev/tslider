@@ -1,14 +1,14 @@
 import Point from '../utils/Point'
 import Shape from '../utils/Shape'
-import { ComponentObserver } from './ComponentObserver'
 import ViewComponent from './ViewComponent'
 import { ViewElement } from './ViewElement'
+import { ViewElementObserver } from './ViewElementObserver'
 
 class Track implements ViewComponent {
   constructor(
     public element: ViewElement,
-    private clickObserver: ComponentObserver,
-    private resizeObserver: ComponentObserver,
+    private clickObserver: ViewElementObserver,
+    private resizeObserver: ViewElementObserver,
     private range: ViewComponent,
     private handles: ViewComponent
   ) {}
@@ -18,7 +18,11 @@ class Track implements ViewComponent {
   }
 
   onClick(handler: (point: Point) => void): void {
-    this.clickObserver.listen(this, this.range, this.handles)
+    this.clickObserver.listen(
+      this.element,
+      this.range.element,
+      this.handles.element
+    )
     this.clickObserver.bind((e) => {
       handler({
         x: e.point.x - this.element.position.x,
@@ -28,8 +32,8 @@ class Track implements ViewComponent {
   }
 
   onResize(handler: (size: Shape) => void): void {
-    this.resizeObserver.listen(this)
-    this.resizeObserver.bind((e) => handler(e.target.element))
+    this.resizeObserver.listen(this.element)
+    this.resizeObserver.bind((e) => handler(e.target))
   }
 }
 

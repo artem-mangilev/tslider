@@ -1,15 +1,18 @@
-import { ComponentObserver, ComponentEventHandler } from './ComponentObserver'
+import {
+  ViewElementObserver,
+  ViewElementEventHandler,
+} from './ViewElementObserver'
+import { ViewElement } from './ViewElement'
 import HTMLViewElement from './HTMLViewElement'
-import ViewComponent from './ViewComponent'
 
-class HTMLComponentDragObserver implements ComponentObserver {
-  private targets: ViewComponent[]
+class HTMLViewElementDragObserver implements ViewElementObserver {
+  private targets: ViewElement[]
 
-  listen(...components: ViewComponent[]): void {
-    this.targets = components
+  listen(...elements: ViewElement[]): void {
+    this.targets = elements
   }
 
-  bind(handler: ComponentEventHandler): void {
+  bind(handler: ViewElementEventHandler): void {
     this.targets.forEach((target, index) => {
       this.bindMouseOrTouchHandler('mouse', target, index, handler)
       this.bindMouseOrTouchHandler('touch', target, index, handler)
@@ -18,19 +21,18 @@ class HTMLComponentDragObserver implements ComponentObserver {
 
   private bindMouseOrTouchHandler(
     which: 'mouse' | 'touch',
-    target: ViewComponent,
+    target: ViewElement,
     index: number,
-    handler: ComponentEventHandler
+    handler: ViewElementEventHandler
   ): void {
-    if (target.element instanceof HTMLViewElement) {
+    if (target instanceof HTMLViewElement) {
       const start = which === 'mouse' ? 'mousedown' : 'touchstart'
       const move = which === 'mouse' ? 'mousemove' : 'touchmove'
       const end = which === 'mouse' ? 'mouseup' : 'touchend'
 
-      const targetHtmlNode = target.element.$elem[0]
       const $root = $('html')
       $root.on(start, (e) => {
-        e.target === targetHtmlNode &&
+        e.target === target.$elem[0] &&
           $root.on(move, (e) => {
             const x = which === 'mouse' ? e.clientX : e.touches[0].clientX
             const y = which === 'mouse' ? e.clientY : e.touches[0].clientY
@@ -42,4 +44,4 @@ class HTMLComponentDragObserver implements ComponentObserver {
   }
 }
 
-export default HTMLComponentDragObserver
+export default HTMLViewElementDragObserver
