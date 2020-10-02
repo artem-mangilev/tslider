@@ -1,7 +1,7 @@
 import ShapeCollisionDetector from '../utils/ShapeCollisionDetector'
 import HandlesContainer from './HandlesContainer'
 import HTMLViewElement from './HTMLViewElement'
-import HTMLViewElementDragObserver from './HTMLComponentDragObserver'
+import HTMLViewElementDragObserver from './HTMLViewElementDragObserver'
 import Input from './Input'
 import LabelsContainer from './LabelsContainer'
 import OrientationManager from './OrientationManager'
@@ -9,13 +9,13 @@ import RenderStatePermitter from './RenderPermitter'
 import ViewParams from './ViewParams'
 import Range from './Range'
 import Ruler from './Ruler'
-import HTMLViewElementClickObserver from './HTMLComponentClickObserver'
+import HTMLViewElementClickObserver from './HTMLViewElementClickObserver'
 import View from './View'
 import Handle from './Handle'
 import Label from './Label'
 import RulerNode from './RulerNode'
 import Track from './Track'
-import HTMLComponentResizeObserver from './HTMLComponentResizeObserver'
+import HTMLViewElementResizeObserver from './HTMLViewElementResizeObserver'
 
 class ViewBuilder {
   constructor(private params: ViewParams) {}
@@ -75,7 +75,7 @@ class ViewBuilder {
     const track = new Track(
       new HTMLViewElement('div', 'tslider__track'),
       new HTMLViewElementClickObserver(),
-      new HTMLComponentResizeObserver(),
+      new HTMLViewElementResizeObserver(),
       range,
       handlesContainer
     )
