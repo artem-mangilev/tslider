@@ -1,5 +1,7 @@
 import { CollisionDetector } from '../../src/utils/CollisionDetector'
 import Point from '../../src/utils/Point'
+import Shape from '../../src/utils/Shape'
+import { OrientationManager } from '../../src/view/OrientationManager'
 import { RenderPermitter } from '../../src/view/RenderPermitter'
 import { ViewElement } from '../../src/view/ViewElement'
 import {
@@ -8,8 +10,8 @@ import {
 } from '../../src/view/ViewElementObserver'
 
 export class MockElement implements ViewElement {
-  width: 10
-  height: 10
+  width = 10
+  height = 10
   position: Point = { x: 0, y: 0 }
   childs: ViewElement[] = []
   isHidden = false
@@ -87,5 +89,46 @@ export class MockCollisionDetector implements CollisionDetector {
 
   setCollisionState(state: boolean): void {
     this.collisionState = state
+  }
+}
+
+export class MockOrientationManager implements OrientationManager {
+  decodePoint(point: Point): Point {
+    return point
+  }
+
+  encodePoint(point: Point): Point {
+    return point
+  }
+
+  getX(point: Point): number {
+    return point.x
+  }
+
+  getY(point: Point): number {
+    return point.y
+  }
+
+  getPoint(point: Point): Point {
+    return point
+  }
+
+  getWidth(shape: Shape): number {
+    return shape.width
+  }
+  getHeight(shape: Shape): number {
+    return shape.height
+  }
+
+  setWidth(shape: Shape, width: number): void {
+    shape.width = width
+  }
+
+  isHorizontal(): boolean {
+    return true
+  }
+
+  isVertical(): boolean {
+    return true
   }
 }

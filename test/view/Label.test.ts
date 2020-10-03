@@ -1,11 +1,24 @@
 import { expect } from 'chai'
 import 'mocha'
-import { JSDOM } from 'jsdom'
 import Label from '../../src/view/Label'
-const { window } = new JSDOM('')
+import {
+  MockElement,
+  MockOrientationManager,
+  MockPermitter,
+} from './MockClasses'
 
-const $ = require('jquery')(window)
+describe(Label.name, () => {
+  describe('render', () => {
+    it('should be rendered', () => {
+      const element = new MockElement()
+      const om = new MockOrientationManager()
+      const permitter = new MockPermitter()
+      const label = new Label(element, om, permitter)
 
-global.$ = $
+      label.render({ position: 10, value: 'hello world' })
 
-describe('Label', () => {})
+      expect(element.getContent()).to.equal('hello world')
+      expect(element.position).to.eql({ x: 5, y: 0 })
+    })
+  })
+})
