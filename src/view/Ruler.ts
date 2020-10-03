@@ -2,14 +2,16 @@ import RulerSegment from '../model/RulerSegment'
 import ViewComponent from './ViewComponent'
 import { RenderPermitter } from './RenderPermitter'
 import { ViewElement } from './ViewElement'
-import HTMLViewElementClickObserver from './HTMLViewElementClickObserver'
 import { OrientationManager } from './OrientationManager'
-import { ViewElementEventHandler } from './ViewElementObserver'
+import {
+  ViewElementEventHandler,
+  ViewElementObserver,
+} from './ViewElementObserver'
 
 class Ruler implements ViewComponent {
   constructor(
     public element: ViewElement,
-    private clickObserver: HTMLViewElementClickObserver,
+    private clickObserver: ViewElementObserver,
     private permitter: RenderPermitter,
     private clickable: boolean,
     private om: OrientationManager,
