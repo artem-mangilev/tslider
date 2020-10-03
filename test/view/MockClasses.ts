@@ -1,3 +1,4 @@
+import { CollisionDetector } from '../../src/utils/CollisionDetector'
 import Point from '../../src/utils/Point'
 import { RenderPermitter } from '../../src/view/RenderPermitter'
 import { ViewElement } from '../../src/view/ViewElement'
@@ -74,5 +75,17 @@ export class MockObserver implements ViewElementObserver {
 export class MockPermitter implements RenderPermitter {
   shouldRerender(): boolean {
     return true
+  }
+}
+
+export class MockCollisionDetector implements CollisionDetector {
+  collisionState = false
+
+  doCollide(): boolean {
+    return this.collisionState
+  }
+
+  setCollisionState(state: boolean): void {
+    this.collisionState = state
   }
 }
