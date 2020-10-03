@@ -1,27 +1,28 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { expect } from 'chai'
 import 'mocha'
-import { JSDOM } from 'jsdom'
 import Input from '../../src/view/Input'
-const { window } = new JSDOM('')
+import { MockElement } from './MockClasses'
 
-const $ = require('jquery')(window)
+describe(Input.name, () => {
+  describe('render', () => {
+    it('should render provided value', () => {
+      const element = new MockElement()
+      const input = new Input(element)
 
-global.$ = $
+      input.render('hello world')
 
-// describe('Input', () => {
-//   describe('setValue', () => {
-//     it('should set value', () => {
-//       const $input: JQuery = $('<input/>', {
-//         type: 'text',
-//       })
-//       const input = new Input(<HTMLInputElement>$input[0])
+      expect(element.getAttribute('value')).to.equal('hello world')
+    })
+  })
 
-//       input.setValue('test val')
+  describe('getValue', () => {
+    it('should get value', () => {
+      const element = new MockElement()
+      const input = new Input(element)
 
-//       expect($input.val()).to.equal('test val')
-//     })
-//   })
-// })
+      input.render('hello world')
+
+      expect(input.getValue()).to.equal('hello world')
+    })
+  })
+})

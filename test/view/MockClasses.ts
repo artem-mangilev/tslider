@@ -12,7 +12,7 @@ export class MockElement implements ViewElement {
   position: Point = { x: 0, y: 0 }
   childs: ViewElement[] = []
   isHidden = false
-  private attr = ''
+  private attrs: { [x: string]: string }
   private content = ''
 
   add(...mockElements: ViewElement[]): void {
@@ -23,12 +23,12 @@ export class MockElement implements ViewElement {
     return
   }
 
-  setAttribute(attr: string): void {
-    this.attr = attr
+  setAttribute(attrName: string, value: string): void {
+    this.attrs = { [attrName]: value }
   }
 
-  getAttribute(): string {
-    return this.attr
+  getAttribute(attrName: string): string {
+    return this.attrs[attrName]
   }
 
   setContent(content: string): void {
