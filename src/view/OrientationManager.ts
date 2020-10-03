@@ -2,7 +2,20 @@ import { Orientation } from '../utils/aliases'
 import Point from '../utils/Point'
 import Shape from '../utils/Shape'
 
-class OrientationManager {
+export interface OrientationManager {
+  getWidth(shape: Shape): number
+  getHeight(shape: Shape): number
+  setWidth(shape: Shape, width: number): void
+  getX(point: Point): number
+  getY(point: Point): number
+  getPoint(point: Point): Point
+  encodePoint(point: Point, shape: Shape): Point
+  decodePoint(point: Point, shape: Shape): Point
+  isHorizontal(): boolean
+  isVertical(): boolean
+}
+
+class ShapeOrientationManager {
   constructor(private orientation: Orientation) {}
 
   getWidth(shape: Shape): number {
@@ -77,4 +90,4 @@ class OrientationManager {
   }
 }
 
-export default OrientationManager
+export default ShapeOrientationManager

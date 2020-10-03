@@ -1,5 +1,5 @@
 import Point from '../utils/Point'
-import OrientationManager from './OrientationManager'
+import { OrientationManager } from './OrientationManager'
 import Shape from '../utils/Shape'
 import ViewComponent from './ViewComponent'
 import { ViewElement } from './ViewElement'

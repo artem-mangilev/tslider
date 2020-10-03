@@ -4,7 +4,7 @@ import HTMLViewElement from './HTMLViewElement'
 import HTMLViewElementDragObserver from './HTMLViewElementDragObserver'
 import Input from './Input'
 import LabelsContainer from './LabelsContainer'
-import OrientationManager from './OrientationManager'
+import ShapeOrientationManager from './OrientationManager'
 import RenderStatePermitter from './RenderPermitter'
 import ViewParams from './ViewParams'
 import Range from './Range'
@@ -25,7 +25,9 @@ class ViewBuilder {
       'div',
       `tslider tslider_${this.params.orientation}`
     )
-    const orientationManager = new OrientationManager(this.params.orientation)
+    const orientationManager = new ShapeOrientationManager(
+      this.params.orientation
+    )
     const input = new Input(new HTMLViewElement(this.params.targetInput))
     const handles = Array.from(
       { length: this.params.handles },

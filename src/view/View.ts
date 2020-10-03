@@ -1,7 +1,6 @@
-import Point from '../utils/Point'
 import RulerSegment from '../model/RulerSegment'
 import TransferHandle from '../model/TransferHandle'
-import OrientationManager from './OrientationManager'
+import { OrientationManager } from './OrientationManager'
 import TransferFiller from '../model/TransferFiller'
 import ViewComponent from './ViewComponent'
 import { ViewElement } from './ViewElement'
