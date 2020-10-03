@@ -1,3 +1,4 @@
+import { Orientation } from '../../src/utils/aliases'
 import { CollisionDetector } from '../../src/utils/CollisionDetector'
 import Point from '../../src/utils/Point'
 import Shape from '../../src/utils/Shape'
@@ -93,6 +94,8 @@ export class MockCollisionDetector implements CollisionDetector {
 }
 
 export class MockOrientationManager implements OrientationManager {
+  orientation: Orientation = 'horizontal'
+
   decodePoint(point: Point): Point {
     return point
   }
@@ -121,14 +124,22 @@ export class MockOrientationManager implements OrientationManager {
   }
 
   setWidth(shape: Shape, width: number): void {
-    shape.width = width
+    if (this.orientation === 'horizontal') {
+      shape.width = width
+    } else {
+      shape.height = width
+    }
   }
 
   isHorizontal(): boolean {
-    return true
+    return this.orientation === 'horizontal'
   }
 
   isVertical(): boolean {
-    return true
+    return this.orientation === 'vertical'
+  }
+
+  changeOrientation(orientation: Orientation): void {
+    this.orientation = orientation
   }
 }
