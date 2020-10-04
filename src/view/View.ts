@@ -23,8 +23,6 @@ class View extends Subject implements ViewComponent {
   private labelsContainer: ViewComponent
   private handlesContainer: ViewComponent
   private ruler: ViewComponent
-  private showLabels: boolean
-  private showRuler: boolean
   private om: OrientationManager
 
   trackPoint: number
@@ -42,8 +40,6 @@ class View extends Subject implements ViewComponent {
     this.labelsContainer = deps.labelsContainer
     this.range = deps.range
     this.ruler = deps.ruler
-    this.showLabels = deps.showLabels
-    this.showRuler = deps.showRuler
 
     this.input.element.after(this.element)
     this.element.add(
@@ -53,6 +49,9 @@ class View extends Subject implements ViewComponent {
       this.handlesContainer.element,
       this.ruler.element
     )
+
+    this.toggleLabels(deps.showLabels)
+    this.toggleRuler(deps.showRuler)
   }
 
   getTrackWidth(): number {
@@ -64,8 +63,6 @@ class View extends Subject implements ViewComponent {
   }
 
   toggleLabels(show: boolean): void {
-    this.showLabels = show
-
     // TODO: maybe put this to labels container
     if (show) {
       this.labelsContainer.element.show()
@@ -75,8 +72,6 @@ class View extends Subject implements ViewComponent {
   }
 
   toggleRuler(show: boolean): void {
-    this.showRuler = show
-
     // TODO: maybe put this to ruler
     if (show) {
       this.ruler.element.show()
