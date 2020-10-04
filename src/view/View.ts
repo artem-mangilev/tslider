@@ -94,9 +94,9 @@ class View extends Subject implements ViewComponent {
     this.handlesContainer.render(handles.map((handle) => handle.position))
     const { position, length } = filler
     this.range.render({ position, length, track: this.track.element })
-    this.showLabels && this.renderLabels(handles, filler)
+    this.renderLabels(handles, filler)
     this.input.render(inputValue)
-    this.showRuler && this.ruler.render(ruler)
+    this.ruler.render(ruler)
   }
 
   private renderLabels(
