@@ -6,11 +6,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const CONTEXT = resolve(__dirname, '..', 'src')
 const BUILD = resolve(__dirname, '..', 'build')
-const NODE_MODULES = resolve(__dirname, '..', 'node_modules')
-const TS_CONFIG = resolve(__dirname, '..', 'tsconfig.json')
 
-const DEMO_NAME = 'index'
-const DEMO_TEMPLATE = resolve(CONTEXT, `${DEMO_NAME}.pug`)
+const DEMO_NAME = 'demo'
+const DEMO_TEMPLATE = resolve(CONTEXT, 'demo', `${DEMO_NAME}.pug`)
 
 const loadersForCSS = [
   'style-loader',
@@ -27,12 +25,22 @@ module.exports = {
 
   context: CONTEXT,
 
-  entry: './index.ts',
+  entry: {
+    tsliderPlugin: './tsliderPlugin.ts',
+    demo: './demo/demo.js'
+  },
+   
 
   output: {
     filename: '[name].js',
     path: BUILD,
     publicPath: '/',
+  },
+
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
   },
 
   module: {

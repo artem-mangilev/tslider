@@ -1,17 +1,15 @@
 import Model from './model/Model'
-import ModelOptions from './model/ModelOptions'
-import { ModelUpdateTypes } from './model/ModelUpdateTypes'
-import SliderOptions from './SliderOptions'
-import Observer from './utils/Observer'
-import View from './view/View'
-import ViewOptions from './view/ViewOptions'
-import { OrientationOptions } from './OrientationOptions'
+import { ModelEvents } from './model/ModelEvents'
+import ModelEventsHandler from './model/ModelEventsHandler'
+import View from './components/View/View'
+import './plugin.scss'
+import HTMLViewElement from './io/dom/HTMLViewElement'
+import ViewBuilder from './components/View/ViewBuilder'
+import ViewEventsHandler from './components/View/ViewEventsHandler'
+import ModelBuilder from './model/ModelBuilder'
 
-class Tslider implements Observer {
+class Tslider {
   private view: View
-  private rulerFlag: boolean
-  private rulerActiveFlag: boolean
-  private inputValuesSeparator: string
   private model: Model
 
   constructor({
@@ -22,140 +20,112 @@ class Tslider implements Observer {
     min,
     step,
     orientation,
-    ruler = false,
+    showRuler = false,
     rulerSteps = 4,
-    rulerActive = true,
-    label = true,
-    hideInput = true,
+    isRulerClickable = true,
+    showLabels = true,
     inputValuesSeparator = ',',
-  }: SliderOptions) {
-    this.rulerFlag = ruler
-    this.rulerActiveFlag = rulerActive
-    this.inputValuesSeparator = inputValuesSeparator
+  }: TsliderParams) {
+    const values = [from, ...(to !== undefined ? [to] : [])]
 
-    // 'from' is required parameter at this moment, to is optional
-    const rangeValues: number[] = [from, ...(to !== undefined ? [to] : [])]
-
-    const orientationOptions: OrientationOptions = {
-      horizontal: {
-        orientation: 'horizontal',
-        longSide: 'width',
-        shortSide: 'height',
-        x: 'x',
-        y: 'y',
-        direction: 'left-to-right',
-      },
-      vertical: {
-        orientation: 'vertical',
-        longSide: 'height',
-        shortSide: 'width',
-        x: 'y',
-        y: 'x',
-        direction: 'bottom-to-top',
-      },
-    }
-
-    const orientationOption = orientationOptions[orientation]
-    const numberOfHandles = rangeValues.length
-    // create view options
-    const viewOptions: ViewOptions = {
-      orientationOption,
-      numberOfHandles,
+    const viewParams = {
+      orientation,
       targetInput,
-      label,
-      hideInput,
+      showLabels,
+      showRuler,
+      isRulerClickable,
       inputValuesSeparator,
+      handles: values.length,
+      rulerSteps
     }
+    this.view = new ViewBuilder(viewParams).build()
 
-    // initialize the View
-    this.view = new View(viewOptions)
-
-    const trackLength = this.view.trackLength
-
-    // if the step isn't provided, the step is 1/100 of track length
-    if (step === undefined) {
-      step = trackLength / 100
-    }
-
-    // the Model needs an additional data
-    const modelOptions: ModelOptions = {
+    const modelParams = {
       max,
       min,
       step,
-      trackLength,
       rulerSteps,
-      values: rangeValues,
+      values,
+      trackWidth: this.view.getTrackWidth(),
+      trackHeight: this.view.getTrackHeight(),
+      inputValuesSeparator,
     }
 
-    // initialize the Model and attach this class to Model as observer of changes
-    // TODO: in this class the model is presented as class field and an argument of handleInitializationAction
-    this.model = new Model(modelOptions, this)
+    this.model = new ModelBuilder(modelParams).build()
+
+    const modelEventsHandler = new ModelEventsHandler(this.view)
+    this.model.attach(modelEventsHandler)
+
+    const viewEventsHandler = new ViewEventsHandler(this.model)
+    this.view.attach(viewEventsHandler)
+
+    this.model.notify(ModelEvents.Init)
   }
 
-  // TODO: this method should not be public
-  // TODO: ths name should be used for API method which updates the handles
-  public update(updateType: ModelUpdateTypes, state: Model): void {
-    switch (updateType) {
-      case ModelUpdateTypes.Initialization:
-        this.handleInitializationAction(state)
-        break
-      case ModelUpdateTypes.Slide:
-        this.handleSlideAction(state)
-        break
+  setFrom(from: number): void {
+    this.model.setFrom(from)
+  }
+
+  setTo(to: number): void {
+    this.model.setTo(to)
+  }
+
+  getFrom(): string {
+    return this.model.getFrom()
+  }
+
+  getTo(): string {
+    return this.model.getTo()
+  }
+
+  setMin(min: number): void {
+    this.model.setMinValue(min)
+  }
+
+  setMax(max: number): void {
+    this.model.setMaxValue(max)
+  }
+
+  getMin(): string {
+    return this.model.getMinValue()
+  }
+
+  getMax(): string {
+    return this.model.getMaxValue()
+  }
+
+  setStep(step: number): void {
+    this.model.setStep(step)
+  }
+
+  getStep(): string {
+    return this.model.getStep()
+  }
+
+  getInstance(): HTMLElement {
+    if (this.view.element instanceof HTMLViewElement) {
+      return this.view.element.getElement()
     }
   }
 
-  private handleInitializationAction(model: Model): void {
-    // the arguments of view events maps to arguments of moveHandle, so
-    // we could just set move handle as a callback for view events
-    const updatePoint = model.updatePoint.bind(model)
-    // when user clicks to some area of the track, move the handle at this position
-    this.view.onTrackClick(updatePoint)
-    // when the user dragged the handle, move it to apropriate position
-    this.view.onHandleDrag(updatePoint)
-
-    const updateLine = model.updateLine.bind(model)
-    this.view.onTrackLengthChanged(updateLine)
-
-    const updateValues = model.updateValues.bind(model)
-    this.view.onInputUpdate(updateValues)
-
-    if (this.rulerFlag) {
-      this.view.renderRuler(model.ruler)
-    }
-
-    if (this.rulerActiveFlag) {
-      this.view.onRulerClick(updateValues)
-    }
+  showLabels(): void {
+    this.view.toggleLabels(true)
   }
 
-  private handleSlideAction({
-    handlePositions,
-    rangeStartPosition,
-    rangeEndPosition,
-    values,
-    ruler,
-  }: any): void {
-    this.view.slideTo(handlePositions)
-
-    // TODO: find the way to hide this functionality back to slideTo
-    this.view.updateRange([rangeStartPosition, rangeEndPosition])
-
-    this.view.updateLabels(handlePositions, values)
-
-    if (this.rulerFlag) {
-      this.view.updateRuler(ruler)
-    }
-
-    this.view.updateInput(values.join(this.inputValuesSeparator))
+  hideLabels(): void {
+    this.view.toggleLabels(false)
   }
 
-  public updateHandles(from: number, to?: number): void {
-    if (to === undefined) {
-      this.model.updateValues(from)
-    } else {
-      this.model.updateValues(from, to)
-    }
+  showRuler(): void {
+    this.view.toggleRuler(true)
+  }
+
+  hideRuler(): void {
+    this.view.toggleRuler(false)
+  }
+
+  onUpdate(handler: (value: string) => void): void {
+    this.model.addUpdateHandler(handler)
   }
 }
 

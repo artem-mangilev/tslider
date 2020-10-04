@@ -1,182 +1,235 @@
-import { OneDimensionalSpacePoint, Ratio } from '../utils/aliases'
-import Point from '../utils/Point'
 import Subject from '../utils/Subject'
-import Data from './Data'
-import Handle from './Handle'
-import ModelOptions from './ModelOptions'
-import { ModelUpdateTypes } from './ModelUpdateTypes'
-import Track from './Track'
-import RulerSegment from '../RulerSegment'
-import Observer from '../utils/Observer'
+import { ModelEvents } from './ModelEvents'
+import PointValidator from './PointValidator'
+import RulerSegment from './RulerSegment'
+import Ruler from './Ruler'
+import Shape from '../utils/Shape'
+import HandleX from './HandleX'
+import HandleY from './HandleY'
+import FillerX from './FillerX'
+import FillerY from './FillerY'
+import TransferHandle from './TransferHandle'
+import Input from './Input'
+import ValuesStore from './ValuesStore'
+import TransferFiller from './TransferFiller'
+import HandlesXContainer from './HandlesXDirector'
+import { ModelDependencies } from './ModelBuilder'
+import PrecisionFormatter from './PrecisionFormatter'
+import NumberConverter from './NumberConverter'
 
 class Model extends Subject {
-  private track: Track
-  private data: Data
-  private handles: Handle[] = []
+  private validator: PointValidator
+  private _ruler: Ruler
+  private track: Shape
+  private handleY: HandleY
+  private fillerX: FillerX
+  private fillerY: FillerY
+  private input: Input
+  private handler: (value: string) => void
+  private valuesStore: ValuesStore
+  private handlesXContainer: HandlesXContainer
+  private formatter: PrecisionFormatter
+  private valueToPointConverter: NumberConverter
+  private pointToValueConverter: NumberConverter
 
-  constructor(private options: ModelOptions, observer?: Observer) {
+  constructor(deps: ModelDependencies) {
     super()
 
-    // initialize the data
-    this.data = new Data(options.min, options.max, options.step)
+    this.input = deps.input
+    this.track = deps.track
+    this.valuesStore = deps.valuesStore
+    this.valueToPointConverter = deps.valueToPointConverter
+    this.pointToValueConverter = deps.pointToValueConverter
+    this.validator = deps.pointValidator
+    this.handlesXContainer = deps.handlesXContainer
+    this.handleY = deps.handleY
+    this.fillerX = deps.fillerX
+    this.fillerY = deps.fillerY
+    this._ruler = deps.ruler
+    this.formatter = deps.formatter
+  }
 
-    // initialize track class
-    this.track = new Track(this.data.numberOfSteps, options.trackLength)
+  setMinValue(min: number): void {
+    this.setMinOrMax('min', min)
 
-    options.values.forEach((data) => {
-      const dataRatio = this.data.getAmountAsRatio(data)
+    this._ruler.update()
+    this.performSettersRoutine()
+  }
 
-      const coordinate: OneDimensionalSpacePoint = dataRatio * this.track.length
-      this.handles.push(new Handle(coordinate))
+  getMinValue(): string {
+    return this.formatValue(this.valuesStore.getMin())
+  }
+
+  setMaxValue(max: number): void {
+    this.setMinOrMax('max', max)
+
+    this._ruler.update()
+    this.performSettersRoutine()
+  }
+
+  getMaxValue(): string {
+    return this.formatValue(this.valuesStore.getMax())
+  }
+
+  setStep(step: number): void {
+    this.valuesStore.setStep(step)
+
+    this._ruler.update()
+    this.notify(ModelEvents.Update)
+  }
+
+  getStep(): string {
+    return this.formatValue(this.valuesStore.getStep())
+  }
+
+  setFrom(value: number): void {
+    this.setValue('from', value)
+
+    this.performSettersRoutine()
+  }
+
+  getFrom(): string {
+    return this.handleToValue(this.handlesXContainer.getById(0))
+  }
+
+  setTo(value: number): void {
+    this.setValue('to', value)
+
+    this.performSettersRoutine()
+  }
+
+  getTo(): string {
+    const to = this.handlesXContainer.getById(1)
+    return to && this.handleToValue(to)
+  }
+
+  setHandle(point: number): void {
+    this.handlesXContainer.setNear(this.validator.validate(point))
+
+    this.performSettersRoutine()
+  }
+
+  setHandleByIndex(point: number, index: number): void {
+    this.setHandleById(point, index)
+
+    this.performSettersRoutine()
+  }
+
+  setHandleByValue(value: number): void {
+    if (isFinite(value)) {
+      value = +value
+
+      const point = this.valueToPointConverter.convert(value)
+      this.handlesXContainer.setNear(this.validator.validate(point))
+
+      this.performSettersRoutine()
+    }
+  }
+
+  resize(trackLength: number): void {
+    const values = this.getValues()
+    this.track.width = trackLength
+    this.setHandlesX(values)
+
+    this._ruler.update()
+
+    this.notify(ModelEvents.Update)
+  }
+
+  addUpdateHandler(handler: (value: string) => void): void {
+    this.handler = handler
+  }
+
+  get filler(): TransferFiller {
+    return {
+      position: {
+        x: this.fillerX.getPosition(),
+        y: this.fillerY.getPosition(),
+      },
+      length: this.fillerX.getLength(),
+    }
+  }
+
+  get handles(): TransferHandle[] {
+    return this.handlesXContainer.getAll().map((handleX) => ({
+      position: {
+        x: handleX.getPosition(),
+        y: this.handleY.getPosition(),
+      },
+      value: this.handleToValue(handleX),
+    }))
+  }
+
+  get ruler(): RulerSegment[] {
+    return this._ruler.get().map((point) => ({
+      point,
+      value: this.getFormattedValueFromPoint(point),
+    }))
+  }
+
+  get inputValue(): string {
+    return this.input.get()
+  }
+
+  private handleToValue(handle: HandleX): string {
+    return this.getFormattedValueFromPoint(handle.getPosition())
+  }
+
+  private setInput(): void {
+    const handles = this.handlesXContainer.getAll()
+    this.input.set(...handles.map((handle) => this.handleToValue(handle)))
+  }
+
+  private callHandler() {
+    this.handler && this.handler(this.input.get())
+  }
+
+  private getValues(): number[] {
+    return this.handlesXContainer
+      .getAll()
+      .map((handle) => this.pointToValueConverter.convert(handle.getPosition()))
+  }
+
+  private setHandlesX(values: number[]): void {
+    values.forEach((value, i) => {
+      const point = this.valueToPointConverter.convert(value)
+      this.setHandleById(point, i)
     })
+  }
 
-    this.track.registerHandles(this.handles)
+  private setValue(which: 'from' | 'to', value: number) {
+    if (isFinite(value)) {
+      value = +value
 
-    // Optionally observer could be attached with class constructor
-    if (observer) {
-      this.attach(observer)
-
-      this.notify(ModelUpdateTypes.Initialization, this.getState)
-      // make the initial draw of the slider
-      // TODO: by this call, model could assume that the view couldn't draw the slider in initialization step,
-      // so find the better way to make iniital draw
-      this.notify(ModelUpdateTypes.Slide, this.getState)
+      const point = this.valueToPointConverter.convert(value)
+      this.setHandleById(point, which === 'from' ? 0 : 1)
     }
   }
 
-  public updatePoint(
-    targetPoint: OneDimensionalSpacePoint,
-    handleIndex?: number
-  ): void {
-    // these condition help the Model to decide should it compute which handle should be used,
-    // or use a provided handleIndex
-    let activeHandleIndex =
-      handleIndex === undefined
-        ? this.track.getNearestPointIndex(targetPoint)
-        : handleIndex
-
-    const activeHandle = this.handles[activeHandleIndex]
-
-    this.track.setActiveHandle(activeHandle)
-
-    const availablePoint = this.track.getAvailablePoint(targetPoint)
-
-    // this is just an optimisation to avoid dummy renders
-    // (when nothing actually changes in the screen) in view
-    if (availablePoint !== activeHandle.position) {
-      activeHandle.position = availablePoint
-
-      this.notify(ModelUpdateTypes.Slide, this.getState)
-    }
+  private setMinOrMax(which: 'min' | 'max', value: number) {
+    const values = this.getValues()
+    which === 'min'
+      ? this.valuesStore.setMin(value)
+      : this.valuesStore.setMax(value)
+    this.setHandlesX(values)
   }
 
-  public updateValues(...values: number[]): void {
-    // TODO: remove duplicated code
-    switch (values.length) {
-      case 1:
-        const [from] = values
-
-        const valueRatio = this.data.getAmountAsRatio(from)
-        const trackPoint = this.track.ratioToPoint(valueRatio)
-
-        const activeHandleIndex = this.track.getNearestPointIndex(trackPoint)
-        const activeHandle = this.handles[activeHandleIndex]
-        this.track.setActiveHandle(activeHandle)
-
-        const availablePoint = this.track.getAvailablePoint(trackPoint)
-
-        activeHandle.position = availablePoint
-
-        break
-      case 2:
-        values.forEach((value, i) => {
-          const valueRatio = this.data.getAmountAsRatio(value)
-          const trackPoint = this.track.ratioToPoint(valueRatio)
-
-          const availablePoint = this.track.getAvailablePoint(trackPoint)
-
-          this.handles[i].position = availablePoint
-        })
-
-        break
-    }
-
-    this.notify(ModelUpdateTypes.Slide, this.getState)
+  private setHandleById(point: number, id: number): void {
+    this.handlesXContainer.setById(this.validator.validate(point), id)
   }
 
-  // TODO: bad method name, model shouldn't know about slider resizing
-  public updateLine(lineLength: number): void {
-    this.values.forEach((value, i) => {
-      const dataRatio = this.data.getAmountAsRatio(value)
-
-      const coordinate: OneDimensionalSpacePoint = dataRatio * lineLength
-
-      this.handles[i].position = coordinate
-    })
-
-    this.track.length = lineLength
-
-    // TODO: current method needs another update type
-    this.notify(ModelUpdateTypes.Slide, this.getState)
+  private performSettersRoutine() {
+    this.setInput()
+    this.callHandler()
+    this.notify(ModelEvents.Update)
   }
 
-  private get rangeStartPosition(): OneDimensionalSpacePoint {
-    return this.track.rangeStartPosition
+  private getFormattedValueFromPoint(point: number): string {
+    return this.formatValue(this.pointToValueConverter.convert(point))
   }
 
-  private get rangeEndPosition(): OneDimensionalSpacePoint {
-    return this.track.rangeEndPosition
-  }
-
-  private get handlePositions(): OneDimensionalSpacePoint[] {
-    return this.handles.map((handle) => handle.position)
-  }
-
-  private get values(): number[] {
-    const handlePositionRatios: Ratio[] = this.handlePositions.map((position) =>
-      this.track.pointToRatio(position)
-    )
-
-    return handlePositionRatios.map((ratio) => this.data.getAmount(ratio))
-  }
-
-  public get ruler(): RulerSegment[] {
-    const trackStep: number = this.track.length / this.options.rulerSteps
-
-    const _ruler = []
-
-    let currentTrackStep: number = 0
-
-    for (let i = 0; i <= this.options.rulerSteps; i++) {
-      const currentTrackStepRatio = this.track.pointToRatio(currentTrackStep)
-      const currentData = this.data.getAmount(currentTrackStepRatio)
-
-      _ruler.push({
-        point: currentTrackStep,
-        value: currentData,
-      })
-
-      currentTrackStep += trackStep
-    }
-
-    return _ruler
-  }
-
-  // TODO: state should be covered with types
-  // TODO: Subject should require the presence of this method in Model
-  private getState = (updateType: number): any => {
-    switch (updateType) {
-      case ModelUpdateTypes.Initialization:
-        return this
-      case ModelUpdateTypes.Slide:
-        return {
-          handlePositions: this.handlePositions,
-          values: this.values,
-          rangeStartPosition: this.rangeStartPosition,
-          rangeEndPosition: this.rangeEndPosition,
-          ruler: this.ruler,
-        }
-    }
+  private formatValue(value: number): string {
+    return this.formatter.format(this.valuesStore.getStep(), value)
   }
 }
 

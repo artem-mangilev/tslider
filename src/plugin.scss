@@ -1,0 +1,117 @@
+$track-height: 7px;
+$track-border-radius: 3px;
+$handle-size: 10px;
+$label-margin-from-track: 5px;
+$ruler-margin-from-track: 5px;
+
+.tslider {
+  &,
+  &__handles,
+  &__labels,
+  &__ruler {
+    display: grid;
+  }
+
+  &__handle,
+  &__label,
+  &__ruler-node {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  &__ruler,
+  &__label,
+  &__handle {
+    user-select: none;
+  }
+
+  &__ruler-node,
+  &__label {
+    width: max-content;
+    height: max-content;
+  }
+
+  &__handle {
+    width: $handle-size;
+    height: $handle-size;
+  }
+
+  &__track,
+  &__range {
+    box-sizing: border-box;
+    border-radius: $track-border-radius;
+  }
+
+  &_horizontal {
+    & .tslider__track,
+    & .tslider__handles,
+    & .tslider__range {
+      height: $track-height;
+      grid-row: 2 / 3;
+      grid-column: 1;
+    }
+
+    & .tslider__labels {
+      margin-bottom: $label-margin-from-track;
+    }
+
+    & .tslider__ruler {
+      grid-row: 3 / 4;
+      margin-top: $ruler-margin-from-track;
+    }
+  }
+
+  &_vertical {
+    height: 100%;
+    grid-template-columns: repeat(3, max-content);
+
+    & .tslider__track,
+    & .tslider__handles,
+    & .tslider__range {
+      width: $track-height;
+      grid-row: 1;
+      grid-column: 2 / 3;
+    }
+
+    & .tslider__labels {
+      grid-row: 1;
+      grid-column: 3 / 4;
+      margin-left: $label-margin-from-track;
+    }
+
+    & .tslider__ruler {
+      justify-items: end;
+      margin-right: $ruler-margin-from-track;
+    }
+  }
+
+  // customisation
+
+  &__track {
+    border: 1px solid rgba(31, 32, 65, 0.25);
+  }
+
+  &__handle {
+    border-radius: 50%;
+    border: 2px solid #fff;
+    background: linear-gradient(180deg, #bc9cff 0%, #8ba4f9 100%);
+  }
+
+  &__ruler {
+    font-family: sans-serif;
+    font-size: 8px;
+    color: gray;
+  }
+
+  &__range {
+    background: linear-gradient(180deg, #6fcf97 0%, #66d2ea 100%);
+  }
+
+  &__label {
+    padding: 3px;
+    background: linear-gradient(180deg, #bc9cff 0%, #8ba4f9 100%);
+    color: #fff;
+    border-radius: 3px;
+    font-family: sans-serif;
+  }
+}
