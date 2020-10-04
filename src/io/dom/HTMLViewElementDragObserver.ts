@@ -4,6 +4,7 @@ import {
 } from './ViewElementObserver'
 import { ViewElement } from './ViewElement'
 import HTMLViewElement from './HTMLViewElement'
+import { throttle } from '../../utils/throttle'
 
 class HTMLViewElementDragObserver implements ViewElementObserver {
   private targets: ViewElement[]
@@ -32,12 +33,15 @@ class HTMLViewElementDragObserver implements ViewElementObserver {
 
       const $root = $('html')
       $root.on(start, (e) => {
-        e.target === target.$elem[0] &&
-          $root.on(move, (e) => {
+        if (e.target === target.$elem[0]) {
+          const moveHandler = (e: JQuery.Event) => {
             const x = which === 'mouse' ? e.clientX : e.touches[0].clientX
             const y = which === 'mouse' ? e.clientY : e.touches[0].clientY
             handler({ target, targetIndex: index, point: { x, y } })
-          })
+          }
+
+          $root.on(move, throttle(moveHandler, 10))
+        }
       })
       $root.on(end, () => $root.off(move))
     }

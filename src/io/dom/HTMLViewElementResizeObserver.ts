@@ -3,7 +3,8 @@ import {
   ViewElementEventHandler,
 } from './ViewElementObserver'
 import { ViewElement } from './ViewElement'
-import HTMLViewElement from "./HTMLViewElement"
+import HTMLViewElement from './HTMLViewElement'
+import { throttle } from '../../utils/throttle'
 
 class HTMLViewElementResizeObserver implements ViewElementObserver {
   private targets: ViewElement[]
@@ -13,11 +14,13 @@ class HTMLViewElementResizeObserver implements ViewElementObserver {
   }
 
   bind(handler: ViewElementEventHandler): void {
-    const ro = new ResizeObserver((entries) => {
+    const resizeObserverHandler = (entries: ResizeObserverEntry[]) => {
       entries.forEach((_, index) => {
         handler({ target: this.targets[index], targetIndex: index })
       })
-    })
+    }
+
+    const ro = new ResizeObserver(throttle(resizeObserverHandler, 10))
 
     this.targets.forEach((target) => {
       if (target instanceof HTMLViewElement) {
