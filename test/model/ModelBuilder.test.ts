@@ -1,11 +1,12 @@
 import { expect } from 'chai'
 import 'mocha'
-import ModelDependencyBuilder from '../../src/model/ModelDependencyBuilder'
+import Model from '../../src/model/Model'
+import ModelBuilder from '../../src/model/ModelBuilder'
 import ModelParams from '../../src/model/ModelParams'
 
-describe(ModelDependencyBuilder.name, () => {
+describe(ModelBuilder.name, () => {
   describe('build', () => {
-    it('should build model dependencies', () => {
+    it('should build model', () => {
       const params: ModelParams = {
         min: 0,
         max: 10,
@@ -16,11 +17,9 @@ describe(ModelDependencyBuilder.name, () => {
         trackHeight: 10,
         inputValuesSeparator: ',',
       }
-      const builder = new ModelDependencyBuilder(params)
+      const model = new ModelBuilder(params).build()
 
-      const modelDeps = builder.build()
-
-      expect(typeof modelDeps === 'object').to.be.true
+      expect(model instanceof Model).to.be.true
     })
   })
 })

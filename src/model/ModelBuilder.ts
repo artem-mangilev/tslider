@@ -14,6 +14,7 @@ import ValuesStore, { ValuesStoreGetters } from './ValuesStore'
 import NumberConverter from './NumberConverter'
 import ValueToPointConverter from './ValueToPointConverter'
 import PointToValueConverter from './PointToValueConverter'
+import Model from './Model'
 
 export interface ModelDependencies {
   input: Input
@@ -30,10 +31,10 @@ export interface ModelDependencies {
   formatter: PrecisionFormatter
 }
 
-class ModelDependencyBuilder {
+class ModelBuilder {
   constructor(private params: ModelParams) {}
 
-  build(): ModelDependencies {
+  build(): Model {
     const input = this.buildInput()
     const track = this.buildTrack()
     const valuesStore = this.buildValuesStore()
@@ -58,7 +59,7 @@ class ModelDependencyBuilder {
     const ruler = this.buildRuler(track)
     const formatter = this.buildFormatter()
 
-    return {
+    return new Model({
       input,
       track,
       valuesStore,
@@ -71,7 +72,7 @@ class ModelDependencyBuilder {
       fillerY,
       ruler,
       formatter,
-    }
+    })
   }
 
   private buildInput(): Input {
@@ -143,4 +144,4 @@ class ModelDependencyBuilder {
   }
 }
 
-export default ModelDependencyBuilder
+export default ModelBuilder

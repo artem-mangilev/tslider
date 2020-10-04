@@ -13,7 +13,7 @@ import Input from './Input'
 import ValuesStore from './ValuesStore'
 import TransferFiller from './TransferFiller'
 import HandlesXContainer from './HandlesXDirector'
-import { ModelDependencies } from './ModelDependencyBuilder'
+import { ModelDependencies } from './ModelBuilder'
 import PrecisionFormatter from './PrecisionFormatter'
 import NumberConverter from './NumberConverter'
 

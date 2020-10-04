@@ -3,10 +3,10 @@ import { ModelEvents } from './model/ModelEvents'
 import ModelEventsHandler from './model/ModelEventsHandler'
 import View from './components/View/View'
 import './plugin.scss'
-import ModelDependencyBuilder from './model/ModelDependencyBuilder'
 import HTMLViewElement from './io/dom/HTMLViewElement'
 import ViewBuilder from './components/View/ViewBuilder'
 import ViewEventsHandler from './components/View/ViewEventsHandler'
+import ModelBuilder from './model/ModelBuilder'
 
 class Tslider {
   private view: View
@@ -51,8 +51,7 @@ class Tslider {
       inputValuesSeparator,
     }
 
-    const modelDeps = new ModelDependencyBuilder(modelParams)
-    this.model = new Model(modelDeps.build())
+    this.model = new ModelBuilder(modelParams).build()
 
     const modelEventsHandler = new ModelEventsHandler(this.view)
     this.model.attach(modelEventsHandler)

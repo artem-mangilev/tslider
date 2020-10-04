@@ -7,7 +7,7 @@ chai.use(sinonChai)
 const { expect } = chai
 
 import Model from '../../src/model/Model'
-import ModelDependencyBuilder from '../../src/model/ModelDependencyBuilder'
+import ModelBuilder from '../../src/model/ModelBuilder'
 import ModelParams from '../../src/model/ModelParams'
 
 describe(Model.name, () => {
@@ -24,8 +24,7 @@ describe(Model.name, () => {
       trackHeight: 10,
       inputValuesSeparator: ',',
     }
-    const builder = new ModelDependencyBuilder(params)
-    model = new Model(builder.build())
+    model = new ModelBuilder(params).build()
   })
 
   describe('setMinValue/getMinValue', () => {
