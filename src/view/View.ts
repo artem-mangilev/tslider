@@ -64,20 +64,12 @@ class View extends Subject implements ViewComponent {
 
   toggleLabels(show: boolean): void {
     // TODO: maybe put this to labels container
-    if (show) {
-      this.labelsContainer.element.show()
-    } else {
-      this.labelsContainer.element.hide()
-    }
+    this.toggleComponent(this.labelsContainer, show)
   }
 
   toggleRuler(show: boolean): void {
     // TODO: maybe put this to ruler
-    if (show) {
-      this.ruler.element.show()
-    } else {
-      this.ruler.element.hide()
-    }
+    this.toggleComponent(this.ruler, show)
   }
 
   render({ handles, filler, inputValue, ruler }: ViewRenderData): void {
@@ -142,6 +134,14 @@ class View extends Subject implements ViewComponent {
 
       this.notify(ViewEvents.RulerClick)
     })
+  }
+
+  private toggleComponent(component: ViewComponent, show: boolean): void {
+    if (show) {
+      component.element.show()
+    } else {
+      component.element.hide()
+    }
   }
 }
 
