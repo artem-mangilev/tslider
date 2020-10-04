@@ -1,7 +1,7 @@
-import { OrientationManager } from './OrientationManager'
-import { RenderPermitter } from './RenderPermitter'
-import ViewComponent from './ViewComponent'
-import { ViewElement } from './ViewElement'
+import { OrientationManager } from '../utils/OrientationManager'
+import { RenderPermitter } from '../utils/RenderPermitter'
+import ViewComponent from '../io/dom/ViewComponent'
+import { ViewElement } from '../io/dom/ViewElement'
 
 export interface LabelRenderData {
   position: number

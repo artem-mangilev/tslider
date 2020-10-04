@@ -6,8 +6,8 @@ chai.should()
 chai.use(sinonChai)
 const { expect } = chai
 
-import Ruler from '../../src/view/Ruler'
-import ViewComponent from '../../src/view/ViewComponent'
+import Ruler from '../../src/components/Ruler'
+import ViewComponent from '../../src/io/dom/ViewComponent'
 import {
   MockElement,
   MockObserver,

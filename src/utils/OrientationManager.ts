@@ -1,6 +1,6 @@
-import { Orientation } from '../utils/aliases'
-import Point from '../utils/Point'
-import Shape from '../utils/Shape'
+import { Orientation } from './aliases'
+import Point from './Point'
+import Shape from './Shape'
 
 export interface OrientationManager {
   getWidth(shape: Shape): number

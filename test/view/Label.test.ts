@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import 'mocha'
-import Label from '../../src/view/Label'
+import Label from '../../src/components/Label'
 import {
   MockElement,
   MockOrientationManager,

@@ -1,4 +1,4 @@
-import { equals } from '../utils/equals'
+import { equals } from './equals'
 
 export interface RenderPermitter {
   shouldRerender(data: any): boolean

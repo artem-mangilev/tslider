@@ -6,8 +6,8 @@ chai.should()
 chai.use(sinonChai)
 const { expect } = chai
 
-import View, { ViewRenderData } from '../../src/view/View'
-import ViewComponent from '../../src/view/ViewComponent'
+import View, { ViewRenderData } from '../../src/components/View/View'
+import ViewComponent from '../../src/io/dom/ViewComponent'
 import { MockElement, MockOrientationManager } from './MockClasses'
 
 describe(View.name, () => {

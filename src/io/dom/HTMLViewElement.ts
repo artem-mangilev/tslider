@@ -1,4 +1,4 @@
-import Point from '../utils/Point'
+import Point from '../../utils/Point'
 import { ViewElement } from './ViewElement'
 
 class HTMLViewElement implements ViewElement {

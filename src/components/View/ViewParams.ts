@@ -1,4 +1,4 @@
-import { Orientation } from '../utils/aliases'
+import { Orientation } from '../../utils/aliases'
 
 export default interface ViewParams {
   targetInput: HTMLInputElement

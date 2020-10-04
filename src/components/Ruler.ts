@@ -1,12 +1,12 @@
 import RulerSegment from '../model/RulerSegment'
-import ViewComponent from './ViewComponent'
-import { RenderPermitter } from './RenderPermitter'
-import { ViewElement } from './ViewElement'
-import { OrientationManager } from './OrientationManager'
+import ViewComponent from '../io/dom/ViewComponent'
+import { RenderPermitter } from '../utils/RenderPermitter'
+import { ViewElement } from '../io/dom/ViewElement'
+import { OrientationManager } from '../utils/OrientationManager'
 import {
   ViewElementEventHandler,
   ViewElementObserver,
-} from './ViewElementObserver'
+} from '../io/dom/ViewElementObserver'
 
 class Ruler implements ViewComponent {
   constructor(

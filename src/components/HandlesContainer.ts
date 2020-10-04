@@ -1,11 +1,11 @@
 import Point from '../utils/Point'
-import ViewComponent from './ViewComponent'
-import { RenderPermitter } from './RenderPermitter'
-import { ViewElement } from './ViewElement'
+import ViewComponent from '../io/dom/ViewComponent'
+import { RenderPermitter } from '../utils/RenderPermitter'
+import { ViewElement } from '../io/dom/ViewElement'
 import {
   ViewElementEventHandler,
   ViewElementObserver,
-} from './ViewElementObserver'
+} from '../io/dom/ViewElementObserver'
 
 class HandlesContainer implements ViewComponent {
   constructor(

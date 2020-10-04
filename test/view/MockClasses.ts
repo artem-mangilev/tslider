@@ -2,13 +2,13 @@ import { Orientation } from '../../src/utils/aliases'
 import { CollisionDetector } from '../../src/utils/CollisionDetector'
 import Point from '../../src/utils/Point'
 import Shape from '../../src/utils/Shape'
-import { OrientationManager } from '../../src/view/OrientationManager'
-import { RenderPermitter } from '../../src/view/RenderPermitter'
-import { ViewElement } from '../../src/view/ViewElement'
+import { OrientationManager } from '../../src/utils/OrientationManager'
+import { RenderPermitter } from '../../src/utils/RenderPermitter'
+import { ViewElement } from '../../src/io/dom/ViewElement'
 import {
   ViewElementEventHandler,
   ViewElementObserver,
-} from '../../src/view/ViewElementObserver'
+} from '../../src/io/dom/ViewElementObserver'
 
 export class MockElement implements ViewElement {
   width = 10

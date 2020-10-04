@@ -1,5 +1,5 @@
-import ViewComponent from './ViewComponent'
-import { ViewElement } from './ViewElement'
+import ViewComponent from '../io/dom/ViewComponent'
+import { ViewElement } from '../io/dom/ViewElement'
 
 class Input implements ViewComponent {
   constructor(public element: ViewElement) {

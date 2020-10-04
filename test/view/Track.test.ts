@@ -2,9 +2,9 @@ import 'mocha'
 import * as chai from 'chai'
 import * as sinon from 'sinon'
 import * as sinonChai from 'sinon-chai'
-import Track from '../../src/view/Track'
+import Track from '../../src/components/Track'
 import { MockElement, MockObserver } from './MockClasses'
-import ViewComponent from '../../src/view/ViewComponent'
+import ViewComponent from '../../src/io/dom/ViewComponent'
 chai.should()
 chai.use(sinonChai)
 const { expect } = chai

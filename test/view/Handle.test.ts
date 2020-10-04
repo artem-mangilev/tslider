@@ -1,8 +1,8 @@
 import { expect } from 'chai'
 import 'mocha'
 import Point from '../../src/utils/Point'
-import Handle from '../../src/view/Handle'
-import { ViewElement } from '../../src/view/ViewElement'
+import Handle from '../../src/components/Handle'
+import { ViewElement } from '../../src/io/dom/ViewElement'
 
 describe('Handle', () => {
   describe('render', () => {

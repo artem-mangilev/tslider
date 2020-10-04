@@ -1,7 +1,7 @@
-import Model from './model/Model'
-import Observer from './utils/Observer'
-import View from './view/View'
-import { ViewEvents } from './view/ViewEvents'
+import Model from '../../model/Model'
+import Observer from '../../utils/Observer'
+import View from './View'
+import { ViewEvents } from './ViewEvents'
 
 class ViewEventsHandler implements Observer {
   constructor(private model: Model) {}

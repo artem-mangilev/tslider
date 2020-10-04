@@ -1,6 +1,6 @@
-import { OrientationManager } from './OrientationManager'
-import ViewComponent from './ViewComponent'
-import { ViewElement } from './ViewElement'
+import { OrientationManager } from '../../utils/OrientationManager'
+import ViewComponent from '../../io/dom/ViewComponent'
+import { ViewElement } from '../../io/dom/ViewElement'
 
 interface ViewDependencies {
   element: ViewElement

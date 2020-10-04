@@ -1,6 +1,6 @@
 import Point from '../utils/Point'
-import ViewComponent from './ViewComponent'
-import { ViewElement } from './ViewElement'
+import ViewComponent from '../io/dom/ViewComponent'
+import { ViewElement } from '../io/dom/ViewElement'
 
 class Handle implements ViewComponent {
   constructor(public element: ViewElement) {}

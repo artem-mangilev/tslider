@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import 'mocha'
-import Input from '../../src/view/Input'
+import Input from '../../src/components/Input'
 import { MockElement } from './MockClasses'
 
 describe(Input.name, () => {

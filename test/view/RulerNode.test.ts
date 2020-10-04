@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import RulerNode from "../../src/view/RulerNode";
+import RulerNode from "../../src/components/RulerNode";
 import { MockElement, MockOrientationManager } from "./MockClasses";
 
 describe(RulerNode.name, () => {

@@ -1,11 +1,11 @@
-import RulerSegment from '../model/RulerSegment'
-import TransferHandle from '../model/TransferHandle'
-import { OrientationManager } from './OrientationManager'
-import TransferFiller from '../model/TransferFiller'
-import ViewComponent from './ViewComponent'
-import { ViewElement } from './ViewElement'
+import RulerSegment from '../../model/RulerSegment'
+import TransferHandle from '../../model/TransferHandle'
+import { OrientationManager } from '../../utils/OrientationManager'
+import TransferFiller from '../../model/TransferFiller'
+import ViewComponent from '../../io/dom/ViewComponent'
+import { ViewElement } from '../../io/dom/ViewElement'
 import ViewDependencies from './ViewDependencies'
-import Subject from '../utils/Subject'
+import Subject from '../../utils/Subject'
 import { ViewEvents } from './ViewEvents'
 
 export interface ViewRenderData {

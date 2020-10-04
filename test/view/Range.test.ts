@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import Range from '../../src/view/Range'
+import Range from '../../src/components/Range'
 import { MockElement, MockOrientationManager } from './MockClasses'
 
 describe(Range.name, () => {

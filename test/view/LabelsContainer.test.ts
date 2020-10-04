@@ -6,8 +6,8 @@ chai.should()
 chai.use(sinonChai)
 const { expect } = chai
 
-import LabelsContainer from '../../src/view/LabelsContainer'
-import ViewComponent from '../../src/view/ViewComponent'
+import LabelsContainer from '../../src/components/LabelsContainer'
+import ViewComponent from '../../src/io/dom/ViewComponent'
 import {
   MockCollisionDetector,
   MockElement,

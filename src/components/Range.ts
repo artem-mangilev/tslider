@@ -1,8 +1,8 @@
 import Point from '../utils/Point'
-import { OrientationManager } from './OrientationManager'
+import { OrientationManager } from '../utils/OrientationManager'
 import Shape from '../utils/Shape'
-import ViewComponent from './ViewComponent'
-import { ViewElement } from './ViewElement'
+import ViewComponent from '../io/dom/ViewComponent'
+import { ViewElement } from '../io/dom/ViewElement'
 
 export interface RangeRenderData {
   position: Point

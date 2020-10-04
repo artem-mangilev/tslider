@@ -1,4 +1,4 @@
-import Point from '../utils/Point'
+import Point from '../../utils/Point'
 
 // TODO: maybe split this to several interfaces?
 export interface ViewElement {

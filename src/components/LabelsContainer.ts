@@ -1,7 +1,7 @@
 import { LabelRenderData } from './Label'
-import { RenderPermitter } from './RenderPermitter'
-import ViewComponent from './ViewComponent'
-import { ViewElement } from './ViewElement'
+import { RenderPermitter } from '../utils/RenderPermitter'
+import ViewComponent from '../io/dom/ViewComponent'
+import { ViewElement } from '../io/dom/ViewElement'
 import { CollisionDetector } from '../utils/CollisionDetector'
 
 export interface LabelsContainerRenderData {

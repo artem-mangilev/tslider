@@ -1,12 +1,12 @@
 import Model from './model/Model'
 import { ModelEvents } from './model/ModelEvents'
-import ModelEventsHandler from './ModelEventsHandler'
-import View from './view/View'
+import ModelEventsHandler from './model/ModelEventsHandler'
+import View from './components/View/View'
 import './plugin.scss'
 import ModelDependencyBuilder from './model/ModelDependencyBuilder'
-import HTMLViewElement from './view/HTMLViewElement'
-import ViewBuilder from './view/ViewBuilder'
-import ViewEventsHandler from './ViewEventsHandler'
+import HTMLViewElement from './io/dom/HTMLViewElement'
+import ViewBuilder from './components/View/ViewBuilder'
+import ViewEventsHandler from './components/View/ViewEventsHandler'
 
 class Tslider {
   private view: View

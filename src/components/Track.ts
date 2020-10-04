@@ -1,6 +1,6 @@
-import ViewComponent from './ViewComponent'
-import { ViewElement } from './ViewElement'
-import { ViewElementEventHandler, ViewElementObserver } from './ViewElementObserver'
+import ViewComponent from '../io/dom/ViewComponent'
+import { ViewElement } from '../io/dom/ViewElement'
+import { ViewElementEventHandler, ViewElementObserver } from '../io/dom/ViewElementObserver'
 
 class Track implements ViewComponent {
   constructor(
