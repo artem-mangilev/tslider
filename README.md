@@ -1,3 +1,7 @@
+Demo page:
+
+https://artem-mangilev.github.io/tslider/
+
 Create production build:
 
 ```npm run build```
