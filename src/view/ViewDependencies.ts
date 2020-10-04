@@ -1,4 +1,4 @@
-import OrientationManager from './OrientationManager'
+import { OrientationManager } from './OrientationManager'
 import ViewComponent from './ViewComponent'
 import { ViewElement } from './ViewElement'
 

@@ -15,7 +15,8 @@ export class MockElement implements ViewElement {
   height = 10
   position: Point = { x: 0, y: 0 }
   childs: ViewElement[] = []
-  isHidden = false
+  afterElement: ViewElement
+  isShown = true
   private attrs: { [x: string]: string }
   private content = ''
 
@@ -23,8 +24,8 @@ export class MockElement implements ViewElement {
     this.childs = mockElements
   }
 
-  after(): void {
-    return
+  after(mockElement: ViewElement): void {
+    this.afterElement = mockElement
   }
 
   setAttribute(attrName: string, value: string): void {
@@ -44,11 +45,11 @@ export class MockElement implements ViewElement {
   }
 
   hide(): void {
-    this.isHidden = true
+    this.isShown = false
   }
 
   show(): void {
-    this.isHidden = false
+    this.isShown = true
   }
 
   move(position: Point): void {
@@ -94,7 +95,7 @@ export class MockCollisionDetector implements CollisionDetector {
 }
 
 export class MockOrientationManager implements OrientationManager {
-  orientation: Orientation = 'horizontal'
+  private orientation: Orientation = 'horizontal'
 
   decodePoint(point: Point): Point {
     return point
